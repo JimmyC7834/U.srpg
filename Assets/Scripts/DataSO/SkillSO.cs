@@ -14,5 +14,10 @@ namespace Game.Unit.Skill
         
         public Sprite icon { get; }
         public bool unique { get; }
+
+        public virtual int Range()
+        {
+            return -1;
+        }
     }
 }

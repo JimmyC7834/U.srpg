@@ -7,6 +7,9 @@ namespace Game.Unit.Skill
     [CreateAssetMenu(menuName = "Game/Skill/Move", fileName = "Sk_Move")]
     public class Sk_Move : SkillSO
     {
-    
+        public override int Range()
+        {
+            return 5;
+        }
     }
 }

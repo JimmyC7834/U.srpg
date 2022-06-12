@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Battle.Map;
 using UnityEngine;
 
 using Game.Unit;
@@ -14,6 +15,8 @@ namespace Game.Battle
         public UnitManager unitManager;
         public CursorController cursor;
         public UIManager uiManager;
+        public BattleMap _battleMap;
+        public MapHighlighter _mapHighlighter;
         
         // ---BATTLEDATA---
         public UnitObject currentUnit { get; private set; }
