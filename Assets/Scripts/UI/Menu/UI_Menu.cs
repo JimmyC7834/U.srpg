@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Game.UI
 {
@@ -10,6 +11,7 @@ namespace Game.UI
     {
         [SerializeField] private RectTransform _itemContainer;
         [SerializeField] private List<GameObject> _items;
+        [SerializeField] private ObjectPool<IUI_MenuItem<T>> _pool;
         [SerializeField] private GameObject _itemPrefab;
         
         public T AddItem(Action<T> callback = null)

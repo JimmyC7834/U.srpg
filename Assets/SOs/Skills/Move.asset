@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd402bbd748d8f248b2018db7b8150f5, type: 3}
   m_Name: Move
   m_EditorClassIdentifier: 
-  displayName: Move
+  _displayName: 
   _id: 2
   _icon: {fileID: -1827896563, guid: 7544fbde4715e7843847ceb4bd39c2df, type: 3}
   _unique: 1
+  _skillSelectionRange:
+    range: 5
+    ignoreTerrain: 1
+    includeSelf: 1
+    optionalRange:
+      enabled: 0
+      value:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}

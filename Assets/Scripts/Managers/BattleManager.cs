@@ -15,7 +15,7 @@ namespace Game.Battle
         [SerializeField] private UnitManager _unitManager;
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private BattlePhraseManager _battlePhraseManager;
-        [SerializeField] private BattleMap _battleMap;
+        private BattleBoard _battleBoard;
         [SerializeField] private MapHighlighter _mapHighlighter;
 
         private void OnEnable()
@@ -30,12 +30,12 @@ namespace Game.Battle
             
             _battleData.unitManager = _unitManager;
             _battleData.uiManager = _uiManager;
-            _battleData._mapHighlighter = _mapHighlighter;
-            _battleData._battleMap = _battleMap;
+            _battleData.mapHighlighter = _mapHighlighter;
+            _battleBoard = new BattleBoard(_battleSO);
+            _battleData.battleBoard = _battleBoard;
             
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
             _battlePhraseManager.Initialize();
-            _battleMap.Initialize(_battleSO);
         }
     }
 }

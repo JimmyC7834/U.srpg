@@ -9,8 +9,10 @@ namespace Game.Battle
 {
     public class UnitManager : MonoBehaviour
     {
+        [SerializeField] private BattleData _battleData;
+        
         private IObjectPool<UnitObject> _pool;
-        private Dictionary<Vector2Int, UnitObject> _unitCoordDict;
+        // private Dictionary<Vector2Int, UnitObject> _unitCoordDict;
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
         [SerializeField] private UnitObject _prefab;
@@ -23,7 +25,7 @@ namespace Game.Battle
                 ReleaseUnit
                 );
 
-            _unitCoordDict = new Dictionary<Vector2Int, UnitObject>();
+            // _unitCoordDict = new Dictionary<Vector2Int, UnitObject>();
 
             for (int i = 0; i < unitSpawnInfo.Length; i++)
             {
@@ -48,16 +50,10 @@ namespace Game.Battle
         
         public void SpawnUnitAt(DataSet.UnitId id, Vector2Int coord)
         {
-            if (_unitCoordDict.ContainsKey(coord))
-            {
-                Debug.LogWarning($"Unit already exists at {coord}");
-                return;
-            }
-
             UnitObject newUnit = _pool.Get();
             newUnit.InitializeWith(_unitDataset[id]);
             PlaceUnitObjectAt(newUnit, coord);
-            _unitCoordDict.Add(coord, newUnit);
+            _battleData.battleBoard.PlaceUnit(coord, newUnit);
         }
 
         private void PlaceUnitObjectAt(UnitObject unit, Vector2Int coord)
@@ -65,20 +61,13 @@ namespace Game.Battle
             RaycastHit hit;
             if (Physics.Raycast(new Ray(new Vector3(coord.x, 10, coord.y), Vector3.down), out hit, 20f))
             {
-                // ray hits, update cursor position
+                // ray hits, update unit position
                 unit.transform.position = hit.point;
             }
             else
             {
                 Debug.LogError($"Failed to place unit {unit} at {coord}.");
             }
-        }
-
-        public UnitObject GetUnitAt(Vector2Int coord)
-        {
-            if (_unitCoordDict.ContainsKey(coord))
-                return _unitCoordDict[coord];
-            return null;
         }
     }
 }
