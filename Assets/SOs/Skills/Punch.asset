@@ -12,7 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19af590456cda2246bd300d58c60f8da, type: 3}
   m_Name: Punch
   m_EditorClassIdentifier: 
-  displayName: Punch
+  _displayName: 
   _id: 1
   _icon: {fileID: -1237822247, guid: 7544fbde4715e7843847ceb4bd39c2df, type: 3}
   _unique: 0
+  _skillSelectionRange:
+    range: 1
+    ignoreTerrain: 1
+    includeSelf: 1
+    optionalRange:
+      enabled: 1
+      value:
+      - {x: 1, y: 1}
+      - {x: 1, y: -1}
+      - {x: -1, y: -1}
+      - {x: -1, y: 1}

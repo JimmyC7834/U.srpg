@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba30884158119640831e0ad92c4d5da, type: 3}
   m_Name: Debugbattle
   m_EditorClassIdentifier: 
-  unitSpawnInfo:
-  - coord: {x: 3, y: 5}
-    unitId: 0
+  _unitSpawnInfo:
   - coord: {x: 0, y: 0}
     unitId: 0
+  - coord: {x: 10, y: 5}
+    unitId: 0
+  - coord: {x: 6, y: 8}
+    unitId: 0
+  _mapSize: 16

@@ -20,6 +20,7 @@ namespace Game.Unit
         public DataSet.UnitId unitId;
         public UnitParam unitParam;
         public UnitPartTree partTree;
+        public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(transform.position));
         
         public void InitializeWith(UnitSO unitSO)
         {

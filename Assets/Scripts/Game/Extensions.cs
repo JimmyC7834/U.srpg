@@ -1,5 +1,3 @@
-using Game.Battle;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game

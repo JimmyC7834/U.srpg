@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Battle.Map;
 using UnityEngine;
 
 namespace Game.Battle
@@ -14,6 +15,8 @@ namespace Game.Battle
         [SerializeField] private UnitManager _unitManager;
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private BattlePhraseManager _battlePhraseManager;
+        private BattleBoard _battleBoard;
+        [SerializeField] private MapHighlighter _mapHighlighter;
 
         private void OnEnable()
         {
@@ -27,9 +30,11 @@ namespace Game.Battle
             
             _battleData.unitManager = _unitManager;
             _battleData.uiManager = _uiManager;
+            _battleData.mapHighlighter = _mapHighlighter;
+            _battleBoard = new BattleBoard(_battleSO);
+            _battleData.battleBoard = _battleBoard;
             
-            _unitManager.Initialize(_battleSO.unitSpawnInfo);
-            
+            _unitManager.Initialize(_battleSO.unitSpawnInfos);
             _battlePhraseManager.Initialize();
         }
     }

@@ -36,6 +36,7 @@ namespace Game.UI
         {
             Clear();
             gameObject.SetActive(false);
+            confirmEvent = null;
         }
     }
 }

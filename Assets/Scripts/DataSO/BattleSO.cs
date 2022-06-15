@@ -17,6 +17,11 @@ namespace Game
             public DataSet.UnitId unitId;
         }
 
-        public UnitSpawnInfo[] unitSpawnInfo;
+        [SerializeField] private UnitSpawnInfo[] _unitSpawnInfo;
+        [SerializeField] private int _mapSize;
+
+        public UnitSpawnInfo[] unitSpawnInfos { get => _unitSpawnInfo; }
+        public int mapSize { get => _mapSize; }
+        
     }
 }

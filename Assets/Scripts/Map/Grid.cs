@@ -14,7 +14,17 @@ namespace Game
 
         private TGridObject[,] gridArray;
 
-        public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<TGridObject> createTGridObject)
+        public TGridObject this[int x, int y]
+        {
+            get => GetValue(x, y); 
+        }
+        
+        public TGridObject this[Vector2Int v]
+        {
+            get => GetValue(v.x, v.y); 
+        }
+
+        public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<int, int, TGridObject> createTGridObject)
         {
             this.width = width;
             this.height = height;
@@ -27,7 +37,7 @@ namespace Game
             {
                 for (int j = 0; j < height; j++)
                 {
-                    gridArray[i, j] = createTGridObject();
+                    gridArray[i, j] = createTGridObject(i, j);
                 }
             }
         }

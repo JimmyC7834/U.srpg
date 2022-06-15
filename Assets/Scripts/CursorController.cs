@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Battle.Map;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,7 +18,9 @@ namespace Game.Battle
         [SerializeField] private Vector2 _velocity;
         [SerializeField] private Vector2 _mapCoord;
         [SerializeField] private Vector2 _prevMapCoord;
-        [SerializeField] public Vector2 MapCoord => Vector2Int.FloorToInt(transform.position.GameV3ToV2());
+        private Vector2 _newMapCoord => Vector2Int.FloorToInt(transform.position.GameV3ToV2());
+        public Vector2 MapCoord => _mapCoord;
+        public BattleBoardTile CurrentTile => _battleData.battleBoard.GetTile(_mapCoord);
         
         // ring sprite placement
         [SerializeField] private Transform _raycastPoint;
@@ -53,7 +56,7 @@ namespace Game.Battle
             if (_velocity.magnitude != 0)
             {
                 transform.position += _velocity.GameV2ToV3() * _cursorMoveSpeed * Time.deltaTime;
-                _mapCoord = MapCoord;
+                _mapCoord = _newMapCoord;
                 OnMove.Invoke(this);
                 if (_mapCoord != _prevMapCoord)
                 {
@@ -90,7 +93,7 @@ namespace Game.Battle
 
         private void UpdateCurrentUnit(CursorController _)
         {
-            _battleData.SetCurrentUnit(_battleData.unitManager.GetUnitAt(transform.position.GameV3ToV2Int()));
+            _battleData.SetCurrentUnit(_battleData.battleBoard.GetUnit(transform.position.GameV3ToV2()));
         }
     }    
 }
