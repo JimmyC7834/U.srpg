@@ -12,7 +12,6 @@ namespace Game.Unit.Skill
     [CreateAssetMenu(menuName = "Game/Unit/Skill")]
     public class SkillSO : DataEntrySO<SkillId>
     {
-        [SerializeField] private BattleData _battleData;
         [SerializeField] private Sprite _icon;
         [SerializeField] private bool _unique;
 
@@ -33,12 +32,12 @@ namespace Game.Unit.Skill
         public bool ignoreTerrain { get => _skillSelectionRange.ignoreTerrain; }
         public bool includeSelf { get => _skillSelectionRange.includeSelf; }
         public Optional<Vector2[]> optionalRange { get => _skillSelectionRange.optionalRange; }
-        public virtual bool castableOn(BattleBoardTile tile) => false;
         
-        private void OnValidate()
+        public virtual bool castableOn(BattleBoardTile tile) => false;
+
+        public virtual IEnumerator StartCasting(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
-            if (_battleData == null)
-                Debug.LogError($"Did not assign battle data for skill! {id} {this}");
+            yield break;
         }
     }
     

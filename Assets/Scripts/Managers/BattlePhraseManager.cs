@@ -16,7 +16,8 @@ namespace Game.Battle
         public class Phrase
         {
             private BattlePhraseManager _parent;
-            private BattleData _battleData => _parent._battleData;
+            private BattleService battleService => _parent._battleService;
+            private SkillCastInfo skillCastInfo => _parent._skillCastInfo;
             private InputReader _input => _parent._input;
             private CursorController _cursor => _parent._cursor;
             
@@ -49,8 +50,8 @@ namespace Game.Battle
 
                 private void OnConfirm(CursorController obj)
                 {
-                    if (_battleData.currentUnit == null) return;
-                    Debug.Log($"Confrimed on unit {_battleData.currentUnit}");
+                    if (battleService.CurrentUnitObject == null) return;
+                    Debug.Log($"Confrimed on unit {battleService.CurrentTile}");
                     _parent.Pop();
                     _parent.Push(new SkillSelectionPhrase(_parent));
                 }
@@ -67,11 +68,11 @@ namespace Game.Battle
 
                 public override void Start()
                 {
-                    _battleData.uiManager.OpenSkillSelectionMenu(
-                        _battleData.currentUnit,
+                    battleService.uiManager.OpenSkillSelectionMenu(
+                        battleService.CurrentUnitObject,
                         (item) =>
                         {
-                            _battleData.SetCastedSkill(item.skill);
+                            skillCastInfo.SetCastedSkill(item.skill);
                             _parent.Pop();
                             _parent.Push(new TargetSelectionPhrase(_parent));
                         });
@@ -81,22 +82,14 @@ namespace Game.Battle
             
             public class TargetSelectionPhrase : Phrase
             {
-                private BattleData.SelectionInfo _selectionInfo;
+                private SkillCaster _skillCaster;
                 
                 public TargetSelectionPhrase(BattlePhraseManager parent) : base(parent) { }
 
                 public override void Enter()
                 {
                     _input.DisableAllInput();
-                    UnitObject caster = _battleData.currentUnit;
-                    SkillSO skill = _battleData.castedSkill;
-                    Vector2Int casterLocation = caster.location;
-                    _selectionInfo = GetRangeTilesFrom(
-                        caster.location.x, caster.location.y, skill.range, skill.ignoreTerrain, skill.includeSelf, skill.optionalRange);
-
-                    _battleData.mapHighlighter.HighlightTiles(
-                        _selectionInfo.rangeTiles.Select(x => x.coord),
-                        TileHighlightColor.InTargetRange);
+                    _skillCaster = new SkillCaster(battleService, skillCastInfo);
                 }
 
                 public override void Start()
@@ -107,76 +100,22 @@ namespace Game.Battle
 
                 private void OnConfirm(CursorController cursor)
                 {
-                    if (!(_selectionInfo.rangeV2.Contains(cursor.MapCoord) && _battleData.castedSkill.castableOn(cursor.CurrentTile))) return;
+                    if (!_skillCaster.Castable()) return;
                     _cursor.OnConfirm -= OnConfirm;
                     
-                    _battleData.SetTargetTile(cursor.CurrentTile);
-                    _battleData.mapHighlighter.RemoveHighlights();
+                    _input.DisableAllInput();
+                    _skillCaster.CastSkill();
                     _parent.Pop();
                     _parent.Push(new UnitSelectionPhrase(_parent));
-                }
-
-                private BattleData.SelectionInfo GetRangeTilesFrom(int gx, int gy, int totalRange, bool ignoreTerrain, bool includeSelf, Optional<Vector2[]> optionalRange)
-                {
-                    // BFS search
-                    Queue<BattleBoardTile> queue = new Queue<BattleBoardTile>();
-                    HashSet<Vector2> explored = new HashSet<Vector2>();
-                    Dictionary<Vector2, float> tileCostLeft = new Dictionary<Vector2, float>();
-                    Dictionary<Vector2, Vector2> tileParents = new Dictionary<Vector2, Vector2>();
-                    HashSet<BattleBoardTile> rangeTiles = new HashSet<BattleBoardTile>();
-
-                    BattleBoard battleBoard = _parent._battleData.battleBoard;
-                    BattleBoardTile startTile = battleBoard.GetTile(gx, gy);
-                    explored.Add(startTile.coord);
-                    queue.Enqueue(startTile);
-                    tileCostLeft.Add(startTile.coord, totalRange);
-
-                    while (queue.Count != 0)
-                    {
-                        BattleBoardTile currentTile = queue.Dequeue();
-                        rangeTiles.Add(currentTile);
-                        foreach (Vector2 tileCoord in battleBoard.GetTile(currentTile.x, currentTile.y).neighbours)
-                        {
-                            BattleBoardTile tile = battleBoard.GetTile(tileCoord);
-                            float costLeft = tileCostLeft[currentTile.coord] - (ignoreTerrain ? 1 : tile.cost);
-                            if (!explored.Contains(tileCoord) && costLeft >= 0f && tile.walkable)
-                            {
-                                queue.Enqueue(tile);
-                                explored.Add(tileCoord);
-
-                                if (!tileParents.ContainsKey(tileCoord))
-                                    tileParents.Add(tileCoord, currentTile.coord);
-
-                                if (!tileCostLeft.ContainsKey(tileCoord))
-                                    tileCostLeft.Add(tileCoord, costLeft);
-
-                                tileCostLeft[tileCoord] = costLeft;
-                            }
-                        }
-                    }
-
-                    if (!includeSelf)
-                        rangeTiles.Remove(startTile);
-
-                    if (optionalRange.Enabled)
-                    {
-                        foreach (Vector2 v in optionalRange.Value)
-                        {
-                            Vector2 coord = v + _battleData.currentUnit.location;
-                            if (battleBoard.CoordOnBoard(coord))
-                                rangeTiles.Add(battleBoard.GetTile(coord));
-                        }
-                    }
-
-                    return BattleData.SelectionInfo.From(rangeTiles, tileParents);
                 }
             }
         }
 
-        [SerializeField] private BattleData _battleData;
         [SerializeField] private InputReader _input;
+        [SerializeField] private SkillCastInfo _skillCastInfo;
+        private BattleService _battleService;
         private Phrase _top => _stack.Peek();
-        private CursorController _cursor => _battleData.cursor;
+        private CursorController _cursor => _battleService.cursor;
         private Stack<Phrase> _stack;
         private bool started = false;
 
@@ -194,8 +133,10 @@ namespace Game.Battle
         public void Clear() => _stack.Clear();
         public bool IsEmpty() => _stack.Count == 0;
 
-        public void Initialize()
+        public void Initialize(BattleService battleService)
         {
+            _battleService = battleService;
+            
             _stack = new Stack<Phrase>();
             // empty phrase to skip null check
             _stack.Push(new Phrase(this));

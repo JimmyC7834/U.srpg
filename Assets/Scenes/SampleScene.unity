@@ -603,7 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _battleSO: {fileID: 11400000, guid: 11a7b6896bd87a4498166084473496ae, type: 2}
-  _battleData: {fileID: 11400000, guid: 0aa4d94af7d0dbe4096a49c9e928eed5, type: 2}
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _cursor: {fileID: 1972074441}
   _unitManager: {fileID: 1673851508}
   _uiManager: {fileID: 1641323436}
@@ -901,8 +901,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c24bd817633eeb46928bf93cfc3fce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _battleData: {fileID: 11400000, guid: 0aa4d94af7d0dbe4096a49c9e928eed5, type: 2}
   _input: {fileID: 11400000, guid: 5f5e14dac104e5345a7ea138a43a567c, type: 2}
+  _skillCastInfo: {fileID: 11400000, guid: 9dbdde408fda92644afa38a0bf1c5f47, type: 2}
 --- !u!4 &992611303
 Transform:
   m_ObjectHideFlags: 0
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d03b372d22e4c24492b81e36ba938e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _battleData: {fileID: 11400000, guid: 0aa4d94af7d0dbe4096a49c9e928eed5, type: 2}
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _unitDataset: {fileID: 11400000, guid: 71e6646d2a095274587c5b5df73760f6, type: 2}
   _prefab: {fileID: 7782091336579945877, guid: 100d8a657301870469a5fa2d23858898, type: 3}
 --- !u!1 &1728547064
@@ -1461,7 +1461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 11400000, guid: 5f5e14dac104e5345a7ea138a43a567c, type: 2}
-  _battleData: {fileID: 11400000, guid: 0aa4d94af7d0dbe4096a49c9e928eed5, type: 2}
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _cameraAngle: -45
   _cursorMoveSpeed: 8
   _velocity: {x: 0, y: 0}
