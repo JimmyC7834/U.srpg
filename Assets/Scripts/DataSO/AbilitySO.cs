@@ -13,4 +13,14 @@ namespace Game.Unit.Ability
         public virtual void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node) { }
         public virtual void OnTrigger() { }
     }
+    
+    public enum AbilityId
+    {
+        DurIncrease1,
+        StrIncrease1,
+        DexIncrease1,
+        PerIncrease1,
+        SanIncrease1,
+        Count,
+    }
 }

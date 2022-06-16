@@ -6,11 +6,12 @@ using Game.Battle.Map;
 using Game.DataSet;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Game.Unit.Skill
 {
     [CreateAssetMenu(menuName = "Game/Unit/Skill")]
-    public class SkillSO : DataEntrySO<SkillId>
+    public abstract class SkillSO : DataEntrySO<SkillId>
     {
         [SerializeField] private Sprite _icon;
         [SerializeField] private bool _unique;
@@ -33,12 +34,23 @@ namespace Game.Unit.Skill
         public bool includeSelf { get => _skillSelectionRange.includeSelf; }
         public Optional<Vector2[]> optionalRange { get => _skillSelectionRange.optionalRange; }
         
-        public virtual bool castableOn(BattleBoardTile tile) => false;
+        public abstract bool castableOn(BattleBoardTile tile);
 
-        public virtual IEnumerator StartCasting(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
+        public virtual void StartCasting(
+            BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo, Action callback)
         {
-            yield break;
+            UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
+            casterObject.StartCoroutine(CallBackWrap(Cast(battleService, skillCastInfo, selectionInfo), callback));
         }
+
+        public IEnumerator CallBackWrap(IEnumerator enumerator, Action callback)
+        {
+            yield return enumerator;
+            Assert.AreNotEqual(callback, null);
+            callback.Invoke();
+        }
+
+        public abstract IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo);
     }
     
     public enum SkillId
