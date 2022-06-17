@@ -10,7 +10,7 @@ namespace Game.Battle
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private InputReader _input;
-        [SerializeField] private BattleData _battleData;
+        [SerializeField] private BattleService _battleService;
 
         // cursor movement
         [SerializeField] private float _cameraAngle;
@@ -20,7 +20,6 @@ namespace Game.Battle
         [SerializeField] private Vector2 _prevMapCoord;
         private Vector2 _newMapCoord => Vector2Int.FloorToInt(transform.position.GameV3ToV2());
         public Vector2 MapCoord => _mapCoord;
-        public BattleBoardTile CurrentTile => _battleData.battleBoard.GetTile(_mapCoord);
         
         // ring sprite placement
         [SerializeField] private Transform _raycastPoint;
@@ -42,8 +41,6 @@ namespace Game.Battle
             OnTileChange += (_) => { };
             OnConfirm += (_) => { };
             OnCancel += (_) => { };
-
-            OnTileChange += UpdateCurrentUnit;
         }
 
         private void Update()
@@ -89,11 +86,6 @@ namespace Game.Battle
         private void InputOnCursorMoveEvent(Vector2 v)
         {
             _velocity = v.GameRotateV2(Mathf.Deg2Rad * _cameraAngle);
-        }
-
-        private void UpdateCurrentUnit(CursorController _)
-        {
-            _battleData.SetCurrentUnit(_battleData.battleBoard.GetUnit(transform.position.GameV3ToV2()));
         }
     }    
 }

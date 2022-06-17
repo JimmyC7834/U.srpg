@@ -19,9 +19,9 @@ namespace Game
             get => GetValue(x, y); 
         }
         
-        public TGridObject this[Vector2Int v]
+        public TGridObject this[Vector2 v]
         {
-            get => GetValue(v.x, v.y); 
+            get => GetValue((int) v.x, (int) v.y); 
         }
 
         public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<int, int, TGridObject> createTGridObject)

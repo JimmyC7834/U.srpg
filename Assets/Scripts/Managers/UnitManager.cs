@@ -9,7 +9,7 @@ namespace Game.Battle
 {
     public class UnitManager : MonoBehaviour
     {
-        [SerializeField] private BattleData _battleData;
+        [SerializeField] private BattleService _battleService;
         
         private IObjectPool<UnitObject> _pool;
         // private Dictionary<Vector2Int, UnitObject> _unitCoordDict;
@@ -53,7 +53,7 @@ namespace Game.Battle
             UnitObject newUnit = _pool.Get();
             newUnit.InitializeWith(_unitDataset[id]);
             PlaceUnitObjectAt(newUnit, coord);
-            _battleData.battleBoard.PlaceUnit(coord, newUnit);
+            _battleService.battleBoard.PlaceUnit(coord, newUnit);
         }
 
         private void PlaceUnitObjectAt(UnitObject unit, Vector2Int coord)

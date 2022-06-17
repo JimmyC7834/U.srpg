@@ -14,6 +14,7 @@ namespace Game.Battle.Map
         public int cost = 1;
         public UnitObject unitOnTile;
         public bool walkable = true;
+        public bool HaveUnitOnTop => unitOnTile != null;
 
         public BattleBoardTile(int _x, int _y)
         {
@@ -32,23 +33,13 @@ namespace Game.Battle.Map
         public BattleBoardTile GetTile(Vector2 v) => GetTile((int) v.x, (int) v.y);
 
         public BattleBoardTile GetTile(int x, int y) => _board[x, y];
-        // public BattleBoardTile GetTile(int x, int y)
-        // {
-        //     if (x < 0 || x > _size - 1 || y < 0 || y > _size - 1)
-        //     {
-        //         Debug.LogError($"Coord out of Board! [{x}, {y}]");
-        //         return _board[0, 0];
-        //     }
-        //
-        //     return _board[x, y];
-        // }
-        
+
         public UnitObject GetUnit(Vector2 v) => GetTile(v).unitOnTile;
         public UnitObject GetUnit(int x, int y) => GetTile(x, y).unitOnTile;
-        public bool AnyUnitAt(Vector2 v) => GetUnit(v) != null;
-        public bool AnyUnitAt(int x, int y) => GetUnit(x, y) != null;
+        public bool AnyUnitAt(Vector2 v) => GetTile(v).HaveUnitOnTop;
+        public bool AnyUnitAt(int x, int y) => GetTile(x, y).HaveUnitOnTop;
         public bool CoordOnBoard(Vector2 v) => CoordOnBoard((int) v.x, (int) v.y);
-        public bool CoordOnBoard(int x, int y) => (x > 0 && x < _size - 1 && y > 0 && y < _size - 1);
+        public bool CoordOnBoard(int x, int y) => (x >= 0 && x < _size - 1 && y >= 0 && y < _size - 1);
 
         public BattleBoard(BattleSO _battleSO)
         {
@@ -88,12 +79,13 @@ namespace Game.Battle.Map
             tile.unitOnTile = unit;
         }
 
-        public void MoveUnitFromTo(Vector2Int from, Vector2Int to)
+        public void MoveUnitFromTo(BattleBoardTile from, BattleBoardTile to) => MoveUnitFromTo(from.coord, to.coord);
+        public void MoveUnitFromTo(Vector2 from, Vector2 to)
         {
             BattleBoardTile fromTile = _board[from];
             BattleBoardTile toTile = _board[to];
 
-            if (AnyUnitAt(from))
+            if (!AnyUnitAt(from))
             {
                 Debug.LogError($"There is no Unit placed at {from}!");
                 return;
