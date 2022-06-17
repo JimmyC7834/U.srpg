@@ -16,6 +16,7 @@ namespace Game
 
         public void OpenSkillSelectionMenu(UnitObject unit, Action<UI_SkillSelectionMenuItem> callback)
         {
+            // TODO: handle no skills
             _skillList.OpenMenu(unit.partTree.GetAllSkills(), (item) => callback.Invoke(item));
             _eventSystem.SetSelectedGameObject(_skillList.GetItemAt(0).gameObject);
             callback += (_) => _skillList.CloseMenu();

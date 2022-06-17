@@ -17,7 +17,7 @@ namespace Game.Unit.Skill
             
             yield return null;
             
-            damageInfo.AddModifier(new UnitStatModifier(UnitParam.UnitStatType.DUR, 1, BaseStatModifier.ModifyType.Flat, sourceInfo));
+            damageInfo.AddModifier(new UnitStatModifier(UnitStatType.DUR, -1, BaseStatModifier.ModifyType.Flat, sourceInfo));
             skillCastInfo.target.DealDamage(damageInfo);
         }
     }
