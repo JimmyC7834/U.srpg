@@ -12,9 +12,14 @@ namespace Game.Unit.Part
         [SerializeField] private AbilityDataSetSO _abDataset;
         
         [SerializeField] private AbilityId[] _abilities;
-        public Sprite icon;
-        public UnitStat stateBoost;
-        public SkillId skillId;
+        
+        private Sprite _icon;
+        private UnitStatModifier[] _stateBoost;
+        private SkillId _skillId;
+
+        public Sprite icon { get => _icon; }
+        public UnitStat stateBoost { get => stateBoost; }
+        public SkillId skillId { get => skillId; }
 
         public AbilitySO[] GetAbilities()
         {
