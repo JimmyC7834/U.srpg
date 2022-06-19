@@ -16,6 +16,13 @@ namespace Game.Unit
             lastValue = (int) lastValue;
             return lastValue;
         }
+        
+        [Serializable]
+        public struct StatBoostEntry
+        {
+            public UnitStatType unitStatType;
+            public int value;
+        }
     }
     
     public class UnitStatModifier : BaseStatModifier
@@ -34,7 +41,7 @@ namespace Game.Unit
 
     public class DamageStat : BaseStat
     {
-        public int Value { get => Mathf.RoundToInt(base.Value); }
+        public int Value { get => Mathf.Max(0, Mathf.RoundToInt(base.Value)); }
     }
     
     public class DamageStatModifier : BaseStatModifier

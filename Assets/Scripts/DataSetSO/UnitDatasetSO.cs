@@ -5,6 +5,9 @@ namespace Game.DataSet
     public enum UnitId
     {
         Norm,
+        Norm1,
+        Norm2,
+        Norm3,
         Count
     }
 

@@ -16,11 +16,8 @@ namespace Game.Unit.Ability
     
     public enum AbilityId
     {
-        DurIncrease1,
-        StrIncrease1,
-        DexIncrease1,
-        PerIncrease1,
-        SanIncrease1,
+        StatBoostDUR1,
+        DamageReduction1,
         Count,
     }
 }
