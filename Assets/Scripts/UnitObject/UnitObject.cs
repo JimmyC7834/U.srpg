@@ -26,7 +26,9 @@ namespace Game.Unit
         public UnitAnimation unitAnimation { get; private set; }
         public UnitPartTree partTree { get; private set; }
 
+        public event Action<DamageInfo> OnStartTakenDamage;
         public event Action<DamageInfo> OnTakenDamage;
+        public event Action<DamageInfo> OnStartDealDamage;
         public event Action<DamageInfo> OnDealDamage;
 
         public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(transform.position));
@@ -62,10 +64,18 @@ namespace Game.Unit
                 abilities[i].RegisterTo(this, node);
             unitParam.AddModifiers(node.Part.statBoost);
         }
-        
-        public void DealDamage(DamageInfo damageInfo)
+
+        public void DealDamageTo(DamageInfo damageInfo)
         {
-            unitParam.AddModifiers(damageInfo.damgeModifiers);
+            OnStartDealDamage?.Invoke(damageInfo);
+            damageInfo.target.TakeDamage(damageInfo);
+            OnDealDamage?.Invoke(damageInfo);
+        }
+        
+        public void TakeDamage(DamageInfo damageInfo)
+        {
+            OnStartTakenDamage?.Invoke(damageInfo);
+            unitParam.AddModifier(damageInfo.damageModifier);
             unitParam.Evaluate();
             OnTakenDamage?.Invoke(damageInfo);
         }
@@ -136,17 +146,21 @@ namespace Game.Unit
     public struct DamageInfo
     {
         public DamageSourceInfo source { get; private set; }
-        public BattleBoardTile toTile { get; private set; }
-        public List<UnitStatModifier> damgeModifiers { get; private set; }
+        public BattleBoardTile targetTile { get; private set; }
+        public UnitObject target { get => targetTile.unitOnTile; }
+        public DamageStat damageStat;
 
-        public static DamageInfo From(DamageSourceInfo _source, BattleBoardTile _toTile) => new DamageInfo()
+        public static DamageInfo From(DamageSourceInfo _source, BattleBoardTile _targetTile) => new DamageInfo()
         {
             source = _source,
-            toTile = _toTile,
-            damgeModifiers = new List<UnitStatModifier>(),
+            targetTile = _targetTile,
+            damageStat = new DamageStat(),
         };
 
-        public void AddModifier(UnitStatModifier unitStatModifier) => damgeModifiers.Add(unitStatModifier);
+        public void AddModifier(DamageStatModifier damageStatModifier) => damageStat.AddModifier(damageStatModifier);
+
+        public UnitStatModifier damageModifier =>
+            new UnitStatModifier(UnitStatType.DUR, -damageStat.Value, BaseStatModifier.ModifyType.Flat, source);
     }
 
     public struct DamageSourceInfo

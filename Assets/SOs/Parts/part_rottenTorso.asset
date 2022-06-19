@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5f8e75970b95140b8d7112e5c86d1f, type: 3}
   m_Name: part_rottenTorso
   m_EditorClassIdentifier: 
-  displayName: Rotten Torso
+  _displayName: 
   _id: 1
   _abDataset: {fileID: 11400000, guid: 5a57583d9c62bf74fa629e35c82cff15, type: 2}
   _abilities: 00000000
-  icon: {fileID: 0}
-  skillId: 0
+  _statBoostEntries:
+  - unitStatType: 0
+    value: 3
+  _icon: {fileID: 0}
+  _skillId: 0

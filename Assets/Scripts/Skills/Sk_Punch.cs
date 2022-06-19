@@ -13,12 +13,11 @@ namespace Game.Unit.Skill
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
             DamageSourceInfo sourceInfo = DamageSourceInfo.From(skillCastInfo);
-            DamageInfo damageInfo = DamageInfo.From(sourceInfo, skillCastInfo.casterTile);
-            
+            DamageInfo damageInfo = DamageInfo.From(sourceInfo, skillCastInfo.targetTile);
+
+            damageInfo.AddModifier(new DamageStatModifier(1, BaseStatModifier.ModifyType.Flat, sourceInfo));
+            skillCastInfo.caster.DealDamageTo(damageInfo);
             yield return null;
-            
-            damageInfo.AddModifier(new UnitStatModifier(UnitStatType.DUR, -1, BaseStatModifier.ModifyType.Flat, sourceInfo));
-            skillCastInfo.target.DealDamage(damageInfo);
         }
     }
 }

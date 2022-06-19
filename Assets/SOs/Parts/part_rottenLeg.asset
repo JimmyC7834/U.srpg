@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5f8e75970b95140b8d7112e5c86d1f, type: 3}
   m_Name: part_rottenLeg
   m_EditorClassIdentifier: 
-  displayName: Rotten Leg
+  _displayName: 
   _id: 2
   _abDataset: {fileID: 0}
   _abilities: 
-  icon: {fileID: 0}
-  skillId: 2
+  _statBoostEntries:
+  - unitStatType: 0
+    value: 2
+  - unitStatType: 2
+    value: 2
+  _icon: {fileID: 0}
+  _skillId: 2

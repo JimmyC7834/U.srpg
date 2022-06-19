@@ -16,5 +16,10 @@ MonoBehaviour:
   _id: 0
   _abDataset: {fileID: 0}
   _abilities: 
-  icon: {fileID: 0}
-  skillId: 1
+  _statBoostEntries:
+  - unitStatType: 0
+    value: 2
+  - unitStatType: 2
+    value: 2
+  _icon: {fileID: 0}
+  _skillId: 1

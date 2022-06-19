@@ -10,8 +10,14 @@ namespace Game.Unit
     {
         // round down
         public int Value { get => (int) base.Value; }
+        protected override float Evaluate()
+        {
+            base.Evaluate();
+            lastValue = (int) lastValue;
+            return lastValue;
+        }
     }
-
+    
     public class UnitStatModifier : BaseStatModifier
     {
         public readonly UnitStatType statType;
@@ -25,4 +31,19 @@ namespace Game.Unit
         public UnitStatModifier(UnitStatType _statType, float _value, ModifyType _type, object _source) : 
             this(_statType, _value, _type, (int)_type, _source) { }
     }
+
+    public class DamageStat : BaseStat
+    {
+        public int Value { get => Mathf.RoundToInt(base.Value); }
+    }
+    
+    public class DamageStatModifier : BaseStatModifier
+    {
+        public DamageStatModifier(float _value, ModifyType _type, int _priority, object _source) :
+            base(_value, _type, _priority, _source) { }
+        
+        public DamageStatModifier(float _value, ModifyType _type, object _source) :
+            this(_value, _type, (int)_type, _source) { }
+    }
+    
 }
