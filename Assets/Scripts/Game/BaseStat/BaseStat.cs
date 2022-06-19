@@ -90,7 +90,7 @@ namespace Game
 
             lastValue = value;
             changed = false;
-            return (float)Math.Round(value, 2);
+            return (float) Math.Round(value, 2);
         }
     }
 }

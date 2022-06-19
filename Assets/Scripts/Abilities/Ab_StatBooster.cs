@@ -12,17 +12,12 @@ namespace Game.Unit.Ability
         {
             unit.unitParam.AddModifier(
                 new UnitStatModifier(
-                    UnitParam.UnitStatType.DUR,
+                    UnitStatType.DUR,
                     0.05f,
                     BaseStatModifier.ModifyType.PercentAdd,
                     node
                 )
             );
-        }
-    
-        public override void OnTrigger()
-        {
-        
         }
     }
 }

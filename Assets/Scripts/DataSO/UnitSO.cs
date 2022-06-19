@@ -10,16 +10,19 @@ namespace Game.Unit
     public struct PartNode
     {
         public Part.PartSO part;
-        public PartNode[] children;
+        public Optional<PartNode[]> children;
 
         public PartNode Copy()
         {
             PartNode newNode = new PartNode();
             newNode.part = part;
-            newNode.children = new PartNode[children.Length];
-            for (int i = 0; i < children.Length; i++)
+            if (children.Enabled)
             {
-                newNode.children[i] = children[i].Copy();
+                newNode.children = new Optional<PartNode[]>(new PartNode[children.Value.Length]);
+                for (int i = 0; i < children.Value.Length; i++)
+                {
+                    newNode.children.Value[i] = children.Value[i].Copy();
+                }
             }
 
             return newNode;

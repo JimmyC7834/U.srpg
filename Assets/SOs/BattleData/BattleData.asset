@@ -9,17 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b5f8e75970b95140b8d7112e5c86d1f, type: 3}
-  m_Name: part_rottenArm
+  m_Script: {fileID: 11500000, guid: dea0fd856049a3e43bad966babda9d78, type: 3}
+  m_Name: BattleData
   m_EditorClassIdentifier: 
-  _displayName: 
-  _id: 0
-  _abDataset: {fileID: 0}
-  _abilities: 
-  _statBoostEntries:
-  - unitStatType: 0
-    value: 2
-  - unitStatType: 2
-    value: 2
-  _icon: {fileID: 0}
-  _skillId: 1
+  currentUnit: {fileID: 0}
+  unitManager: {fileID: 0}
