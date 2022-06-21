@@ -29,8 +29,7 @@ namespace Game.Unit.Part
                     _statBoost = new UnitStatModifier[_statBoostEntries.Length];
                     for (int i = 0; i < _statBoostEntries.Length; i++)
                     {
-                        UnitStat.StatBoostEntry entry = _statBoostEntries[i];
-                        _statBoost[i] = new UnitStatModifier(entry.unitStatType, entry.value, BaseStatModifier.ModifyType.Flat, null);
+                        _statBoost[i] = _statBoostEntries[i].ToModifier();
                     }
                 }
 

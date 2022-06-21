@@ -8,6 +8,8 @@ namespace Game.Unit
     [Serializable]
     public struct UnitParam
     {
+        [SerializeField] private int _maxDur;
+        [SerializeField] private int _maxSan;
         [SerializeField] private UnitStat _dur;
         [SerializeField] private UnitStat _str;
         [SerializeField] private UnitStat _dex;
@@ -26,6 +28,8 @@ namespace Game.Unit
                 _san = new UnitStat(),
             };
 
+            _maxDur = DUR;
+            _maxSan = SAN;
             return this;
         }
 
@@ -34,16 +38,22 @@ namespace Game.Unit
             get => _param[(int) statType];
         }
             
-        
+        public int MaxDUR { get => _maxDur; }
         public int DUR { get => _dur.Value; }
         public int STR { get => _str.Value; }
         public int DEX { get => _dex.Value; }
         public int PER { get => _per.Value; }
         public int SAN { get => _san.Value; }
+        
+        public event Action<UnitParam> OnDurChanged;
 
         public void AddModifier(UnitStatModifier modifier)
         {
             this[modifier.statType].AddModifier(modifier);
+            if (modifier.statType == UnitStatType.DUR)
+            {
+                OnDurChanged?.Invoke(this);
+            }
         }
 
         public void AddModifiers(IEnumerable<UnitStatModifier> modifiers)

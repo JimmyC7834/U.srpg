@@ -32,6 +32,7 @@ namespace Game.Unit
         public event Action<DamageInfo> OnDealDamage;
 
         public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(transform.position));
+        public float height => transform.position.y;
         
         public void InitializeWith(UnitSO unitSO)
         {

@@ -22,6 +22,7 @@ namespace Game.Unit
         {
             public UnitStatType unitStatType;
             public int value;
+            public UnitStatModifier ToModifier() => new UnitStatModifier(unitStatType, value, BaseStatModifier.ModifyType.Flat, null);
         }
     }
     
