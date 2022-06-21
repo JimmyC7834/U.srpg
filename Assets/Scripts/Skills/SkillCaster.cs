@@ -55,7 +55,8 @@ public class SkillCaster
     {
         _skillCastInfo.SetTargetTile(_battleService.CurrentTile);
         _battleService.mapHighlighter.RemoveHighlights();
-        _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, () => { Debug.Log("asdadasdasds"); });
+        // TODO: phrase for animation
+        _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, () => { });
     }
     
     private SelectionInfo GetRangeTilesFrom(

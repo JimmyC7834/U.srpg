@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: part_rottenArm
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 0
+  _id: 2
   _abDataset: {fileID: 0}
   _abilities: 
   _statBoostEntries:

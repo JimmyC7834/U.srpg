@@ -48,7 +48,7 @@ namespace Game.Battle
             unit.gameObject.SetActive(false);
         }
         
-        public void SpawnUnitAt(DataSet.UnitId id, Vector2Int coord)
+        public void SpawnUnitAt(UnitId id, Vector2Int coord)
         {
             UnitObject newUnit = _pool.Get();
             newUnit.InitializeWith(_unitDataset[id]);

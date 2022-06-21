@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: part_rottenHead
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 3
+  _id: 5
   _abDataset: {fileID: 0}
   _abilities: 
   _statBoostEntries:

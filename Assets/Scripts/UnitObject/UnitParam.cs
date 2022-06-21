@@ -16,8 +16,9 @@ namespace Game.Unit
         [SerializeField] private UnitStat _per;
         [SerializeField] private UnitStat _san;
         private UnitStat[] _param;
+        private UnitObject _unit;
 
-        public UnitParam Initialize(UnitSO data)
+        public UnitParam Initialize(UnitObject unit)
         {
             _param = new []
             {
@@ -28,9 +29,16 @@ namespace Game.Unit
                 _san = new UnitStat(),
             };
 
+            _unit = unit;
             _maxDur = DUR;
             _maxSan = SAN;
             return this;
+        }
+
+        public void InitializeMaxValues()
+        {
+            _maxDur = DUR;
+            _maxSan = SAN;
         }
 
         private UnitStat this[UnitStatType statType]
@@ -45,14 +53,14 @@ namespace Game.Unit
         public int PER { get => _per.Value; }
         public int SAN { get => _san.Value; }
         
-        public event Action<UnitParam> OnDurChanged;
+        public event Action<UnitObject> OnDurChanged;
 
         public void AddModifier(UnitStatModifier modifier)
         {
             this[modifier.statType].AddModifier(modifier);
             if (modifier.statType == UnitStatType.DUR)
             {
-                OnDurChanged?.Invoke(this);
+                OnDurChanged?.Invoke(_unit);
             }
         }
 
@@ -70,7 +78,7 @@ namespace Game.Unit
             v = STR;
             v = DEX;
             v = PER;
-            v = SAN; 
+            v = SAN;
         }
     }
 }

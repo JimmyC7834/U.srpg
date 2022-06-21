@@ -13,12 +13,8 @@ MonoBehaviour:
   m_Name: Debugbattle
   m_EditorClassIdentifier: 
   _unitSpawnInfo:
-  - coord: {x: 0, y: 0}
-    unitId: 0
-  - coord: {x: 10, y: 5}
-    unitId: 0
-  - coord: {x: 6, y: 8}
-    unitId: 0
   - coord: {x: 1, y: 1}
+    unitId: 2
+  - coord: {x: 0, y: 0}
     unitId: 1
   _mapSize: 16

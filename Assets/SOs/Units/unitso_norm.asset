@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: unitso_norm
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 0
-  sprite: {fileID: -8339600319336640735, guid: f36af427a0eb69941a418db982e93d4d, type: 3}
+  _id: 2
+  sprite: {fileID: -4950888218617916955, guid: f36af427a0eb69941a418db982e93d4d, type: 3}
   _partTree:
     part: {fileID: 11400000, guid: c654f45572d433d4dab3f8e1a9deec01, type: 2}
     children:

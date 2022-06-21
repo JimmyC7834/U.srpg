@@ -8,6 +8,7 @@ using Game.DataSet;
 using Game.Unit.Ability;
 using Game.Unit.Part;
 using Game.Unit.Skill;
+using Game.Unit.StatusEffects;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,13 +17,15 @@ namespace Game.Unit
     public class UnitObject : MonoBehaviour
     {
         [SerializeField] private SkillDataSetSO _skillDataSet;
-            
+        [SerializeField] private StatusEffectDataSetSO _statusEffectDataSet;
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+        
         private UnitSO unitSO;
         
         public string displayName { get; private set; }
         public Sprite sprite { get; private set; }
         public UnitId unitId { get; private set; }
-        public UnitParam unitParam;
+        public UnitParam param;
         public UnitAnimation unitAnimation { get; private set; }
         public UnitPartTree partTree { get; private set; }
 
@@ -37,11 +40,14 @@ namespace Game.Unit
         public void InitializeWith(UnitSO unitSO)
         {
             this.unitSO = unitSO;
-            unitParam = new UnitParam().Initialize(unitSO);
-            unitAnimation = GetComponent<UnitAnimation>();
+            param = new UnitParam().Initialize(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
+            unitAnimation = GetComponent<UnitAnimation>();
+
+            _spriteRenderer.sprite = unitSO.sprite;
             RegisterParts(partTree.root);
-            unitParam.Evaluate();
+            param.InitializeMaxValues();
+            param.Evaluate();
         }
 
         private void RegisterParts(UnitPartTree.UnitPartTreeNode node)
@@ -63,9 +69,19 @@ namespace Game.Unit
             AbilitySO[] abilities = node.Part.GetAbilities();
             for (int i = 0; i < abilities.Length; i++)
                 abilities[i].RegisterTo(this, node);
-            unitParam.AddModifiers(node.Part.statBoost);
+            param.AddModifiers(node.Part.statBoost);
         }
 
+        public void RegisterStatusEffects(StatusEffectId statusEffectId)
+        {
+            _statusEffectDataSet[statusEffectId].RegisterTo(this);
+        }
+        
+        public void RemoveStatusEffects(StatusEffectId statusEffectId)
+        {
+            _statusEffectDataSet[statusEffectId].RemoveFrom(this);
+        }
+        
         public void DealDamageTo(DamageInfo damageInfo)
         {
             OnStartDealDamage?.Invoke(damageInfo);
@@ -76,8 +92,8 @@ namespace Game.Unit
         public void TakeDamage(DamageInfo damageInfo)
         {
             OnStartTakenDamage?.Invoke(damageInfo);
-            unitParam.AddModifier(damageInfo.damageModifier);
-            unitParam.Evaluate();
+            param.AddModifier(damageInfo.damageModifier);
+            param.Evaluate();
             OnTakenDamage?.Invoke(damageInfo);
         }
         
@@ -103,13 +119,13 @@ namespace Game.Unit
                 }
             }
 
-            public UnitObject unitObject;
+            public UnitObject unit;
             public UnitPartTreeNode root;
             public List<UnitPartTreeNode> nodes;
             
-            public UnitPartTree(UnitObject _unitObject, PartNode partTree)
+            public UnitPartTree(UnitObject _unit, PartNode partTree)
             {
-                unitObject = _unitObject;
+                unit = _unit;
                 nodes = new List<UnitPartTreeNode>();
                 root = new UnitPartTreeNode(nodes, partTree);
             }
@@ -134,7 +150,7 @@ namespace Game.Unit
                     if (node.Part.skillId == SkillId.None)
                         continue;
                     
-                    SkillSO skill = unitObject._skillDataSet[node.Part.skillId];
+                    SkillSO skill = unit._skillDataSet[node.Part.skillId];
                     if (!(skill.unique && skills.Contains(skill)))
                         skills.Add(skill);
                 }

@@ -15,7 +15,7 @@ namespace Game.Unit.Ability
             for (int i = 0; i < _statBoostEntries.Length; i++)
             {
                 UnitStat.StatBoostEntry entry = _statBoostEntries[i];
-                unit.unitParam.AddModifier(entry.ToModifier());
+                unit.param.AddModifier(entry.ToModifier());
             }
         }
     }
