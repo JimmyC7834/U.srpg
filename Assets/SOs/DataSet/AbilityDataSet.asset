@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AbilityDataSet
   m_EditorClassIdentifier: 
   _dataEntry:
-  - {fileID: 11400000, guid: 7362d0e76bf806c47899ebeefa6f6c06, type: 2}
   - {fileID: 11400000, guid: 43746adccda670047b2db1157b1dca2a, type: 2}
+  - {fileID: 11400000, guid: 29db65942588b4642a1dc564c5959325, type: 2}

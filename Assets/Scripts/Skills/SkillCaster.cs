@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,11 +52,12 @@ public class SkillCaster
                  _skillCastInfo.castedSkill.castableOn(_battleService.CurrentTile));
     }
 
-    public void CastSkill()
+    public void CastSkill(Action callback)
     {
         _skillCastInfo.SetTargetTile(_battleService.CurrentTile);
         _battleService.mapHighlighter.RemoveHighlights();
-        _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, () => { Debug.Log("asdadasdasds"); });
+        // TODO: phrase for animation
+        _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, callback);
     }
     
     private SelectionInfo GetRangeTilesFrom(

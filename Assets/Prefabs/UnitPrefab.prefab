@@ -47,11 +47,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillDataSet: {fileID: 11400000, guid: f3ee47c0fdaf55a44b222eeaed73b6a1, type: 2}
-  displayName: 
-  sprite: {fileID: 0}
-  unitId: 0
-  unitParam: {fileID: 0}
-  unitAnimation: {fileID: 4744776644398057735}
+  _statusEffectDataSet: {fileID: 11400000, guid: bc77772777b7afb4cbeb2948f21623b0, type: 2}
+  _spriteRenderer: {fileID: 7782091336593499974}
+  param:
+    _maxDur: 0
+    _maxSan: 0
+    _dur:
+      baseValue: 0
+      lastValue: 0
+    _str:
+      baseValue: 0
+      lastValue: 0
+    _dex:
+      baseValue: 0
+      lastValue: 0
+    _per:
+      baseValue: 0
+      lastValue: 0
+    _san:
+      baseValue: 0
+      lastValue: 0
 --- !u!114 &4744776644398057735
 MonoBehaviour:
   m_ObjectHideFlags: 0

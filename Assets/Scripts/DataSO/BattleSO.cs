@@ -14,7 +14,7 @@ namespace Game
         public struct UnitSpawnInfo
         {
             public Vector2Int coord;
-            public DataSet.UnitId unitId;
+            public UnitId unitId;
         }
 
         [SerializeField] private UnitSpawnInfo[] _unitSpawnInfo;

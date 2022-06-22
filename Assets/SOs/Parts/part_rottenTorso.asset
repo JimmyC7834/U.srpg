@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: part_rottenTorso
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 1
+  _id: 3
   _abDataset: {fileID: 11400000, guid: 5a57583d9c62bf74fa629e35c82cff15, type: 2}
-  _abilities: 00000000
+  _abilities: 
   _statBoostEntries:
   - unitStatType: 0
     value: 3

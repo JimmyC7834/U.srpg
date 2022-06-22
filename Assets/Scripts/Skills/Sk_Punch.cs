@@ -9,13 +9,15 @@ namespace Game.Unit.Skill
     [CreateAssetMenu(menuName = "Game/Skill/Punch", fileName = "Sk_Punch")]
     public class Sk_Punch : SkillSO
     {
+        [SerializeField] private int _value;
+            
         public override bool castableOn(BattleBoardTile tile) => tile.unitOnTile != null;
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
             DamageSourceInfo sourceInfo = DamageSourceInfo.From(skillCastInfo);
             DamageInfo damageInfo = DamageInfo.From(sourceInfo, skillCastInfo.targetTile);
 
-            damageInfo.AddModifier(new DamageStatModifier(1, BaseStatModifier.ModifyType.Flat, sourceInfo));
+            damageInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat, sourceInfo));
             skillCastInfo.caster.DealDamageTo(damageInfo);
             yield return null;
         }

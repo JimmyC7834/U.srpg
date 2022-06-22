@@ -5,6 +5,16 @@ using UnityEngine;
 
 namespace Game.Unit
 {
+    public enum UnitStatType
+    {
+        DUR,
+        STR,
+        DEX,
+        PER,
+        SAN,
+        Count,
+    }
+    
     [Serializable]
     public class UnitStat : BaseStat
     {

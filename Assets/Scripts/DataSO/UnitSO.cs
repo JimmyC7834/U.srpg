@@ -40,14 +40,15 @@ namespace Game.Unit
         public PartNode PartTree => _partTree.Copy();
     }
 
-    public enum UnitStatType
+    public enum UnitId
     {
-        DUR,
-        STR,
-        DEX,
-        PER,
-        SAN,
-        Count,
+        None,
+        DebugUnit,
+        Norm,
+        Norm1,
+        Norm2,
+        Norm3,
+        Count
     }
 }
 

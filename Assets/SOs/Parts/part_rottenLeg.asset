@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: part_rottenLeg
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 2
+  _id: 4
   _abDataset: {fileID: 0}
   _abilities: 
   _statBoostEntries:

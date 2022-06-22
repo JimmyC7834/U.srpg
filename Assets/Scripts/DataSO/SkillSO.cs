@@ -10,7 +10,6 @@ using UnityEngine.Assertions;
 
 namespace Game.Unit.Skill
 {
-    [CreateAssetMenu(menuName = "Game/Unit/Skill")]
     public abstract class SkillSO : DataEntrySO<SkillId>
     {
         [SerializeField] private Sprite _icon;

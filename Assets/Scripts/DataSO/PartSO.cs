@@ -49,6 +49,8 @@ namespace Game.Unit.Part
 
     public enum PartId
     {
+        None,
+        DebugPart,
         RottenArm,
         RottenTorso,
         RottenLeg,

@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using Game.Unit.StatusEffects;
+using UnityEngine;
 
 namespace Game.Unit.Ability
 {
+    [CreateAssetMenu(menuName = "Game/Abilities/Ab_StatBoostOnHealth", fileName = "Ab_StatBoostOnHealth")]
     public class Ab_StatBoostOnHealth : AbilitySO
     {
         [SerializeField] private float _triggerHealth;
@@ -13,27 +15,26 @@ namespace Game.Unit.Ability
         {
             if (isAttackBoost)
             {
-                unit.unitParam.OnDurChanged += BoostAttack;
+                unit.param.OnDurChanged += BoostAttack;
             }
             else
             {
-                unit.unitParam.OnDurChanged += BoostDefence;
+                unit.param.OnDurChanged += BoostDefence;
             }
         }
 
-        public void BoostAttack(UnitParam param)
+        public void BoostAttack(UnitObject unit)
         {
-            // DamageStatModifier damageModifier = new DamageStatModifier(
-            //     (_modifyType == BaseStatModifier.ModifyType.Flat) ? _value : 1 + _value,
-            //     _modifyType, null);
-            //
-            // if (param.DUR >= param.MaxDUR/2)
-            // {
-            //     damageInfo.AddModifier();
-            // }
+            if (unit.param.DUR < unit.param.MaxDUR / 2)
+            {
+                unit.RegisterStatusEffects(StatusEffectId.DamageBoost1);
+                return;
+            }
+            
+            unit.RemoveStatusEffects(StatusEffectId.DamageBoost1);
         }
         
-        public void BoostDefence(UnitParam param)
+        public void BoostDefence(UnitObject unit)
         {
             // if (damageInfo.source.sourceUnit.height > damageInfo.target.height)
             // {
