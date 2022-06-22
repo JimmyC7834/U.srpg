@@ -104,7 +104,24 @@ namespace Game.Battle
                     _cursor.OnConfirm -= OnConfirm;
                     
                     _input.DisableAllInput();
-                    _skillCaster.CastSkill();
+                    _parent.Pop();
+                    SkillAnimationPhrase skillAnimationPhrase = new SkillAnimationPhrase(_parent);
+                    _parent.Push(skillAnimationPhrase);
+                    _skillCaster.CastSkill(skillAnimationPhrase.EndPhrase);
+                }
+            }
+            
+            public class SkillAnimationPhrase : Phrase
+            {
+                public SkillAnimationPhrase(BattlePhraseManager parent) : base(parent) { }
+
+                public override void Enter()
+                {
+                    _input.DisableAllInput();
+                }
+
+                public void EndPhrase()
+                {
                     _parent.Pop();
                     _parent.Push(new UnitSelectionPhrase(_parent));
                 }

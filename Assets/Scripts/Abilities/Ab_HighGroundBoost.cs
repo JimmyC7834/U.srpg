@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Unit.Ability
 {
@@ -7,7 +9,7 @@ namespace Game.Unit.Ability
     {
         [SerializeField] private float _triggerHeight;
         [SerializeField] private float _value;
-        [SerializeField] private UnitStatModifier.ModifyType _modifyType;
+        [SerializeField] private BaseStatModifier.ModifyType _modifyType;
         [SerializeField] private bool isAttackBoost;
 
         public override void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node)
@@ -26,21 +28,15 @@ namespace Game.Unit.Ability
         {
             if (damageInfo.source.sourceUnit.height > damageInfo.target.height)
             {
-                damageInfo.AddModifier(new DamageStatModifier(
-                    (_modifyType == BaseStatModifier.ModifyType.Flat) ? _value : 1 + _value, 
-                    _modifyType, null));
+                damageInfo.AddModifier(_modifierDict[_modifyType](_value));
             }
         }
         
         public void BoostDefence(DamageInfo damageInfo)
         {
-            if (damageInfo.source.sourceUnit.height > damageInfo.target.height)
+            if (damageInfo.source.sourceUnit.height < damageInfo.target.height)
             {
-                damageInfo.AddModifier(
-                    new DamageStatModifier(
-                        (_modifyType == BaseStatModifier.ModifyType.Flat) ? -_value : 1 - _value,
-                        _modifyType, null)
-                    );
+                damageInfo.AddModifier(_modifierDict[_modifyType](-_value));
             }
         }
     }
