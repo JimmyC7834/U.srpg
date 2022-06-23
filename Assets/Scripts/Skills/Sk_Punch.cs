@@ -14,11 +14,11 @@ namespace Game.Unit.Skill
         public override bool castableOn(BattleBoardTile tile) => tile.unitOnTile != null;
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
-            DamageSourceInfo sourceInfo = DamageSourceInfo.From(skillCastInfo);
-            DamageInfo damageInfo = DamageInfo.From(sourceInfo, skillCastInfo.targetTile);
+            AttackSourceInfo sourceInfo = AttackSourceInfo.From(skillCastInfo);
+            AttackInfo attackInfo = AttackInfo.From(sourceInfo, skillCastInfo.targetTile);
 
-            damageInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat, sourceInfo));
-            skillCastInfo.caster.DealDamageTo(damageInfo);
+            attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
+            skillCastInfo.caster.DealDamageTo(attackInfo);
             yield return null;
         }
     }

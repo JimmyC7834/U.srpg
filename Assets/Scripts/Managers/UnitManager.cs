@@ -12,7 +12,8 @@ namespace Game.Battle
         [SerializeField] private BattleService _battleService;
         
         private IObjectPool<UnitObject> _pool;
-        // private Dictionary<Vector2Int, UnitObject> _unitCoordDict;
+        private List<UnitObject> _units;
+        private Dictionary<int, UnitObject> _unitMpDict;
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
         [SerializeField] private UnitObject _prefab;
@@ -25,7 +26,7 @@ namespace Game.Battle
                 ReleaseUnit
                 );
 
-            // _unitCoordDict = new Dictionary<Vector2Int, UnitObject>();
+            _units = new List<UnitObject>();
 
             for (int i = 0; i < unitSpawnInfo.Length; i++)
             {
@@ -51,7 +52,8 @@ namespace Game.Battle
         public void SpawnUnitAt(UnitId id, Vector2Int coord)
         {
             UnitObject newUnit = _pool.Get();
-            newUnit.InitializeWith(_unitDataset[id]);
+            newUnit.InitializeWith(_unitDataset[id], _battleService);
+            _units.Add(newUnit);
             PlaceUnitObjectAt(newUnit, coord);
             _battleService.battleBoard.PlaceUnit(coord, newUnit);
         }

@@ -17,6 +17,7 @@ namespace Game.Unit.StatusEffects
     {
         None,
         DamageBoost1,
+        Poison1,
         Count,
     }
 }

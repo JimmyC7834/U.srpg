@@ -19,9 +19,9 @@ namespace Game.Unit.StatusEffects
             unit.OnStartDealDamage -= BoostAttack;
         }
         
-        public void BoostAttack(DamageInfo damageInfo)
+        public void BoostAttack(AttackInfo attackInfo)
         {
-            damageInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat, this));
+            attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
         }
     }
 }

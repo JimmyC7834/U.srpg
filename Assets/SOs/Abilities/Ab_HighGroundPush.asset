@@ -16,6 +16,6 @@ MonoBehaviour:
   _id: 3
   icon: {fileID: 0}
   _triggerHeight: 0.1
-  _value: 0.05
+  _value: 0.333
   _modifyType: 200
   isAttackBoost: 1

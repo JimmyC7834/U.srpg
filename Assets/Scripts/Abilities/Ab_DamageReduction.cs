@@ -11,14 +11,13 @@ namespace Game.Unit.Ability
         
         public override void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node)
         {
-            unit.OnStartTakenDamage += ReduceDamageTaken;
+            unit.OnStartTakenAttack += ReduceAttackTaken;
         }
 
-        private void ReduceDamageTaken(DamageInfo damageInfo)
+        private void ReduceAttackTaken(AttackInfo attackInfo)
         {
-            damageInfo.damageStat.AddModifier(
-                new DamageStatModifier(-_damageReduction, BaseStatModifier.ModifyType.Flat, null)
-                );
+            attackInfo.AddModifier(
+                new DamageStatModifier(-_damageReduction, BaseStatModifier.ModifyType.Flat));
         }
     }
 }

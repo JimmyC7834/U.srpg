@@ -32,6 +32,16 @@ namespace Game.Battle
             {
                 _parent = bm;
             }
+
+            public class HandleTurnPhrase : Phrase
+            {
+                public HandleTurnPhrase(BattlePhraseManager parent) : base(parent) { }
+
+                public override void Enter()
+                {
+                    _parent._battleService.battleTurnManager.NextTurn();
+                }
+            }
             
             public class UnitSelectionPhrase : Phrase
             {
@@ -124,6 +134,7 @@ namespace Game.Battle
                 {
                     _parent.Pop();
                     _parent.Push(new UnitSelectionPhrase(_parent));
+                    _parent._battleService.battleTurnManager.NextTurn();
                 }
             }
         }

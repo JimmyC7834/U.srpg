@@ -568,6 +568,7 @@ GameObject:
   m_Component:
   - component: {fileID: 497167031}
   - component: {fileID: 497167032}
+  - component: {fileID: 497167033}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -607,8 +608,22 @@ MonoBehaviour:
   _cursor: {fileID: 1972074441}
   _unitManager: {fileID: 1673851508}
   _uiManager: {fileID: 1641323436}
+  _battleTurnManager: {fileID: 497167033}
   _battlePhraseManager: {fileID: 992611302}
   _mapHighlighter: {fileID: 1515405242}
+--- !u!114 &497167033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497167030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d55439630af49fa47989c9889c0e77f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _kokuPerTurn: 20
 --- !u!1 &851846706
 GameObject:
   m_ObjectHideFlags: 0

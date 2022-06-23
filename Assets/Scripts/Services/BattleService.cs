@@ -16,6 +16,7 @@ namespace Game.Battle
         public CursorController cursor  { get; private set; }
         public UIManager uiManager { get; private set; }
         public BattleBoard battleBoard { get; private set; }
+        public BattleTurnManager battleTurnManager { get; private set; }
         public MapHighlighter mapHighlighter { get; private set; }
         
         // Provide services
@@ -23,6 +24,7 @@ namespace Game.Battle
         public void ProvideCursorController(CursorController _cursor) => cursor = _cursor;
         public void ProvideUIManager(UIManager _uiManager) => uiManager = _uiManager;
         public void ProvideBattleBoard(BattleBoard _battleBoard) => battleBoard = _battleBoard;
+        public void ProvideBattleTurnManager(BattleTurnManager _battleTurnManager) => battleTurnManager = _battleTurnManager;
         public void ProvideMapHighlighter(MapHighlighter _mapHighlighter) => mapHighlighter = _mapHighlighter;
         
         // Other services

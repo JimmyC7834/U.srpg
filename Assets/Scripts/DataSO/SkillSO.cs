@@ -57,6 +57,7 @@ namespace Game.Unit.Skill
         None,
         Punch,
         Move,
+        DealPoison1,
         Count,
     }
 }

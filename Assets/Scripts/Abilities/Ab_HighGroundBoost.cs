@@ -20,23 +20,23 @@ namespace Game.Unit.Ability
             }
             else
             {
-                unit.OnStartTakenDamage += BoostDefence;
+                unit.OnStartTakenAttack += BoostDefence;
             }
         }
 
-        public void BoostAttack(DamageInfo damageInfo)
+        public void BoostAttack(AttackInfo attackInfo)
         {
-            if (damageInfo.source.sourceUnit.height > damageInfo.target.height)
+            if (attackInfo.source.sourceUnit.height > attackInfo.target.height)
             {
-                damageInfo.AddModifier(_modifierDict[_modifyType](_value));
+                attackInfo.AddModifier(_modifierDict[_modifyType](_value));
             }
         }
         
-        public void BoostDefence(DamageInfo damageInfo)
+        public void BoostDefence(AttackInfo attackInfo)
         {
-            if (damageInfo.source.sourceUnit.height < damageInfo.target.height)
+            if (attackInfo.source.sourceUnit.height < attackInfo.target.height)
             {
-                damageInfo.AddModifier(_modifierDict[_modifyType](-_value));
+                attackInfo.AddModifier(_modifierDict[_modifyType](-_value));
             }
         }
     }

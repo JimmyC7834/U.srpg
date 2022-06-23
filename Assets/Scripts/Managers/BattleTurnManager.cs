@@ -12,11 +12,11 @@ public class BattleTurnManager : MonoBehaviour
     public event Action<int> OnTurnChanged;
     public event Action<int> OnKokuChanged;
 
-    public void Initialize()
+    public void Awake()
     {
         koku = _kokuPerTurn;
     }
-    
+
     public void NextKoku()
     {
         koku++;
@@ -26,6 +26,7 @@ public class BattleTurnManager : MonoBehaviour
     public void NextTurn()
     {
         turn++;
+        koku = _kokuPerTurn;
         OnTurnChanged?.Invoke(turn);
     }
 }
