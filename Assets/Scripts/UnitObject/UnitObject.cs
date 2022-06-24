@@ -18,9 +18,11 @@ namespace Game.Unit
     {
         [SerializeField] private SkillDataSetSO _skillDataSet;
         [SerializeField] private StatusEffectDataSetSO _statusEffectDataSet;
+        [SerializeField] private BattleService _battleService;
+
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private List<StatusEffectId> _statusEffects;
-        
+
         private UnitSO unitSO;
         
         public string displayName { get; private set; }
@@ -29,7 +31,8 @@ namespace Game.Unit
         public UnitParam param;
         public UnitAnimation unitAnimation { get; private set; }
         public UnitPartTree partTree { get; private set; }
-
+        public Transform _transform { get; private set; }
+        
         public event Action<AttackInfo> OnStartTakenAttack;
         public event Action<DamageInfo> OnStartTakenDamage;
         public event Action<AttackInfo> OnTakenAttack;
@@ -40,8 +43,8 @@ namespace Game.Unit
         public event Action<UnitObject> OnTurnChanged;
         public event Action<UnitObject> OnKokuChanged;
 
-        public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(transform.position));
-        public float height => transform.position.y;
+        public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(_transform.position));
+        public float height => _transform.position.y;
         
         public void InitializeWith(UnitSO unitSO, BattleService battleService)
         {
@@ -50,6 +53,7 @@ namespace Game.Unit
             partTree = new UnitPartTree(this, unitSO.PartTree);
             _statusEffects = new List<StatusEffectId>();
             unitAnimation = GetComponent<UnitAnimation>();
+            _transform = transform;
 
             _spriteRenderer.sprite = unitSO.sprite;
             RegisterParts(partTree.root);
@@ -113,7 +117,9 @@ namespace Game.Unit
         public void TakeDamage(DamageInfo damageInfo)
         {
             OnStartTakenDamage?.Invoke(damageInfo);
-            param.AddModifier(damageInfo.damageModifier);
+            UnitStatModifier damageModifier = damageInfo.damageModifier;
+            param.AddModifier(damageModifier);
+            _battleService.uiManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.damageStat.Value);
             param.Evaluate();
             OnTakenDamage?.Invoke(damageInfo);
         }
