@@ -11,6 +11,12 @@ using UnityEngine.UIElements;
 
 namespace Game.Battle
 {
+    public enum BattleTeam
+    {
+        Player,
+        CPU,
+    }
+    
     public class BattlePhraseManager : MonoBehaviour
     {
         public class Phrase
@@ -32,6 +38,22 @@ namespace Game.Battle
             {
                 _parent = bm;
             }
+
+            public class HandleKokuPhrase : Phrase
+            {
+                public HandleKokuPhrase(BattlePhraseManager parent) : base(parent) { }
+
+                public override void Start()
+                {
+                    while (battleService.unitManager.currentKokuUnits.Count == 0)
+                    {
+                        battleService.battleTurnManager.NextKoku();
+                    }
+                    
+                    _parent.Pop();
+                    _parent.Push(new UnitSelectionPhrase(_parent));
+                }
+            }
             
             public class UnitSelectionPhrase : Phrase
             {
@@ -50,11 +72,16 @@ namespace Game.Battle
 
                 private void OnConfirm(CursorController obj)
                 {
-                    if (battleService.CurrentUnitObject == null) return;
+                    UnitObject unit = battleService.CurrentUnitObject;
+                    if (unit == null) return;
+                    if (unit._team != BattleTeam.Player) return;
+                    if (unit.param.MP != battleService.currentKoku) return;
                     Debug.Log($"Confrimed on unit {battleService.CurrentTile}");
                     _parent.Pop();
                     _parent.Push(new SkillSelectionPhrase(_parent));
                 }
+
+                public override string ToString() => "UnitSelectionPhrase";
             }
             
             public class SkillSelectionPhrase : Phrase
@@ -123,7 +150,7 @@ namespace Game.Battle
                 public void EndPhrase()
                 {
                     _parent.Pop();
-                    _parent.Push(new UnitSelectionPhrase(_parent));
+                    _parent.Push(new HandleKokuPhrase(_parent));
                 }
             }
         }
@@ -135,6 +162,14 @@ namespace Game.Battle
         private CursorController _cursor => _battleService.cursor;
         private Stack<Phrase> _stack;
         private bool started = false;
+
+        public event Action<Phrase> OnPhraseChanged;
+
+        public void Start()
+        {
+            _battleService.debugConsole.AddItem(DebugItem.From("Current Phrase", _top.ToString()));
+            OnPhraseChanged += (phrase) => _battleService.debugConsole.SetValue("Current Phrase", phrase.ToString());
+        }
 
         public void Update()
         {
@@ -158,17 +193,17 @@ namespace Game.Battle
             // empty phrase to skip null check
             _stack.Push(new Phrase(this));
             
-            Push(new Phrase.UnitSelectionPhrase(this));
+            Push(new Phrase.HandleKokuPhrase(this));
         }
         
         // prev.Disable() -> new.Enter() -> new.Start()
         public void Push(Phrase state)
         {
-            Debug.Log($"Pushed to Top: {state}");
             _top.Disable();
             _stack.Push(state);
             state.Enter();
             started = false;
+            OnPhraseChanged?.Invoke(_top);
         }
         
         // top.Disable() -> top.Exit() -> prev.Enable()
@@ -178,7 +213,7 @@ namespace Game.Battle
             _top.Exit();
             Phrase poped = _stack.Pop();
             _top.Enable();
-            Debug.Log($"Popped: {poped}");
+            OnPhraseChanged?.Invoke(_top);
             return poped;
         }
     }

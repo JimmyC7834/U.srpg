@@ -14,11 +14,11 @@ namespace Game.Unit.Ability
         protected Dictionary<BaseStatModifier.ModifyType, Func<float, DamageStatModifier>> _modifierDict = new ()
         {
             {BaseStatModifier.ModifyType.Flat, (value) => 
-                new DamageStatModifier(value, BaseStatModifier.ModifyType.Flat, null)},
+                new DamageStatModifier(value, BaseStatModifier.ModifyType.Flat)},
             {BaseStatModifier.ModifyType.Percent, (value) => 
-                new DamageStatModifier(1 + value, BaseStatModifier.ModifyType.Percent, null)},
+                new DamageStatModifier(1 + value, BaseStatModifier.ModifyType.Percent)},
             {BaseStatModifier.ModifyType.PercentAdd, (value) => 
-                new DamageStatModifier(value, BaseStatModifier.ModifyType.PercentAdd, null)},
+                new DamageStatModifier(value, BaseStatModifier.ModifyType.PercentAdd)},
         };
         
         public abstract void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node);

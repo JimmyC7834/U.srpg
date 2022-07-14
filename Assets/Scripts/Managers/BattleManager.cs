@@ -14,6 +14,7 @@ namespace Game.Battle
         [SerializeField] private CursorController _cursor;
         [SerializeField] private UnitManager _unitManager;
         [SerializeField] private UIManager _uiManager;
+        [SerializeField] private BattleTurnManager _battleTurnManager;
         [SerializeField] private BattlePhraseManager _battlePhraseManager;
         [SerializeField] private MapHighlighter _mapHighlighter;
 
@@ -29,8 +30,13 @@ namespace Game.Battle
             _battleService.ProvideUnitManager(_unitManager);
             _battleService.ProvideUIManager(_uiManager);
             _battleService.ProvideMapHighlighter(_mapHighlighter);
+            _battleService.ProvideBattleTurnManager(_battleTurnManager);
             _battleService.ProvideBattleBoard(new BattleBoard(_battleSO));
-            
+            _battleService.ProvideDebugConsole(GetComponent<DebugConsole>());
+        }
+
+        private void Start()
+        {
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
             _battlePhraseManager.Initialize(_battleService);
         }

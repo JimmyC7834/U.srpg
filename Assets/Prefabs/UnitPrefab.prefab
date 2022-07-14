@@ -48,7 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillDataSet: {fileID: 11400000, guid: f3ee47c0fdaf55a44b222eeaed73b6a1, type: 2}
   _statusEffectDataSet: {fileID: 11400000, guid: bc77772777b7afb4cbeb2948f21623b0, type: 2}
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _spriteRenderer: {fileID: 7782091336593499974}
+  _statusEffects: 
   param:
     _maxDur: 0
     _maxSan: 0

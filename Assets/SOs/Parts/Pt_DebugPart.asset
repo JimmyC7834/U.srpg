@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b5f8e75970b95140b8d7112e5c86d1f, type: 3}
+  m_Name: Pt_DebugPart
+  m_EditorClassIdentifier: 
+  _displayName: 
+  _id: 1
+  _abDataset: {fileID: 11400000, guid: 5a57583d9c62bf74fa629e35c82cff15, type: 2}
+  _abilities: 05000000
+  _statBoostEntries:
+  - unitStatType: 0
+    value: 1
+  _icon: {fileID: 0}
+  _skillId: 3

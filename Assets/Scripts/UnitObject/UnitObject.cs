@@ -18,37 +18,55 @@ namespace Game.Unit
     {
         [SerializeField] private SkillDataSetSO _skillDataSet;
         [SerializeField] private StatusEffectDataSetSO _statusEffectDataSet;
+        [SerializeField] private BattleService _battleService;
+
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        
+        [SerializeField] private List<StatusEffectId> _statusEffects;
+
         private UnitSO unitSO;
         
-        public string displayName { get; private set; }
-        public Sprite sprite { get; private set; }
-        public UnitId unitId { get; private set; }
+        // public string displayName { get; private set; }
+        // public Sprite sprite { get; private set; }
+        // public UnitId unitId { get; private set; }
         public UnitParam param;
         public UnitAnimation unitAnimation { get; private set; }
         public UnitPartTree partTree { get; private set; }
-
-        public event Action<DamageInfo> OnStartTakenDamage;
-        public event Action<DamageInfo> OnTakenDamage;
-        public event Action<DamageInfo> OnStartDealDamage;
-        public event Action<DamageInfo> OnDealDamage;
-
-        public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(transform.position));
-        public float height => transform.position.y;
+        public Transform _transform { get; private set; }
+        public BattleTeam _team { get => BattleTeam.Player; }
         
-        public void InitializeWith(UnitSO unitSO)
+        public event Action<AttackInfo> OnStartTakenAttack;
+        public event Action<DamageInfo> OnStartTakenDamage;
+        public event Action<AttackInfo> OnTakenAttack;
+        public event Action<DamageInfo> OnTakenDamage;
+        public event Action<AttackInfo> OnStartDealDamage;
+        public event Action<AttackInfo> OnDealDamage;
+        public event Action<int> OnMpChanged;
+        
+        public event Action<UnitObject> OnTurnChanged;
+        public event Action<UnitObject> OnKokuChanged;
+
+        public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(_transform.position));
+        public float height => _transform.position.y;
+        
+        public void InitializeWith(UnitSO unitSO, BattleService battleService)
         {
             this.unitSO = unitSO;
             param = new UnitParam().Initialize(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
+            _statusEffects = new List<StatusEffectId>();
             unitAnimation = GetComponent<UnitAnimation>();
+            _transform = transform;
 
             _spriteRenderer.sprite = unitSO.sprite;
             RegisterParts(partTree.root);
             param.InitializeMaxValues();
             param.Evaluate();
+
+            battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
         }
+
+        private void InvokeOnTurnChanged(int turn) => OnTurnChanged?.Invoke(this);
+        private void InvokeOnKokuChanged(int koku) => OnKokuChanged?.Invoke(this);
 
         private void RegisterParts(UnitPartTree.UnitPartTreeNode node)
         {
@@ -75,28 +93,39 @@ namespace Game.Unit
         public void RegisterStatusEffects(StatusEffectId statusEffectId)
         {
             _statusEffectDataSet[statusEffectId].RegisterTo(this);
+            _statusEffects.Add(statusEffectId);
         }
         
         public void RemoveStatusEffects(StatusEffectId statusEffectId)
         {
             _statusEffectDataSet[statusEffectId].RemoveFrom(this);
+            _statusEffects.Remove(statusEffectId);
         }
         
-        public void DealDamageTo(DamageInfo damageInfo)
+        public void DealDamageTo(AttackInfo attackInfo)
         {
-            OnStartDealDamage?.Invoke(damageInfo);
-            damageInfo.target.TakeDamage(damageInfo);
-            OnDealDamage?.Invoke(damageInfo);
+            OnStartDealDamage?.Invoke(attackInfo);
+            attackInfo.target.TakeAttack(attackInfo);
+            OnDealDamage?.Invoke(attackInfo);
+        }
+        
+        public void TakeAttack(AttackInfo attackInfo)
+        {
+            OnStartTakenAttack?.Invoke(attackInfo);
+            TakeDamage(attackInfo.damageInfo);
+            OnTakenAttack?.Invoke(attackInfo);
         }
         
         public void TakeDamage(DamageInfo damageInfo)
         {
             OnStartTakenDamage?.Invoke(damageInfo);
-            param.AddModifier(damageInfo.damageModifier);
+            UnitStatModifier damageModifier = damageInfo.damageModifier;
+            param.AddModifier(damageModifier);
+            _battleService.uiManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.damageStat.Value);
             param.Evaluate();
             OnTakenDamage?.Invoke(damageInfo);
         }
-        
+
         public class UnitPartTree
         {
             public class UnitPartTreeNode
@@ -159,36 +188,58 @@ namespace Game.Unit
             }
         }
     }
-    
+
     public struct DamageInfo
     {
-        public DamageSourceInfo source { get; private set; }
+        public DamageStat damageStat { get; private set; }
+        public object source { get; private set; }
+        
+        public void AddModifier(DamageStatModifier damageStatModifier) => damageStat.AddModifier(damageStatModifier);
+        public UnitStatModifier damageModifier => 
+            new UnitStatModifier(UnitStatType.DUR, -damageStat.Value, BaseStatModifier.ModifyType.Flat, source);
+        
+        public static DamageInfo From(object _source) => new DamageInfo()
+        {
+            damageStat = new DamageStat(),
+            source = _source,
+        };
+    }
+    
+    public struct AttackInfo
+    {
+        public AttackSourceInfo source { get; private set; }
         public BattleBoardTile targetTile { get; private set; }
         public UnitObject target { get => targetTile.unitOnTile; }
-        public DamageStat damageStat;
+        public DamageInfo damageInfo;
 
-        public static DamageInfo From(DamageSourceInfo _source, BattleBoardTile _targetTile) => new DamageInfo()
+        public static AttackInfo From(AttackSourceInfo _source, BattleBoardTile _targetTile) => new AttackInfo()
         {
             source = _source,
             targetTile = _targetTile,
-            damageStat = new DamageStat(),
+            damageInfo = DamageInfo.From(_source),
         };
 
-        public void AddModifier(DamageStatModifier damageStatModifier) => damageStat.AddModifier(damageStatModifier);
+        public void AddModifier(DamageStatModifier damageStatModifier) => damageInfo.AddModifier(damageStatModifier);
 
-        public UnitStatModifier damageModifier =>
-            new UnitStatModifier(UnitStatType.DUR, -damageStat.Value, BaseStatModifier.ModifyType.Flat, source);
+        public UnitStatModifier damageModifier => damageInfo.damageModifier;
     }
 
-    public struct DamageSourceInfo
+    public struct AttackSourceInfo
     {
         public BattleBoardTile sourceTile { get; private set; }
         public UnitObject sourceUnit { get; private set; }
         public SkillSO sourceSkill { get; private set; }
 
-        public static DamageSourceInfo From(SkillCastInfo skillCastInfo) =>
+
+        public static AttackSourceInfo Empty => new AttackSourceInfo()
+        {
+            sourceTile = null,
+            sourceUnit = null,
+            sourceSkill = null,
+        };
+        public static AttackSourceInfo From(SkillCastInfo skillCastInfo) =>
             From(skillCastInfo.casterTile, skillCastInfo.castedSkill);
-        public static DamageSourceInfo From(BattleBoardTile sourceTile, SkillSO _sourceSkill) => new DamageSourceInfo()
+        public static AttackSourceInfo From(BattleBoardTile sourceTile, SkillSO _sourceSkill) => new AttackSourceInfo()
         {
             sourceTile = sourceTile,
             sourceUnit = sourceTile.unitOnTile,

@@ -57,11 +57,11 @@ namespace Game.Unit
     
     public class DamageStatModifier : BaseStatModifier
     {
-        public DamageStatModifier(float _value, ModifyType _type, int _priority, object _source) :
-            base(_value, _type, _priority, _source) { }
+        public DamageStatModifier(float _value, ModifyType _type, int _priority) :
+            base(_value, _type, _priority, null) { }
         
-        public DamageStatModifier(float _value, ModifyType _type, object _source) :
-            this(_value, _type, (int)_type, _source) { }
+        public DamageStatModifier(float _value, ModifyType _type) :
+            this(_value, _type, (int)_type) { }
     }
     
 }
