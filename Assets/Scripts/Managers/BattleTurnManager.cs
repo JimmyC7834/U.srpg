@@ -15,12 +15,19 @@ public class BattleTurnManager : MonoBehaviour
     public void Awake()
     {
         koku = _kokuPerTurn;
+        OnKokuChanged?.Invoke(koku);
+        OnTurnChanged?.Invoke(turn);
     }
 
     public void NextKoku()
     {
-        koku++;
+        koku--;
+        if (koku < 0)
+        {
+            NextTurn();
+        }
         OnKokuChanged?.Invoke(koku);
+        Debug.Log($"koku changed to: {koku}");
     }
     
     public void NextTurn()

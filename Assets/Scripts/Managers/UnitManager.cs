@@ -13,7 +13,7 @@ namespace Game.Battle
         
         private IObjectPool<UnitObject> _pool;
         private List<UnitObject> _units;
-        private Dictionary<int, UnitObject> _unitMpDict;
+        public List<UnitObject> currentKokuUnits { get => GetCurrentKokuUnits(_battleService.currentKoku); }
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
         [SerializeField] private UnitObject _prefab;
@@ -32,6 +32,13 @@ namespace Game.Battle
             {
                 SpawnUnitAt(unitSpawnInfo[i].unitId, unitSpawnInfo[i].coord);
             }
+
+            // _battleService.battleTurnManager.OnKokuChanged += UpdateCurrentKokuUnits;
+        }
+
+        private List<UnitObject> GetCurrentKokuUnits(int koku)
+        {
+            return _units.Where(unit => unit.param.MP == koku).ToList();
         }
         
         private UnitObject CreateNewUnit()

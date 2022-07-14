@@ -32,11 +32,13 @@ namespace Game.Battle
             _battleService.ProvideMapHighlighter(_mapHighlighter);
             _battleService.ProvideBattleTurnManager(_battleTurnManager);
             _battleService.ProvideBattleBoard(new BattleBoard(_battleSO));
-            
+            _battleService.ProvideDebugConsole(GetComponent<DebugConsole>());
+        }
+
+        private void Start()
+        {
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
             _battlePhraseManager.Initialize(_battleService);
-            
-            _battleTurnManager.NextTurn();
         }
     }
 }

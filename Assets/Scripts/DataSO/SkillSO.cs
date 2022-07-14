@@ -14,6 +14,7 @@ namespace Game.Unit.Skill
     {
         [SerializeField] private Sprite _icon;
         [SerializeField] private bool _unique;
+        [SerializeField] private int _cost;
 
         [Serializable]
         private struct SkillSelectionRange
@@ -39,6 +40,7 @@ namespace Game.Unit.Skill
             BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo, Action callback)
         {
             UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
+            casterObject.param.ConsumeMp(_cost);
             casterObject.StartCoroutine(CallBackWrap(Cast(battleService, skillCastInfo, selectionInfo), callback));
         }
 

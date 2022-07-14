@@ -25,13 +25,14 @@ namespace Game.Unit
 
         private UnitSO unitSO;
         
-        public string displayName { get; private set; }
-        public Sprite sprite { get; private set; }
-        public UnitId unitId { get; private set; }
+        // public string displayName { get; private set; }
+        // public Sprite sprite { get; private set; }
+        // public UnitId unitId { get; private set; }
         public UnitParam param;
         public UnitAnimation unitAnimation { get; private set; }
         public UnitPartTree partTree { get; private set; }
         public Transform _transform { get; private set; }
+        public BattleTeam _team { get => BattleTeam.Player; }
         
         public event Action<AttackInfo> OnStartTakenAttack;
         public event Action<DamageInfo> OnStartTakenDamage;
@@ -39,6 +40,7 @@ namespace Game.Unit
         public event Action<DamageInfo> OnTakenDamage;
         public event Action<AttackInfo> OnStartDealDamage;
         public event Action<AttackInfo> OnDealDamage;
+        public event Action<int> OnMpChanged;
         
         public event Action<UnitObject> OnTurnChanged;
         public event Action<UnitObject> OnKokuChanged;
@@ -123,7 +125,7 @@ namespace Game.Unit
             param.Evaluate();
             OnTakenDamage?.Invoke(damageInfo);
         }
-        
+
         public class UnitPartTree
         {
             public class UnitPartTreeNode

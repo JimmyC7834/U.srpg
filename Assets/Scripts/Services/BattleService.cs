@@ -18,6 +18,7 @@ namespace Game.Battle
         public BattleBoard battleBoard { get; private set; }
         public BattleTurnManager battleTurnManager { get; private set; }
         public MapHighlighter mapHighlighter { get; private set; }
+        public DebugConsole debugConsole { get; private set; }
         
         // Provide services
         public void ProvideUnitManager(UnitManager _unitManager) => unitManager = _unitManager;
@@ -26,10 +27,13 @@ namespace Game.Battle
         public void ProvideBattleBoard(BattleBoard _battleBoard) => battleBoard = _battleBoard;
         public void ProvideBattleTurnManager(BattleTurnManager _battleTurnManager) => battleTurnManager = _battleTurnManager;
         public void ProvideMapHighlighter(MapHighlighter _mapHighlighter) => mapHighlighter = _mapHighlighter;
+        public void ProvideDebugConsole(DebugConsole _debugConsole) => debugConsole = _debugConsole;
         
         // Other services
         public UnitObject CurrentUnitObject => battleBoard.GetUnit(cursor.MapCoord);
         public BattleBoardTile CurrentTile => battleBoard.GetTile(cursor.MapCoord);
         public Vector2 CurrentCoord => cursor.MapCoord;
+        public int currentKoku => battleTurnManager.koku;
+        public int currentTurn => battleTurnManager.turn;
     }
 }

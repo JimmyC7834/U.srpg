@@ -584,6 +584,7 @@ GameObject:
   - component: {fileID: 497167031}
   - component: {fileID: 497167032}
   - component: {fileID: 497167033}
+  - component: {fileID: 497167034}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -639,6 +640,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _kokuPerTurn: 20
+--- !u!114 &497167034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497167030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8282b31b23329d244a6c6d85d742b6e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showConsole: 1
+  _consoleWidth: 0
+  _itemHeight: 16
+  _position: {x: 0, y: 0}
 --- !u!1 &851846706
 GameObject:
   m_ObjectHideFlags: 0
