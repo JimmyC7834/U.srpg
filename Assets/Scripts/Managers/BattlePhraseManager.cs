@@ -167,8 +167,7 @@ namespace Game.Battle
 
         public void Start()
         {
-            _battleService.debugConsole.AddItem(DebugItem.From("Current Phrase", _top.ToString()));
-            OnPhraseChanged += (phrase) => _battleService.debugConsole.SetValue("Current Phrase", phrase.ToString());
+            _battleService.debugConsole.AddItem("Current Phrase", () => _top.ToString());
         }
 
         public void Update()

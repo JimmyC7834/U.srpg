@@ -27,7 +27,18 @@ namespace Game.Battle
         public void ProvideBattleBoard(BattleBoard _battleBoard) => battleBoard = _battleBoard;
         public void ProvideBattleTurnManager(BattleTurnManager _battleTurnManager) => battleTurnManager = _battleTurnManager;
         public void ProvideMapHighlighter(MapHighlighter _mapHighlighter) => mapHighlighter = _mapHighlighter;
-        public void ProvideDebugConsole(DebugConsole _debugConsole) => debugConsole = _debugConsole;
+        public void ProvideDebugConsole(DebugConsole _debugConsole)
+        {
+            debugConsole = _debugConsole;
+        }
+
+        public void InitializeDebugConsole()
+        {
+            debugConsole.AddItem("Koku", () => battleTurnManager.koku.ToString());
+            debugConsole.AddItem("Turn", () => battleTurnManager.koku.ToString());
+            debugConsole.AddItem("Current Selected Unit", () => CurrentUnitObject == null ? null : CurrentUnitObject.name);
+            debugConsole.AddItem("Current Selected Tile", () => CurrentTile.ToString());
+        }
         
         // Other services
         public UnitObject CurrentUnitObject => battleBoard.GetUnit(cursor.MapCoord);

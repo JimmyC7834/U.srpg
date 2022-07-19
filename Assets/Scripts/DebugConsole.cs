@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -29,24 +30,28 @@ namespace Game
             _debugItems = new Dictionary<string, DebugItem>();
         }
 
-        public void AddItem(DebugItem _debugItem)
+        public void AddItem(string name, Func<string> bind)
         {
-            _debugItems.Add(_debugItem.name, _debugItem);
+            DebugItem _debugItem = DebugItem.From(name, bind);
+            if (!_debugItems.ContainsKey(name))
+                _debugItems.Add(_debugItem.name, _debugItem);
+            RebindValue(name, bind);
         }
 
-        public void SetValue(string name, string value)
+        public void RebindValue(string name, Func<string> bind)
         {
-            _debugItems[name] = DebugItem.From(name, value);
+            _debugItems[name] = DebugItem.From(name, bind);
         }
         
         private void OnGUI()
         {
             if (!_showConsole) return;
 
-            float y = 0f;
+            float y = _itemHeight;
+            GUI.Box(new Rect(_position.x, _position.y, _consoleWidth, _itemHeight * (_debugItems.Count + 1)), "");
             foreach (DebugItem item in _debugItems.Values)
             {
-                GUI.Box(new Rect(_position.x, _position.y + y, _consoleWidth, _itemHeight), item.message);
+                GUI.Label(new Rect(_position.x + 10, _position.y + y, _consoleWidth, y), item.message);
                 y += _itemHeight;
             }
         }
@@ -56,16 +61,13 @@ namespace Game
     public struct DebugItem
     {
         public string name { get; private set; }
-        public string value { get; private set; }
-        public Action<string> UpdateValue { get; private set; }
-        public string message => $"{name}: {value}";
+        public Func<string> bind { get; private set; }
+        public string message => $"{name}: {bind.Invoke()}";
 
-        public static DebugItem From(string _name, string _value) => new DebugItem()
+        public static DebugItem From(string _name, Func<string> _bind) => new DebugItem()
         {
             name = _name,
-            value = _value,
+            bind = _bind,
         };
-
-        public void SetValue(string _value) => value = _value;
     }
 }
