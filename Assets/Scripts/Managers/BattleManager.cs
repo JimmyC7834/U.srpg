@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace Game.Battle
 {
+    // TODO: Camera control
+    // TODO: Part Destroy
+    // TODO: Part Disable System
+    
     public class BattleManager : MonoBehaviour
     {
         [SerializeField] private BattleSO _battleSO;
@@ -39,6 +43,8 @@ namespace Game.Battle
         {
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
             _battlePhraseManager.Initialize(_battleService);
+
+            _battleService.InitializeDebugConsole();
         }
     }
 }
