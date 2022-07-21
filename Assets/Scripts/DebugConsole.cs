@@ -1,12 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 
 namespace Game
 {

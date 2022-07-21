@@ -36,8 +36,18 @@ namespace Game.Battle
         {
             debugConsole.AddItem("Koku", () => battleTurnManager.koku.ToString());
             debugConsole.AddItem("Turn", () => battleTurnManager.koku.ToString());
-            debugConsole.AddItem("Current Selected Unit", () => CurrentUnitObject == null ? null : CurrentUnitObject.name);
-            debugConsole.AddItem("Current Selected Tile", () => CurrentTile.ToString());
+            debugConsole.AddItem("Current Selected Unit", () =>
+            {
+                if (battleBoard.CoordOnBoard(cursor.MapCoord))
+                    return CurrentUnitObject == null ? "null" : CurrentUnitObject.name;
+                return "null";
+            });
+            debugConsole.AddItem("Current Selected Tile", () => 
+            {
+                if (battleBoard.CoordOnBoard(cursor.MapCoord))
+                    return CurrentTile.ToString();
+                return "null";
+            });
         }
         
         // Other services

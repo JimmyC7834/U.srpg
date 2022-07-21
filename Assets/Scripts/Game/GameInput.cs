@@ -246,6 +246,34 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""DebugConsole"",
+            ""id"": ""b520142b-8f20-490a-b4f9-6b3a3d95d181"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleDebug"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac9746b8-38d2-402c-af41-caa65062836d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ff1b97f2-570a-4ae0-9ca4-45ac831695b3"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleDebug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -260,6 +288,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_MenuNavi_PointerMove = m_MenuNavi.FindAction("PointerMove", throwIfNotFound: true);
         m_MenuNavi_PointerConfirm = m_MenuNavi.FindAction("PointerConfirm", throwIfNotFound: true);
         m_MenuNavi_PointerCancel = m_MenuNavi.FindAction("PointerCancel", throwIfNotFound: true);
+        // DebugConsole
+        m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
+        m_DebugConsole_ToggleDebug = m_DebugConsole.FindAction("ToggleDebug", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -413,6 +444,39 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         }
     }
     public MenuNaviActions @MenuNavi => new MenuNaviActions(this);
+
+    // DebugConsole
+    private readonly InputActionMap m_DebugConsole;
+    private IDebugConsoleActions m_DebugConsoleActionsCallbackInterface;
+    private readonly InputAction m_DebugConsole_ToggleDebug;
+    public struct DebugConsoleActions
+    {
+        private @GameInput m_Wrapper;
+        public DebugConsoleActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleDebug => m_Wrapper.m_DebugConsole_ToggleDebug;
+        public InputActionMap Get() { return m_Wrapper.m_DebugConsole; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebugConsoleActions set) { return set.Get(); }
+        public void SetCallbacks(IDebugConsoleActions instance)
+        {
+            if (m_Wrapper.m_DebugConsoleActionsCallbackInterface != null)
+            {
+                @ToggleDebug.started -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebug;
+                @ToggleDebug.performed -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebug;
+                @ToggleDebug.canceled -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebug;
+            }
+            m_Wrapper.m_DebugConsoleActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ToggleDebug.started += instance.OnToggleDebug;
+                @ToggleDebug.performed += instance.OnToggleDebug;
+                @ToggleDebug.canceled += instance.OnToggleDebug;
+            }
+        }
+    }
+    public DebugConsoleActions @DebugConsole => new DebugConsoleActions(this);
     public interface IMapNaviActions
     {
         void OnCursorMove(InputAction.CallbackContext context);
@@ -424,5 +488,9 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         void OnPointerMove(InputAction.CallbackContext context);
         void OnPointerConfirm(InputAction.CallbackContext context);
         void OnPointerCancel(InputAction.CallbackContext context);
+    }
+    public interface IDebugConsoleActions
+    {
+        void OnToggleDebug(InputAction.CallbackContext context);
     }
 }
