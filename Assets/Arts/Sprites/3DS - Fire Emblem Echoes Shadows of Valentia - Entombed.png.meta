@@ -124,7 +124,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -145,7 +145,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -166,7 +166,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -187,7 +187,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -195,6 +195,90 @@ TextureImporter:
       bones: []
       spriteID: 167abdfd68af48d90800000000000000
       internalID: -7096271655640783007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_4
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1116
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f41664e7f7d72b54385a0e3175703236
+      internalID: 1396561108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_5
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 1116
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c56b96cae82e022468dfa38c1bd611ea
+      internalID: 1450804669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_6
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 1116
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa744019a943c5a45bd2f1993fb9a7cf
+      internalID: -940165638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_7
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 1116
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe1ab284c353cc74bb977e38df836c85
+      internalID: 923243509
       vertices: []
       indices: 
       edges: []
@@ -210,9 +294,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_5: 1450804669
+      3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_4: 1396561108
+      3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_7: 923243509
       3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_2: -8339600319336640735
       3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_1: 4407443601765327208
       3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_0: -4950888218617916955
+      3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_6: -940165638
       3DS - Fire Emblem Echoes Shadows of Valentia - Entombed_3: -7096271655640783007
   spritePackingTag: 
   pSDRemoveMatte: 0

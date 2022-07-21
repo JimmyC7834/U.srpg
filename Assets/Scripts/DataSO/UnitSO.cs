@@ -32,12 +32,14 @@ namespace Game.Unit
     [CreateAssetMenu(menuName = "Game/Unit/UnitSO")]
     public class UnitSO : DataEntrySO<UnitId>
     {
-        public Sprite sprite;
-
+        [SerializeField] private Sprite _sprite;
+        [SerializeField] private AnimatorOverrideController _animatorOverrideController;
         [SerializeField] private PartNode _partTree;
 
         // make a copy of the raw data everytime to prevent change on dataset
         public PartNode PartTree => _partTree.Copy();
+        public Sprite sprite { get => _sprite; }
+        public AnimatorOverrideController animatorOverrideController { get => _animatorOverrideController; }
     }
 
     public enum UnitId

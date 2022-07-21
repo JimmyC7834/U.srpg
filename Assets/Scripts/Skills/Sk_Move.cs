@@ -26,11 +26,15 @@ namespace Game.Unit.Skill
             {
                 path.Push(selectionInfo.tileParents[path.Peek()]);
             }
-
+            
+            casterObject.unitAnimation.SwitchStateTo(UnitAnimation.Move);
+            
             while (path.Count != 0)
             {
-                yield return casterObject.unitAnimation.Move(path.Pop(), movingTimePerTile);
+                yield return casterObject.unitAnimation.MoveUnitOnBroad(path.Pop(), movingTimePerTile);
             }
+            
+            casterObject.unitAnimation.SwitchStateTo(UnitAnimation.Idle);
         }
     }
 }
