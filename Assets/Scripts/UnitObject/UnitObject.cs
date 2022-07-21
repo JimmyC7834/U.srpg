@@ -25,12 +25,10 @@ namespace Game.Unit
 
         private UnitSO unitSO;
         
-        // public string displayName { get; private set; }
-        // public Sprite sprite { get; private set; }
-        // public UnitId unitId { get; private set; }
         public UnitParam param;
         public UnitAnimation unitAnimation { get; private set; }
         public UnitPartTree partTree { get; private set; }
+        public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
         public BattleTeam _team { get => BattleTeam.Player; }
         
@@ -53,15 +51,18 @@ namespace Game.Unit
             this.unitSO = unitSO;
             param = new UnitParam().Initialize(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
-            _statusEffects = new List<StatusEffectId>();
             unitAnimation = GetComponent<UnitAnimation>();
+            unitAnimation.Initialize(this, unitSO.animatorOverrideController);
+            _statusEffects = new List<StatusEffectId>();
+            
             _transform = transform;
-
             _spriteRenderer.sprite = unitSO.sprite;
             RegisterParts(partTree.root);
             param.InitializeMaxValues();
             param.Evaluate();
-
+            
+            unitAnimation.SwitchStateTo(UnitAnimation.Idle);
+            
             battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
         }
 
