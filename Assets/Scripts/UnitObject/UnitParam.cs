@@ -49,7 +49,7 @@ namespace Game.Unit
         }
             
         public int MaxDUR { get => _maxDur; }
-        public int MP;
+        public int MP { get; private set; }
         public int DUR { get => _dur.Value; }
         public int STR { get => _str.Value; }
         public int DEX { get => _dex.Value; }

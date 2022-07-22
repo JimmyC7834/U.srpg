@@ -55,18 +55,18 @@ namespace Game.Unit.Ability
     
     public enum AbilityId
     {
-        None,
-        DamageReduction1,
-        HighGroundAttack,
-        HighGroundPush,
-        HighGroundBlock,
-        HighGroundDefence,
-        HighGroundAdvantage,
-        AttackUpUnder50Hp,
-        AttackUpFullHp,
-        AttackUpOver80Hp,
-        DamageReductionFullHp,
-        DamageReductionOver80Hp,
-        Count,
+        None = -1,
+        DamageReduction1 = 10,
+        HighGroundAttack = 20,
+        HighGroundPush = 30,
+        HighGroundBlock = 40,
+        HighGroundDefence = 50,
+        HighGroundAdvantage = 60,
+        AttackUpUnder50Hp = 70,
+        AttackUpFullHp = 80,
+        AttackUpOver80Hp = 90,
+        DamageReductionFullHp = 100,
+        DamageReductionOver80Hp = 110,
+        Count = 11,
     }
 }

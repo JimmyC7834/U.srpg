@@ -56,10 +56,11 @@ namespace Game.Unit.Skill
     
     public enum SkillId
     {
-        None,
-        Punch,
-        Move,
-        DealPoison1,
-        Count,
+        None = -1,
+        Punch = 9910,
+        EmptyPunch = 9920,
+        Move = 9930,
+        DealPoison1 = 9940,
+        Count = 4,
     }
 }

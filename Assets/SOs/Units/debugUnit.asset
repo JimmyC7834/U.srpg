@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: debugUnit
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 1
+  _id: 9900
   _sprite: {fileID: 4407443601765327208, guid: f36af427a0eb69941a418db982e93d4d, type: 3}
   _animatorOverrideController: {fileID: 22100000, guid: cea6c3c83a609d24abea107b8ddf215b, type: 2}
   _partTree:

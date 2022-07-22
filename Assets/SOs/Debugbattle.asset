@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitSpawnInfo:
   - coord: {x: 3, y: 0}
-    unitId: 2
+    unitId: 9910
   - coord: {x: 3, y: 1}
-    unitId: 1
+    unitId: 9900
   _mapSize: 16

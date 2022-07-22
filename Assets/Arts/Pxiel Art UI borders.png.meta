@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -176,7 +176,7 @@ TextureImporter:
         height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 8, y: 8, z: 8, w: 8}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -197,7 +197,7 @@ TextureImporter:
         height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 29, y: 31, z: 30, w: 27}
+      border: {x: 44, y: 42, z: 46, w: 40}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -218,7 +218,7 @@ TextureImporter:
         height: 92
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 11, y: 11, z: 11, w: 11}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -281,13 +281,34 @@ TextureImporter:
         height: 90
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 12, y: 12, z: 12, w: 12}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: e2a7591f1304b194493056ec14819080
       internalID: -1080879250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pxiel Art UI borders_9
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 107
+        width: 50
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 9, y: 7, z: 6, w: 9}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4a0349454bedb245b67a2cafc4d05d0
+      internalID: -1766358017
       vertices: []
       indices: 
       edges: []
@@ -308,6 +329,7 @@ TextureImporter:
       Pxiel Art UI borders_6: -1358299437
       Pxiel Art UI borders_8: -1080879250
       Pxiel Art UI borders_7: -330120687
+      Pxiel Art UI borders_9: -1550190388
       Pxiel Art UI borders_1: -1256374168
       Pxiel Art UI borders_2: 1187318607
       Pxiel Art UI borders_3: 514331062
