@@ -4,7 +4,7 @@ using Game.Battle;
 using Game.Battle.Map;
 using UnityEngine;
 
-namespace Game.Unit.StatusEffects
+namespace Game.Unit.StatusEffect
 {
     [CreateAssetMenu(menuName = "Game/StatusEffects/SE_Poison")]
     public class SE_Poison : StatusEffectSO

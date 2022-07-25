@@ -27,27 +27,52 @@ namespace Game.Unit.Ability
     [Serializable]
     public struct Condition
     {
-        public enum PlayerValueType
+        public enum UnitValueType
         {
+            HP,
+            MP,
+            HPPercent,
             Height,
-            DUR,
+            Constant_25,
+            Constant_50,
+            Constant_75,
+            Constant_80,
+            Constant_100,
         }
         
         public enum ComparisonType
         {
             Greater,
             Less,
+            GreaterOrEquals,
+            LessOrEquals,
             Equals,
             NotEquals,
         }
-
+        
+        [SerializeField] private UnitValueType _unitValueType;
         [SerializeField] private ComparisonType _comparisonType;
+        [SerializeField] private UnitValueType _targetValueType;
         [SerializeField] private float _value;
 
+        private static Dictionary<UnitValueType, Func<UnitObject, float>> _valueLookUpTable = new Dictionary<UnitValueType, Func<UnitObject, float>>
+        {
+            {UnitValueType.HP, (unit) => unit.param.DUR},
+            {UnitValueType.MP, (unit) => unit.param.MP},
+            {UnitValueType.HPPercent, (unit) => unit.param.HPPercent},
+            {UnitValueType.Height, (unit) => unit.height},
+            {UnitValueType.Constant_25, (_) => .25f},
+            {UnitValueType.Constant_50, (_) => .50f},
+            {UnitValueType.Constant_80, (_) => .80f},
+            {UnitValueType.Constant_100, (_) => .100f},
+        };
+        
         public bool MatchCondition(float inputValue)
         {
             return (inputValue > _value && _comparisonType == ComparisonType.Greater) ||
                    (inputValue < _value && _comparisonType == ComparisonType.Less) ||
+                   (inputValue >= _value && _comparisonType == ComparisonType.GreaterOrEquals) ||
+                   (inputValue <= _value && _comparisonType == ComparisonType.LessOrEquals) ||
                    (FloatComparer.AreEqual(inputValue, _value, 0.001f) && _comparisonType == ComparisonType.Equals) ||
                    (!FloatComparer.AreEqual(inputValue, _value, 0.001f) && _comparisonType == ComparisonType.NotEquals);
         }

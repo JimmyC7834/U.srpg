@@ -1,17 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Game.Battle;
 using Game.Battle.Map;
 using Game.DataSet;
 using Game.Unit.Ability;
 using Game.Unit.Part;
 using Game.Unit.Skill;
-using Game.Unit.StatusEffects;
+using Game.Unit.StatusEffect;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
+
 
 namespace Game.Unit
 {
@@ -107,7 +104,6 @@ namespace Game.Unit
         
         public void RemoveStatusEffects(StatusEffectId statusEffectId)
         {
-            _statusEffectDataSet[statusEffectId].RemoveFrom(this);
             int index = _statusEffectRegisters.FindIndex(reg => reg.id == statusEffectId);
             if (index < 0) return;
             _statusEffectDataSet[statusEffectId].RemoveFrom(this);

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Game.DataSet;
 using UnityEngine;
 
-namespace Game.Unit.StatusEffects
+namespace Game.Unit.StatusEffect
 {
     public abstract class StatusEffectSO : DataEntrySO<StatusEffectId>
     {
@@ -16,7 +14,9 @@ namespace Game.Unit.StatusEffects
     public enum StatusEffectId
     {
         None = -1,
+        AttackDamageUp = 5,
         DamageBoost1 = 10,
+        AttackDamageReduction = 15,
         Poison1 = 20,
         Count = 2,
     }

@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using Game.Battle;
 using Game.Battle.Map;
-using Game.Unit.StatusEffects;
+using Game.Unit.StatusEffect;
 using UnityEngine;
 
 namespace Game.Unit.Skill

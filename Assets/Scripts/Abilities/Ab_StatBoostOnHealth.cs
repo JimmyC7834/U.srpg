@@ -1,4 +1,4 @@
-﻿using Game.Unit.StatusEffects;
+﻿using Game.Unit.StatusEffect;
 using UnityEngine;
 
 namespace Game.Unit.Ability
@@ -15,17 +15,17 @@ namespace Game.Unit.Ability
         {
             if (isAttackBoost)
             {
-                unit.param.OnDurChanged += BoostAttack;
+                unit.param.OnHPChanged += BoostAttack;
             }
             else
             {
-                unit.param.OnDurChanged += BoostDefence;
+                unit.param.OnHPChanged += BoostDefence;
             }
         }
 
         public void BoostAttack(UnitObject unit)
         {
-            if (unit.param.DUR < unit.param.MaxDUR / 2)
+            if (unit.param.DUR < unit.param.MaxHP / 2)
             {
                 unit.RegisterStatusEffects(StatusEffectId.DamageBoost1);
                 return;

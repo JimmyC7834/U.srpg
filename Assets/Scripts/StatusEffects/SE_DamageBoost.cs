@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Unit.StatusEffects
+namespace Game.Unit.StatusEffect
 {
     [CreateAssetMenu(menuName = "Game/StatusEffects/SE_DamageBoost")]
     public class SE_DamageBoost : StatusEffectSO

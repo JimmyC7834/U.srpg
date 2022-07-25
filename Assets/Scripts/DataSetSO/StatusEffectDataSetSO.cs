@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Game.Unit.StatusEffects;
+using Game.Unit.StatusEffect;
 using UnityEngine;
 
 namespace Game.DataSet
