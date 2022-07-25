@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SE_Poison
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 2
+  _id: 20
   _icon: {fileID: 0}
   damagePerTurn: 1

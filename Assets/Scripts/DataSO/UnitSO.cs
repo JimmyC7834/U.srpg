@@ -44,13 +44,13 @@ namespace Game.Unit
 
     public enum UnitId
     {
-        None,
-        DebugUnit,
-        Norm,
-        Norm1,
-        Norm2,
-        Norm3,
-        Count
+        None = -1,
+        DebugUnit = 9900,
+        Norm = 9910,
+        Norm1 = 9920,
+        Norm2 = 9930,
+        Norm3 = 9940,
+        Count = 5
     }
 }
 

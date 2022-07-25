@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ab_DamageReduction
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 1
+  _id: 10
   icon: {fileID: 0}
   _damageReduction: 1

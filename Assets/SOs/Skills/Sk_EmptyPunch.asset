@@ -9,13 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7dc85df1cd54a8e8cac08f1873dd1c4, type: 3}
-  m_Name: Ab_DamageUpUnder50Dur
+  m_Script: {fileID: 11500000, guid: 19af590456cda2246bd300d58c60f8da, type: 3}
+  m_Name: Sk_EmptyPunch
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 7
-  icon: {fileID: 0}
-  _triggerHealth: 0
-  _value: 10
-  _modifyType: 100
-  isAttackBoost: 1
+  _id: 9920
+  _icon: {fileID: 0}
+  _unique: 0
+  _cost: 11
+  _skillSelectionRange:
+    range: 10
+    ignoreTerrain: 1
+    includeSelf: 1
+    optionalRange:
+      enabled: 0
+      value: []
+  _value: 0

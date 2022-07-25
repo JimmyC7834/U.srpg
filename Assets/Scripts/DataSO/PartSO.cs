@@ -49,13 +49,13 @@ namespace Game.Unit.Part
 
     public enum PartId
     {
-        None,
-        DebugPart,
-        RottenArm,
-        RottenTorso,
-        RottenLeg,
-        RottenHead,
-        SteelPlate,
-        Count,
+        None = -1,
+        DebugPart = 10,
+        RottenArm = 20,
+        RottenTorso = 30,
+        RottenLeg = 40,
+        RottenHead = 50,
+        SteelPlate = 60,
+        Count = 6,
     }
 }

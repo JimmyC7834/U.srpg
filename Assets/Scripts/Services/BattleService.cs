@@ -35,7 +35,7 @@ namespace Game.Battle
         public void InitializeDebugConsole()
         {
             debugConsole.AddItem("Koku", () => battleTurnManager.koku.ToString());
-            debugConsole.AddItem("Turn", () => battleTurnManager.koku.ToString());
+            debugConsole.AddItem("Turn", () => battleTurnManager.turn.ToString());
             debugConsole.AddItem("Current Selected Unit", () =>
             {
                 if (battleBoard.CoordOnBoard(cursor.MapCoord))

@@ -15,9 +15,9 @@ namespace Game.Unit.StatusEffects
 
     public enum StatusEffectId
     {
-        None,
-        DamageBoost1,
-        Poison1,
-        Count,
+        None = -1,
+        DamageBoost1 = 10,
+        Poison1 = 20,
+        Count = 2,
     }
 }

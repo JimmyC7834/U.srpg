@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Pt_DebugPart
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 1
+  _id: 10
   _abDataset: {fileID: 11400000, guid: 5a57583d9c62bf74fa629e35c82cff15, type: 2}
-  _abilities: 05000000
+  _abilities: 46000000
   _statBoostEntries:
   - unitStatType: 0
     value: 1
   _icon: {fileID: 0}
-  _skillId: 3
+  _skillId: 9940

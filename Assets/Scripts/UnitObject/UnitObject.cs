@@ -11,6 +11,7 @@ using Game.Unit.Skill;
 using Game.Unit.StatusEffects;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Game.Unit
 {
@@ -21,7 +22,7 @@ namespace Game.Unit
         [SerializeField] private BattleService _battleService;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private List<StatusEffectId> _statusEffects;
+        [SerializeField] private List<StatusEffectRegister> _statusEffectRegisters;
 
         private UnitSO unitSO;
         
@@ -53,7 +54,7 @@ namespace Game.Unit
             partTree = new UnitPartTree(this, unitSO.PartTree);
             unitAnimation = GetComponent<UnitAnimation>();
             unitAnimation.Initialize(this, unitSO.animatorOverrideController);
-            _statusEffects = new List<StatusEffectId>();
+            _statusEffectRegisters = new List<StatusEffectRegister>();
             
             _transform = transform;
             _spriteRenderer.sprite = unitSO.sprite;
@@ -64,6 +65,12 @@ namespace Game.Unit
             unitAnimation.SwitchStateTo(UnitAnimation.Idle);
             
             battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
+            OnTurnChanged += RefreshKoku;
+        }
+
+        private void RefreshKoku(UnitObject _)
+        {
+            param.ResetMP();
         }
 
         private void InvokeOnTurnChanged(int turn) => OnTurnChanged?.Invoke(this);
@@ -91,16 +98,20 @@ namespace Game.Unit
             param.AddModifiers(node.Part.statBoost);
         }
 
-        public void RegisterStatusEffects(StatusEffectId statusEffectId)
+        public void RegisterStatusEffects(StatusEffectId statusEffectId) => RegisterStatusEffects(statusEffectId, -1);
+        public void RegisterStatusEffects(StatusEffectId statusEffectId, int turns)
         {
             _statusEffectDataSet[statusEffectId].RegisterTo(this);
-            _statusEffects.Add(statusEffectId);
+            _statusEffectRegisters.Add(StatusEffectRegister.From(statusEffectId, turns, this));
         }
         
         public void RemoveStatusEffects(StatusEffectId statusEffectId)
         {
             _statusEffectDataSet[statusEffectId].RemoveFrom(this);
-            _statusEffects.Remove(statusEffectId);
+            int index = _statusEffectRegisters.FindIndex(reg => reg.id == statusEffectId);
+            if (index < 0) return;
+            _statusEffectDataSet[statusEffectId].RemoveFrom(this);
+            _statusEffectRegisters.RemoveAt(index);
         }
         
         public void DealDamageTo(AttackInfo attackInfo)
@@ -190,6 +201,37 @@ namespace Game.Unit
         }
     }
 
+    [Serializable]
+    public struct StatusEffectRegister
+    {
+        public StatusEffectId id { get; private set; }
+        public int turnsLeft { get; private set; }
+
+        public void CountDown(UnitObject unit)
+        {
+            if (turnsLeft <= -1) return;
+            
+            turnsLeft--;
+            if (turnsLeft == 0)
+            {
+                unit.RemoveStatusEffects(id);
+                unit.OnTurnChanged -= CountDown;
+            }
+            Debug.Log("CountDown!!!!!");
+        }
+        
+        public static StatusEffectRegister From(StatusEffectId _id, int turns, UnitObject unit)
+        {
+            StatusEffectRegister reg = new StatusEffectRegister()
+            {
+                id = _id,
+                turnsLeft = turns,
+            };
+            unit.OnTurnChanged += reg.CountDown;
+            return reg;
+        }
+    }
+    
     public struct DamageInfo
     {
         public DamageStat damageStat { get; private set; }

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Move
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 2
+  _id: 9930
   _icon: {fileID: -1827896563, guid: 7544fbde4715e7843847ceb4bd39c2df, type: 3}
   _unique: 1
+  _cost: 3
   _skillSelectionRange:
     range: 5
     ignoreTerrain: 1

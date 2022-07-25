@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: part_rottenHead
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 5
+  _id: 50
   _abDataset: {fileID: 0}
   _abilities: 
   _statBoostEntries:
@@ -22,4 +22,4 @@ MonoBehaviour:
   - unitStatType: 4
     value: 3
   _icon: {fileID: 0}
-  _skillId: 0
+  _skillId: -1
