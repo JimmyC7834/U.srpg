@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SE_DamageBoost
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 1
+  _id: 10
   _icon: {fileID: 0}
   _value: 10

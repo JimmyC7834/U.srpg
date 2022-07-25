@@ -15,7 +15,7 @@ MonoBehaviour:
   _displayName: 
   _id: 10
   _abDataset: {fileID: 11400000, guid: 5a57583d9c62bf74fa629e35c82cff15, type: 2}
-  _abilities: 5a000000
+  _abilities: 46000000
   _statBoostEntries:
   - unitStatType: 0
     value: 1
