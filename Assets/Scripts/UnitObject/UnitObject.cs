@@ -7,6 +7,7 @@ using Game.Unit.Ability;
 using Game.Unit.Part;
 using Game.Unit.Skill;
 using Game.Unit.StatusEffect;
+using TMPro;
 using UnityEngine;
 
 
@@ -95,18 +96,30 @@ namespace Game.Unit
             param.AddModifiers(node.Part.statBoost);
         }
 
-        public void RegisterStatusEffects(StatusEffectId statusEffectId) => RegisterStatusEffects(statusEffectId, -1);
-        public void RegisterStatusEffects(StatusEffectId statusEffectId, int turns)
+        public void RegisterStatusEffects(StatusEffect.StatusEffect statusEffect, object source) => RegisterStatusEffects(statusEffect, -1, source);
+        public void RegisterStatusEffects(StatusEffect.StatusEffect statusEffect, int turns, object source)
         {
-            _statusEffectDataSet[statusEffectId].RegisterTo(this);
-            _statusEffectRegisters.Add(StatusEffectRegister.From(statusEffectId, turns, this));
+            _statusEffectRegisters.Add(StatusEffectRegister.From(this, statusEffect, turns, source));
         }
         
-        public void RemoveStatusEffects(StatusEffectId statusEffectId)
+        // public void RemoveStatusEffects(StatusEffectId statusEffectId)
+        // {
+        //     int index = _statusEffectRegisters.FindIndex(reg => reg.id == statusEffectId);
+        //     if (index < 0) return;
+        //     _statusEffectDataSet[statusEffectId].RemoveFrom(this);
+        //     _statusEffectRegisters.RemoveAt(index);
+        // }
+        
+        public void RemoveStatusEffectRegister(StatusEffectRegister statusEffectRegister)
         {
-            int index = _statusEffectRegisters.FindIndex(reg => reg.id == statusEffectId);
+            if (!_statusEffectRegisters.Contains(statusEffectRegister)) return;
+            _statusEffectRegisters.Remove(statusEffectRegister);
+        }
+        
+        public void RemoveStatusEffectRegister(object source)
+        {
+            int index = _statusEffectRegisters.FindIndex(reg => reg.source.Equals(source));
             if (index < 0) return;
-            _statusEffectDataSet[statusEffectId].RemoveFrom(this);
             _statusEffectRegisters.RemoveAt(index);
         }
         
@@ -200,30 +213,35 @@ namespace Game.Unit
     [Serializable]
     public struct StatusEffectRegister
     {
-        public StatusEffectId id { get; private set; }
+        public StatusEffect.StatusEffect statusEffect { get; private set; }
         public int turnsLeft { get; private set; }
+        public UnitObject Unit => statusEffect.unit;
+        public object source { get; private set; }
 
-        public void CountDown(UnitObject unit)
+        public void CountDown(UnitObject _)
         {
             if (turnsLeft <= -1) return;
             
             turnsLeft--;
             if (turnsLeft == 0)
             {
-                unit.RemoveStatusEffects(id);
-                unit.OnTurnChanged -= CountDown;
+                Unit.RemoveStatusEffectRegister(this);
+                statusEffect.Remove();
+                Unit.OnTurnChanged -= CountDown;
             }
-            Debug.Log("CountDown!!!!!");
         }
         
-        public static StatusEffectRegister From(StatusEffectId _id, int turns, UnitObject unit)
+        public static StatusEffectRegister From(UnitObject _unit, StatusEffect.StatusEffect statusEffect, int turns, object _source)
         {
             StatusEffectRegister reg = new StatusEffectRegister()
             {
-                id = _id,
                 turnsLeft = turns,
+                source = _source,
+                statusEffect = statusEffect,
             };
-            unit.OnTurnChanged += reg.CountDown;
+            
+            statusEffect.RegisterTo(_unit);
+            reg.Unit.OnTurnChanged += reg.CountDown;
             return reg;
         }
     }

@@ -27,11 +27,11 @@ namespace Game.Unit.Ability
         {
             if (unit.param.DUR < unit.param.MaxHP / 2)
             {
-                unit.RegisterStatusEffects(StatusEffectId.DamageBoost1);
+                unit.RegisterStatusEffects(new SE_AttackDamageUp(_value), StatusEffectId.DamageBoost1);
                 return;
             }
             
-            unit.RemoveStatusEffects(StatusEffectId.DamageBoost1);
+            unit.RemoveStatusEffectRegister(StatusEffectId.DamageBoost1);
         }
         
         public void BoostDefence(UnitObject unit)

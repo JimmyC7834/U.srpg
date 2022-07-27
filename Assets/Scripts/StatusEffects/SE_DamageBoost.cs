@@ -25,3 +25,4 @@ namespace Game.Unit.StatusEffect
         }
     }
 }
+
