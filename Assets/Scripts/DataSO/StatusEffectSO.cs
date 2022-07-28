@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Unit.StatusEffect
 {
-    public abstract class StatusEffectSO : DataEntrySO<StatusEffectId>
+    public abstract class StatusEffectSO1 : DataEntrySO<StatusEffectId>
     {
         [SerializeField] private Sprite _icon;
         public Sprite icon { get; }

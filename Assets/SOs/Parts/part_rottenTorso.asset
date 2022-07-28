@@ -20,4 +20,4 @@ MonoBehaviour:
   - unitStatType: 0
     value: 3
   _icon: {fileID: 0}
-  _skillId: -1
+  _skillId: 9910

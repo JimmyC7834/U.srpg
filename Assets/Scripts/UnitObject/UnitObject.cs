@@ -16,7 +16,6 @@ namespace Game.Unit
     public class UnitObject : MonoBehaviour
     {
         [SerializeField] private SkillDataSetSO _skillDataSet;
-        [SerializeField] private StatusEffectDataSetSO _statusEffectDataSet;
         [SerializeField] private BattleService _battleService;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
