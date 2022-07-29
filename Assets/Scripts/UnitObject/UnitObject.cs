@@ -24,7 +24,7 @@ namespace Game.Unit
         private UnitSO unitSO;
         
         public UnitParam param;
-        public UnitAnimation unitAnimation { get; private set; }
+        public UnitAnimation anim { get; private set; }
         public UnitPartTree partTree { get; private set; }
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
@@ -36,8 +36,9 @@ namespace Game.Unit
         public event Action<DamageInfo> OnTakenDamage;
         public event Action<AttackInfo> OnStartDealDamage;
         public event Action<AttackInfo> OnDealDamage;
-        public event Action<int> OnMpChanged;
-        
+        public event Action<AttackInfo> OnDodgedAttack;
+        public event Action<AttackInfo> OnCounterAttack;
+        public event Action<AttackInfo> OnExtendedAttack;
         public event Action<UnitObject> OnTurnChanged;
         public event Action<UnitObject> OnKokuChanged;
 
@@ -49,8 +50,8 @@ namespace Game.Unit
             this.unitSO = unitSO;
             param = new UnitParam().Initialize(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
-            unitAnimation = GetComponent<UnitAnimation>();
-            unitAnimation.Initialize(this, unitSO.animatorOverrideController);
+            anim = GetComponent<UnitAnimation>();
+            anim.Initialize(this, unitSO.animatorOverrideController);
             _statusEffectRegisters = new List<StatusEffectRegister>();
             
             _transform = transform;
@@ -59,7 +60,7 @@ namespace Game.Unit
             param.InitializeMaxValues();
             param.Evaluate();
             
-            unitAnimation.SwitchStateTo(UnitAnimation.Idle);
+            anim.SwitchStateTo(UnitAnimation.Idle);
             
             battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
             OnTurnChanged += RefreshKoku;
@@ -100,15 +101,7 @@ namespace Game.Unit
         {
             _statusEffectRegisters.Add(StatusEffectRegister.From(this, statusEffect, turns, source));
         }
-        
-        // public void RemoveStatusEffects(StatusEffectId statusEffectId)
-        // {
-        //     int index = _statusEffectRegisters.FindIndex(reg => reg.id == statusEffectId);
-        //     if (index < 0) return;
-        //     _statusEffectDataSet[statusEffectId].RemoveFrom(this);
-        //     _statusEffectRegisters.RemoveAt(index);
-        // }
-        
+
         public void RemoveStatusEffectRegister(StatusEffectRegister statusEffectRegister)
         {
             if (!_statusEffectRegisters.Contains(statusEffectRegister)) return;
@@ -124,6 +117,9 @@ namespace Game.Unit
         
         public void DealDamageTo(AttackInfo attackInfo)
         {
+            RollHit(attackInfo);
+            RollCritical(attackInfo);
+            
             OnStartDealDamage?.Invoke(attackInfo);
             attackInfo.target.TakeAttack(attackInfo);
             OnDealDamage?.Invoke(attackInfo);
@@ -131,6 +127,14 @@ namespace Game.Unit
         
         public void TakeAttack(AttackInfo attackInfo)
         {
+            if (attackInfo.missed)
+                return;
+
+            RollDodge(attackInfo);
+
+            if (attackInfo.dodge)
+                return;
+            
             OnStartTakenAttack?.Invoke(attackInfo);
             TakeDamage(attackInfo.damageInfo);
             OnTakenAttack?.Invoke(attackInfo);
@@ -146,6 +150,28 @@ namespace Game.Unit
             OnTakenDamage?.Invoke(damageInfo);
         }
 
+        public void RollHit(AttackInfo attackInfo)
+        {
+            if (!param.CheckHit())
+                attackInfo.ToMissed();
+        }
+        
+        public void RollCritical(AttackInfo attackInfo)
+        {
+            if (param.CheckCritical())
+            {
+                attackInfo.ToCritical();
+                
+            }
+
+        }
+        
+        public void RollDodge(AttackInfo attackInfo)
+        {
+            if (param.CheckDodge())
+                attackInfo.ToDodged();
+        }
+        
         public class UnitPartTree
         {
             public class UnitPartTreeNode
@@ -261,20 +287,35 @@ namespace Game.Unit
         };
     }
     
-    public struct AttackInfo
+    public class AttackInfo
     {
         public AttackSourceInfo source { get; private set; }
         public BattleBoardTile targetTile { get; private set; }
         public UnitObject target { get => targetTile.unitOnTile; }
-        public DamageInfo damageInfo;
+        public DamageInfo damageInfo { get; private set; }
+        public int combo { get; private set; }
+        public bool isCritical { get; private set; }
+        public bool missed { get; private set; }
+        public bool dodge { get; private set; }
 
-        public static AttackInfo From(AttackSourceInfo _source, BattleBoardTile _targetTile) => new AttackInfo()
+        public static AttackInfo From(AttackSourceInfo _source, BattleBoardTile _targetTile) =>
+            From(_source, _targetTile, 1);
+
+        public static AttackInfo From(AttackSourceInfo _source, BattleBoardTile _targetTile, int _combo) => new AttackInfo()
         {
             source = _source,
             targetTile = _targetTile,
             damageInfo = DamageInfo.From(_source),
+            combo = _combo,
+            isCritical = false,
+            missed = false,
+            dodge = false,
         };
 
+        public bool ToCritical() => isCritical = true;
+        public bool ToMissed() => missed = true;
+        public bool ToDodged() => dodge = true;
+        
         public void AddModifier(DamageStatModifier damageStatModifier) => damageInfo.AddModifier(damageStatModifier);
 
         public UnitStatModifier damageModifier => damageInfo.damageModifier;
@@ -286,15 +327,16 @@ namespace Game.Unit
         public UnitObject sourceUnit { get; private set; }
         public SkillSO sourceSkill { get; private set; }
 
-
         public static AttackSourceInfo Empty => new AttackSourceInfo()
         {
             sourceTile = null,
             sourceUnit = null,
             sourceSkill = null,
         };
+        
         public static AttackSourceInfo From(SkillCastInfo skillCastInfo) =>
             From(skillCastInfo.casterTile, skillCastInfo.castedSkill);
+        
         public static AttackSourceInfo From(BattleBoardTile sourceTile, SkillSO _sourceSkill) => new AttackSourceInfo()
         {
             sourceTile = sourceTile,

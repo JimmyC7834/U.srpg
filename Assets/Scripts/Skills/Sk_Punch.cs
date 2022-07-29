@@ -20,8 +20,8 @@ namespace Game.Unit.Skill
             attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
             skillCastInfo.caster.DealDamageTo(attackInfo);
             
-            skillCastInfo.caster.unitAnimation.AddAnimationStep(UnitAnimation.Attack1, 0.5f);
-            skillCastInfo.caster.unitAnimation.StartAnimation();
+            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, 0.5f);
+            skillCastInfo.caster.anim.StartAnimation();
             yield return null;
         }
     }
