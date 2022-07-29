@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b5f8e75970b95140b8d7112e5c86d1f, type: 3}
-  m_Name: part_rottenTorso
+  m_Script: {fileID: 11500000, guid: fed083722aca8d34e85a9eca7a3355a2, type: 3}
+  m_Name: Ab_DamageReudctionOnHighGoundF
   m_EditorClassIdentifier: 
   _displayName: 
-  _id: 30
-  _abDataset: {fileID: 11400000, guid: 5a57583d9c62bf74fa629e35c82cff15, type: 2}
-  _abilities: 
-  _statBoostEntries:
-  - unitStatType: 0
-    value: 3
-  _icon: {fileID: 0}
-  _skillId: 9910
+  _id: 40
+  icon: {fileID: 0}
+  _buffType: 1
+  _modifyType: 100
+  _modifyValue: 3

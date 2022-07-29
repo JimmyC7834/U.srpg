@@ -8,9 +8,10 @@ namespace Game.Unit
     [Serializable]
     public struct UnitParam
     {
-        [SerializeField] private int _maxMp;
-        [SerializeField] private int _maxDur;
+        [SerializeField] private int _maxMP;
+        [SerializeField] private int _maxHP;
         [SerializeField] private int _maxSan;
+        
         [SerializeField] private UnitStat _dur;
         [SerializeField] private UnitStat _str;
         [SerializeField] private UnitStat _dex;
@@ -32,14 +33,15 @@ namespace Game.Unit
 
             _unit = unit;
             MP = 10;
-            _maxDur = DUR;
+            
+            _maxHP = DUR;
             _maxSan = SAN;
             return this;
         }
 
         public void InitializeMaxValues()
         {
-            _maxDur = DUR;
+            _maxHP = DUR;
             _maxSan = SAN;
         }
 
@@ -48,7 +50,8 @@ namespace Game.Unit
             get => _param[(int) statType];
         }
             
-        public int MaxDUR { get => _maxDur; }
+        public int MaxHP { get => _maxHP; }
+        public float HPPercent { get => DUR/(float) _maxHP; }
         public int MP { get; private set; }
         public int DUR { get => _dur.Value; }
         public int STR { get => _str.Value; }
@@ -56,7 +59,7 @@ namespace Game.Unit
         public int PER { get => _per.Value; }
         public int SAN { get => _san.Value; }
         
-        public event Action<UnitObject> OnDurChanged;
+        public event Action<UnitObject> OnHPChanged;
         public event Action<UnitObject> OnMPChanged;
 
         public void AddModifier(UnitStatModifier modifier)
@@ -64,7 +67,7 @@ namespace Game.Unit
             this[modifier.statType].AddModifier(modifier);
             if (modifier.statType == UnitStatType.DUR)
             {
-                OnDurChanged?.Invoke(_unit);
+                OnHPChanged?.Invoke(_unit);
             }
         }
 
@@ -78,7 +81,7 @@ namespace Game.Unit
 
         public void ResetMP()
         {
-            MP = _maxMp;
+            MP = _maxMP;
             OnMPChanged?.Invoke(_unit);
         }
         

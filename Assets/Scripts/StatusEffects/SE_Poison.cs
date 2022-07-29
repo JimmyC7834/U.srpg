@@ -4,23 +4,27 @@ using Game.Battle;
 using Game.Battle.Map;
 using UnityEngine;
 
-namespace Game.Unit.StatusEffects
+namespace Game.Unit.StatusEffect
 {
-    [CreateAssetMenu(menuName = "Game/StatusEffects/SE_Poison")]
-    public class SE_Poison : StatusEffectSO
+    public class SE_Poison : StatusEffect
     {
-        [SerializeField] private int damagePerTurn;
+        [SerializeField] private float damagePerTurn;
+
+        public SE_Poison(float _damagePerTurn)
+        {
+            damagePerTurn = _damagePerTurn;
+        }
         
-        public override void RegisterTo(UnitObject unit)
+        protected override void Register(UnitObject unit)
         {
             unit.OnTurnChanged += DealDamage;
         }
-
-        public override void RemoveFrom(UnitObject unit)
+    
+        public override void Remove()
         {
             unit.OnTurnChanged -= DealDamage;
         }
-
+    
         public void DealDamage(UnitObject unit)
         {
             DamageInfo damageInfo = DamageInfo.From(this);

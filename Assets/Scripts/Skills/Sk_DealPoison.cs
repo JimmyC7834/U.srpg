@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using Game.Battle;
 using Game.Battle.Map;
-using Game.Unit.StatusEffects;
+using Game.Unit.StatusEffect;
 using UnityEngine;
 
 namespace Game.Unit.Skill
@@ -16,7 +15,7 @@ namespace Game.Unit.Skill
 
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
-            skillCastInfo.target.RegisterStatusEffects(StatusEffectId.Poison1, _turns);
+            skillCastInfo.target.RegisterStatusEffects(new SE_Poison(10f), _turns);
             yield return null;
         }
     }
