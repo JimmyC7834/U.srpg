@@ -37,6 +37,7 @@ namespace Game.Unit
         public event Action<AttackInfo> OnStartDealDamage;
         public event Action<AttackInfo> OnDealDamage;
         public event Action<AttackInfo> OnDodgedAttack;
+        public event Action<AttackInfo> OnMissedAttack;
         public event Action<AttackInfo> OnCounterAttack;
         public event Action<AttackInfo> OnExtendedAttack;
         public event Action<UnitObject> OnTurnChanged;
@@ -118,6 +119,13 @@ namespace Game.Unit
         public void DealDamageTo(AttackInfo attackInfo)
         {
             RollHit(attackInfo);
+            
+            if (attackInfo.missed)
+            {
+                OnMissedAttack?.Invoke(attackInfo);
+                return;
+            }
+            
             RollCritical(attackInfo);
             
             OnStartDealDamage?.Invoke(attackInfo);
@@ -127,13 +135,13 @@ namespace Game.Unit
         
         public void TakeAttack(AttackInfo attackInfo)
         {
-            if (attackInfo.missed)
-                return;
-
             RollDodge(attackInfo);
 
             if (attackInfo.dodge)
+            {
+                OnDodgedAttack?.Invoke(attackInfo);
                 return;
+            }
             
             OnStartTakenAttack?.Invoke(attackInfo);
             TakeDamage(attackInfo.damageInfo);
