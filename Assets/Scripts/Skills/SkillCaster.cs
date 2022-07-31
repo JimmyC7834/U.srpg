@@ -41,7 +41,13 @@ namespace Game.Battle
             UnitObject caster = _skillCastInfo.casterTile.unitOnTile;
             SkillSO skill = _skillCastInfo.castedSkill;
             _selectionInfo = GetRangeTilesFrom(
-                caster.location.x, caster.location.y, skill.range, skill.ignoreTerrain, skill.includeSelf, skill.optionalRange);
+                caster.location.x,
+                caster.location.y, 
+                skill.calWithMoveRange ? caster.param.GetMoveRange() : skill.range,
+                skill.ignoreTerrain, 
+                skill.includeSelf, 
+                skill.optionalRange);
+
 
             _battleService.mapHighlighter.HighlightTiles(
                 _selectionInfo.rangeTiles.Select(x => x.coord),
@@ -85,7 +91,7 @@ namespace Game.Battle
                 foreach (Vector2 tileCoord in battleBoard.GetTile(currentTile.x, currentTile.y).neighbours)
                 {
                     BattleBoardTile tile = battleBoard.GetTile(tileCoord);
-                    float costLeft = tileCostLeft[currentTile.coord] - (ignoreTerrain ? 1 : tile.cost);
+                    float costLeft = tileCostLeft[currentTile.coord] - (ignoreTerrain ? 1 : 2);
                     if (!explored.Contains(tileCoord) && costLeft >= 0f && tile.walkable)
                     {
                         queue.Enqueue(tile);

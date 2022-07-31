@@ -29,7 +29,9 @@ namespace Game.Unit
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
         public BattleTeam _team { get => BattleTeam.Player; }
-        
+
+        public event Action<AttackInfo> OnInitiatingAttack;
+        public event Action<AttackInfo> OnRecivingAttack;
         public event Action<AttackInfo> OnStartTakenAttack;
         public event Action<DamageInfo> OnStartTakenDamage;
         public event Action<AttackInfo> OnTakenAttack;
@@ -135,6 +137,7 @@ namespace Game.Unit
         
         public void TakeAttack(AttackInfo attackInfo)
         {
+            OnRecivingAttack?.Invoke(attackInfo);
             RollDodge(attackInfo);
 
             if (attackInfo.dodge)

@@ -74,5 +74,8 @@ namespace Game.Unit.Ability
     {
         DamageUp,
         DamageReduction,
+        CirtRateUp,
+        DodgeRateUp,
+        HitRateUp,
     }
 }

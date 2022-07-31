@@ -15,7 +15,7 @@ namespace Game.Unit.StatusEffect
             _value = value;
         }
         
-        protected override void Register(UnitObject _unit)
+        protected override void Register()
         {
             unit.OnStartDealDamage += BoostAttack;
         }
@@ -28,13 +28,7 @@ namespace Game.Unit.StatusEffect
         
         public void BoostAttack(AttackInfo attackInfo)
         {
-            if (_value <= 0)
-            {
-                Debug.LogError("DamageUp <= 0 !!!!");
-                return;
-            }
-
-            if (_value < 1f)
+            if (Mathf.Abs(_value) < 1f)
             {
                 attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.PercentAdd));
                 return;
@@ -43,4 +37,10 @@ namespace Game.Unit.StatusEffect
             attackInfo.AddModifier(new DamageStatModifier((int)_value, BaseStatModifier.ModifyType.Flat));
         }
     }
+
+    public class SE_AttackDamageDown : SE_AttackDamageUp
+    {
+        public SE_AttackDamageDown(float value) : base(-value) { }
+    }
+
 }

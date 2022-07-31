@@ -18,6 +18,9 @@ namespace Game.Unit
     [Serializable]
     public class UnitStat : BaseStat
     {
+        public UnitStat() : base() { }
+        public UnitStat(int baseValue) : base(baseValue) { }
+        
         // round down
         public int Value { get => (int) base.Value; }
         protected override float Evaluate()

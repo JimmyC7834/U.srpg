@@ -11,7 +11,7 @@ namespace Game.Unit.StatusEffect
 
         public SE_DamageReduction(float value) => _value = value;
 
-        protected override void Register(UnitObject unit)
+        protected override void Register()
         {
             unit.OnStartTakenAttack += ReduceDamage;
         }

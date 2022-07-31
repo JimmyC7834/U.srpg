@@ -20,6 +20,7 @@ namespace Game.Unit.Skill
         private struct SkillSelectionRange
         {
             public int range;
+            public bool calWithMoveRange;
             public bool ignoreTerrain;
             public bool includeSelf;
             public Optional<Vector2[]> optionalRange;
@@ -30,6 +31,7 @@ namespace Game.Unit.Skill
         public Sprite icon { get => _icon; }
         public bool unique { get => _unique; }
         public int range { get => _skillSelectionRange.range; }
+        public bool calWithMoveRange { get => _skillSelectionRange.calWithMoveRange; }
         public bool ignoreTerrain { get => _skillSelectionRange.ignoreTerrain; }
         public bool includeSelf { get => _skillSelectionRange.includeSelf; }
         public Optional<Vector2[]> optionalRange { get => _skillSelectionRange.optionalRange; }

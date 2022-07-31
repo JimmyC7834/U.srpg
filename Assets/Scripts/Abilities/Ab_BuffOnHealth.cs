@@ -26,12 +26,24 @@ namespace Game.Unit.Ability
                 case BuffType.DamageUp:
                     unit.OnStartTakenAttack += DamageUpTrigger;
                     break;
+                case BuffType.HitRateUp:
+                    unit.OnInitiatingAttack += HitRateUpTrigger;
+                    break;
+                case BuffType.DodgeRateUp:
+                    unit.OnInitiatingAttack += DodgeRateUpTrigger;
+                    break;
+                case BuffType.CirtRateUp:
+                    unit.OnInitiatingAttack += CritRateUpTrigger;
+                    break;
             }
         }
 
         public void DamageReductionTrigger(AttackInfo attackInfo)
         {
-            if (_comparer.MatchCondition(attackInfo.target.param.HPPercent))
+            UnitObject self = attackInfo.target;
+            UnitObject foe = attackInfo.source.sourceUnit;
+            
+            if (_comparer.MatchCondition(self.param.HPPercent))
             {
                 attackInfo.AddModifier(_modifierDict[_modifyType](_modifyValue));
             }
@@ -39,9 +51,45 @@ namespace Game.Unit.Ability
         
         public void DamageUpTrigger(AttackInfo attackInfo)
         {
-            if (_comparer.MatchCondition(attackInfo.source.sourceUnit.param.HPPercent))
+            UnitObject foe = attackInfo.target;
+            UnitObject self = attackInfo.source.sourceUnit;
+
+            if (_comparer.MatchCondition(self.param.HPPercent))
             {
                 attackInfo.AddModifier(_modifierDict[_modifyType](_modifyValue));
+            }
+        }
+        
+        public void HitRateUpTrigger(AttackInfo attackInfo)
+        {
+            UnitObject foe = attackInfo.target;
+            UnitObject self = attackInfo.source.sourceUnit;
+            
+            if (_comparer.MatchCondition(self.param.HPPercent))
+            {
+                self.param.ModifyHitRate(_modifyValue, this);
+            }
+        }
+        
+        public void DodgeRateUpTrigger(AttackInfo attackInfo)
+        {
+            UnitObject self = attackInfo.target;
+            UnitObject foe = attackInfo.source.sourceUnit;
+            
+            if (_comparer.MatchCondition(self.param.HPPercent))
+            {
+                self.param.ModifyDodgeRate(_modifyValue, this);
+            }
+        }
+        
+        public void CritRateUpTrigger(AttackInfo attackInfo)
+        {
+            UnitObject foe = attackInfo.target;
+            UnitObject self = attackInfo.source.sourceUnit;
+            
+            if (_comparer.MatchCondition(self.param.HPPercent))
+            {
+                self.param.ModifyCritRate(_modifyValue, this);
             }
         }
     }
