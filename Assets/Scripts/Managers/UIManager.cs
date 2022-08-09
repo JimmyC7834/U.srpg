@@ -15,10 +15,13 @@ namespace Game
         [SerializeField] private EventSystem _eventSystem;
 
         [SerializeField] private UI_SkillSelectionMenu _skillList;
+        [SerializeField] private UI_BattleTimeline _timeline;
 
         [SerializeField] private GameObject _damageIndicatorPrefab;
         private ObjectPool<UI_DamageIndicator> _damageIndicatorPool;
-
+        
+        public UI_BattleTimeline timeline { get => _timeline; }
+        
         private void Awake()
         {
             _damageIndicatorPool = new ObjectPool<UI_DamageIndicator>(
@@ -28,6 +31,11 @@ namespace Game
                 );
         }
 
+        public void RegisterTimelineIcon(UnitObject unitObject, UnitTimelineIconController unitTimelineIconController)
+        {
+            
+        }
+        
         public void OpenSkillSelectionMenu(UnitObject unit, Action<UI_SkillSelectionMenuItem> callback)
         {
             // TODO: handle no skills

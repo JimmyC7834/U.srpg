@@ -13,6 +13,7 @@ namespace Game.Unit
         private static readonly float BASE_DODGERATE = 0.05f;
         private static readonly float BASE_HITRATE = 0.95f;
         private static readonly int BASE_MOVERANGE = 9;
+        private static readonly int DEFAULT_MP = 10;
         
         [SerializeField] private int _maxMP;
         [SerializeField] private int _maxHP;
@@ -50,9 +51,10 @@ namespace Game.Unit
             };
 
             _unit = unit;
-            MP = 10;
+            MP = DEFAULT_MP;
             
             _maxHP = DUR;
+            _maxMP = DEFAULT_MP;
             _maxSan = SAN;
             return this;
         }
