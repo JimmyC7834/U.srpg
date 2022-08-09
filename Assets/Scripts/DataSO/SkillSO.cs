@@ -63,6 +63,7 @@ namespace Game.Unit.Skill
         EmptyPunch = 9920,
         Move = 9930,
         DealPoison1 = 9940,
+        OneWayEnter = 9950,
         Count = 4,
     }
 }

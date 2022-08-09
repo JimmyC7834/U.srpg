@@ -44,6 +44,7 @@ namespace Game.Unit
         public event Action<AttackInfo> OnExtendedAttack;
         public event Action<UnitObject> OnTurnChanged;
         public event Action<UnitObject> OnKokuChanged;
+        public event Action<UnitObject> OnEndingAction;
 
         public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(_transform.position));
         public float height => _transform.position.y;
@@ -116,6 +117,18 @@ namespace Game.Unit
             int index = _statusEffectRegisters.FindIndex(reg => reg.source.Equals(source));
             if (index < 0) return;
             _statusEffectRegisters.RemoveAt(index);
+        }
+        
+        public void RemoveStatusEffect(StatusEffect.StatusEffect statusEffect)
+        {
+            int index = _statusEffectRegisters.FindIndex(reg => reg.statusEffect.Equals(statusEffect));
+            if (index < 0) return;
+            _statusEffectRegisters.RemoveAt(index);
+        }
+
+        public void EndAction()
+        {
+            OnEndingAction?.Invoke(this);
         }
         
         public void DealDamageTo(AttackInfo attackInfo)

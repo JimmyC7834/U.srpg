@@ -75,7 +75,7 @@ namespace Game.Battle
                     UnitObject unit = battleService.CurrentUnitObject;
                     if (unit == null) return;
                     if (unit._team != BattleTeam.Player) return;
-                    if (unit.param.MP != battleService.currentKoku) return;
+                    if (!battleService.unitManager.currentKokuUnits.Contains(unit)) return;
                     Debug.Log($"Confrimed on unit {battleService.CurrentTile}");
                     _parent.Pop();
                     _parent.Push(new SkillSelectionPhrase(_parent));
@@ -91,6 +91,7 @@ namespace Game.Battle
                 public override void Enter()
                 {
                     _input.DisableAllInput();
+                    _input.menuXEvent += ActionEnd;
                 }
 
                 public override void Start()
@@ -100,10 +101,30 @@ namespace Game.Battle
                         (item) =>
                         {
                             skillCastInfo.SetCastedSkill(item.skill);
-                            _parent.Pop();
-                            _parent.Push(new TargetSelectionPhrase(_parent));
+                            SkillConfirmed();
                         });
+                    
                     _input.EnableMenuNaviInput();
+                }
+
+                private void SkillConfirmed()
+                {
+                    _parent.Pop();
+                    _parent.Push(new TargetSelectionPhrase(_parent));
+                }
+
+                private void ActionEnd()
+                {
+                    battleService.CurrentUnitObject.EndAction();
+                    battleService.uiManager.CloseSkillSelectionMenu();
+                    battleService.unitManager.UpdateCurrentKokuUnits(battleService.currentKoku);
+                    _parent.Pop();
+                    _parent.Push(new HandleKokuPhrase(_parent));
+                }
+
+                public override void Exit()
+                {
+                    _input.menuXEvent -= ActionEnd;
                 }
             }
             
@@ -150,7 +171,7 @@ namespace Game.Battle
                 public void EndPhrase()
                 {
                     _parent.Pop();
-                    _parent.Push(new HandleKokuPhrase(_parent));
+                    _parent.Push(new UnitSelectionPhrase(_parent));
                 }
             }
         }

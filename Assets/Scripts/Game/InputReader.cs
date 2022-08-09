@@ -14,6 +14,8 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
     public event UnityAction<Vector2> menuMoveEvent = delegate { };
     public event UnityAction menuConfirmEvent = delegate { };
     public event UnityAction menuCancelEvent = delegate { };
+    public event UnityAction menuXEvent = delegate { };
+    public event UnityAction menuYEvent = delegate { };
 
     // !!! Remember to edit Input Reader functions upon updating the input map !!!
     private GameInput gameInput;
@@ -67,6 +69,18 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
     {
         if (context.phase == InputActionPhase.Performed)
             menuCancelEvent.Invoke();
+    }
+    
+    public void OnPointerX(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            menuXEvent.Invoke();
+    }
+
+    public void OnPointerY(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            menuYEvent.Invoke();
     }
 
     // Input Reader

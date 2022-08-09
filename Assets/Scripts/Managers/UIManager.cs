@@ -41,7 +41,12 @@ namespace Game
             // TODO: handle no skills
             _skillList.OpenMenu(unit.partTree.GetAllSkills(), (item) => callback.Invoke(item));
             _eventSystem.SetSelectedGameObject(_skillList.GetItemAt(0).gameObject);
-            callback += (_) => _skillList.CloseMenu();
+            callback += (_) => CloseSkillSelectionMenu();
+        }
+        
+        public void CloseSkillSelectionMenu()
+        {
+            _skillList.CloseMenu();
         }
 
         public void CreateDamageIndicator(Vector3 worldPosition, int value)
