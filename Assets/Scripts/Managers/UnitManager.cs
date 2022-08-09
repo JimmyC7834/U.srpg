@@ -16,6 +16,7 @@ namespace Game.Battle
         public List<UnitObject> currentKokuUnits { get => GetCurrentKokuUnits(_battleService.currentKoku); }
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
+        [SerializeField] private UnitTimelineIconController _timelineIconController;
         [SerializeField] private UnitObject _prefab;
 
         public void Initialize(BattleSO.UnitSpawnInfo[] unitSpawnInfo)
@@ -60,6 +61,7 @@ namespace Game.Battle
         {
             UnitObject newUnit = _pool.Get();
             newUnit.InitializeWith(_unitDataset[id], _battleService);
+            _timelineIconController.RegisterIconOn(newUnit);
             _units.Add(newUnit);
             PlaceUnitObjectAt(newUnit, coord);
             _battleService.battleBoard.PlaceUnit(coord, newUnit);

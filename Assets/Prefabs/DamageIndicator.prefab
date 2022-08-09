@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2414543677642041603}
   - component: {fileID: 2414543677642041629}
   - component: {fileID: 2414543677642041628}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2414543678011600877}
   - component: {fileID: 2414543678011600878}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2414543678920211116}
   - component: {fileID: -5827653023433350757}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DamageIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -304,9 +304,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _textMesh: {fileID: 2414543677642041628}
   _transform: {fileID: 2414543678920211116}
-  _lifespan: 0.75
-  _terminalVelocity: 2
-  _velocity: {x: 0, y: 0, z: 0}
-  _gravity: -0.1
-  _initialVelocityMag: 1
-  _popUpAngle: 90
+  _lifespan: 0.3
+  _floatSpeed: 2

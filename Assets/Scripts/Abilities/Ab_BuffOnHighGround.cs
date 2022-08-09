@@ -25,6 +25,15 @@ namespace Game.Unit.Ability
                 case BuffType.DamageUp:
                     unit.OnStartTakenAttack += DamageUpTrigger;
                     break;
+                case BuffType.HitRateUp:
+                    unit.OnInitiatingAttack += HitRateUpTrigger;
+                    break;
+                case BuffType.DodgeRateUp:
+                    unit.OnRecivingAttack += DodgeRateUpTrigger;
+                    break;
+                case BuffType.CirtRateUp:
+                    unit.OnInitiatingAttack += CritRateUpTrigger;
+                    break;
             }
         }
 
@@ -47,6 +56,39 @@ namespace Game.Unit.Ability
             if (self.height - foe.height >= _triggerValue)
             {
                 attackInfo.AddModifier(_modifierDict[_modifyType](_modifyValue));
+            }
+        }
+        
+        public void HitRateUpTrigger(AttackInfo attackInfo)
+        {
+            UnitObject foe = attackInfo.target;
+            UnitObject self = attackInfo.source.sourceUnit;
+            
+            if (self.height - foe.height >= _triggerValue)
+            {
+                self.param.ModifyHitRate(_modifyValue, this);
+            }
+        }
+        
+        public void DodgeRateUpTrigger(AttackInfo attackInfo)
+        {
+            UnitObject self = attackInfo.target;
+            UnitObject foe = attackInfo.source.sourceUnit;
+            
+            if (self.height - foe.height >= _triggerValue)
+            {
+                self.param.ModifyDodgeRate(_modifyValue, this);
+            }
+        }
+        
+        public void CritRateUpTrigger(AttackInfo attackInfo)
+        {
+            UnitObject foe = attackInfo.target;
+            UnitObject self = attackInfo.source.sourceUnit;
+            
+            if (self.height - foe.height >= _triggerValue)
+            {
+                self.param.ModifyCritRate(_modifyValue, this);
             }
         }
     }
