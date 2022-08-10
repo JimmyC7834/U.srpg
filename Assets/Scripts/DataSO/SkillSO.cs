@@ -10,6 +10,12 @@ using UnityEngine.Assertions;
 
 namespace Game.Unit.Skill
 {
+    public interface ISk_Move { }
+    public interface ISk_Attack { }
+    public interface ISk_Heal { }
+    public interface ISk_Buff { }
+    public interface ISk_Debuff { }
+
     public abstract class SkillSO : DataEntrySO<SkillId>
     {
         [SerializeField] private Sprite _icon;

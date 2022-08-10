@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Game.Unit.Skill
 {
     [CreateAssetMenu(menuName = "Game/Skill/Sk_OneWayEnter", fileName = "Sk_OneWayEnter")]
-    public class Sk_OneWayEnter : SkillSO
+    public class Sk_OneWayEnter : SkillSO, ISk_Buff
     {
         public override bool castableOn(BattleBoardTile tile) => tile.unitOnTile != null;
 

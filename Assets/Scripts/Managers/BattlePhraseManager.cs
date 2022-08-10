@@ -115,11 +115,18 @@ namespace Game.Battle
 
                 private void ActionEnd()
                 {
+                    battleService.unitManager.currentKokuUnits.Remove(battleService.CurrentUnitObject);
                     battleService.CurrentUnitObject.EndAction();
                     battleService.uiManager.CloseSkillSelectionMenu();
-                    battleService.unitManager.UpdateCurrentKokuUnits(battleService.currentKoku);
+                    // battleService.unitManager.UpdateCurrentKokuUnits(battleService.currentKoku);
                     _parent.Pop();
-                    _parent.Push(new HandleKokuPhrase(_parent));
+                    if (battleService.unitManager.currentKokuUnits.Count == 0)
+                    {
+                        _parent.Push(new HandleKokuPhrase(_parent));
+                        return;
+                    }
+                    
+                    _parent.Push(new UnitSelectionPhrase(_parent));
                 }
 
                 public override void Exit()

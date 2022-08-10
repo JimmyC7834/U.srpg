@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Game.Unit.Skill
 {
     [CreateAssetMenu(menuName = "Game/Skill/Move", fileName = "Sk_Move")]
-    public class Sk_Move : SkillSO
+    public class Sk_Move : SkillSO, ISk_Move
     {
         [SerializeField] private float movingTimePerTile;
         
