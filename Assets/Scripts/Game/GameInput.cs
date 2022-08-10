@@ -165,6 +165,24 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerY"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbd68b43-12df-437b-aadd-5c6c6e420e8f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerX"",
+                    ""type"": ""Button"",
+                    ""id"": ""af72b70d-81bf-47f6-b73a-123549f04ad8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -244,6 +262,28 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""action"": ""PointerCancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec8c4612-8699-441d-b869-b1fda0931671"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32a18d93-dd52-4f67-b4b1-b9cb829df759"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -288,6 +328,8 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_MenuNavi_PointerMove = m_MenuNavi.FindAction("PointerMove", throwIfNotFound: true);
         m_MenuNavi_PointerConfirm = m_MenuNavi.FindAction("PointerConfirm", throwIfNotFound: true);
         m_MenuNavi_PointerCancel = m_MenuNavi.FindAction("PointerCancel", throwIfNotFound: true);
+        m_MenuNavi_PointerY = m_MenuNavi.FindAction("PointerY", throwIfNotFound: true);
+        m_MenuNavi_PointerX = m_MenuNavi.FindAction("PointerX", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
         m_DebugConsole_ToggleDebug = m_DebugConsole.FindAction("ToggleDebug", throwIfNotFound: true);
@@ -402,6 +444,8 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_MenuNavi_PointerMove;
     private readonly InputAction m_MenuNavi_PointerConfirm;
     private readonly InputAction m_MenuNavi_PointerCancel;
+    private readonly InputAction m_MenuNavi_PointerY;
+    private readonly InputAction m_MenuNavi_PointerX;
     public struct MenuNaviActions
     {
         private @GameInput m_Wrapper;
@@ -409,6 +453,8 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         public InputAction @PointerMove => m_Wrapper.m_MenuNavi_PointerMove;
         public InputAction @PointerConfirm => m_Wrapper.m_MenuNavi_PointerConfirm;
         public InputAction @PointerCancel => m_Wrapper.m_MenuNavi_PointerCancel;
+        public InputAction @PointerY => m_Wrapper.m_MenuNavi_PointerY;
+        public InputAction @PointerX => m_Wrapper.m_MenuNavi_PointerX;
         public InputActionMap Get() { return m_Wrapper.m_MenuNavi; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -427,6 +473,12 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @PointerCancel.started -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerCancel;
                 @PointerCancel.performed -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerCancel;
                 @PointerCancel.canceled -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerCancel;
+                @PointerY.started -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerY;
+                @PointerY.performed -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerY;
+                @PointerY.canceled -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerY;
+                @PointerX.started -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerX;
+                @PointerX.performed -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerX;
+                @PointerX.canceled -= m_Wrapper.m_MenuNaviActionsCallbackInterface.OnPointerX;
             }
             m_Wrapper.m_MenuNaviActionsCallbackInterface = instance;
             if (instance != null)
@@ -440,6 +492,12 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                 @PointerCancel.started += instance.OnPointerCancel;
                 @PointerCancel.performed += instance.OnPointerCancel;
                 @PointerCancel.canceled += instance.OnPointerCancel;
+                @PointerY.started += instance.OnPointerY;
+                @PointerY.performed += instance.OnPointerY;
+                @PointerY.canceled += instance.OnPointerY;
+                @PointerX.started += instance.OnPointerX;
+                @PointerX.performed += instance.OnPointerX;
+                @PointerX.canceled += instance.OnPointerX;
             }
         }
     }
@@ -488,6 +546,8 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         void OnPointerMove(InputAction.CallbackContext context);
         void OnPointerConfirm(InputAction.CallbackContext context);
         void OnPointerCancel(InputAction.CallbackContext context);
+        void OnPointerY(InputAction.CallbackContext context);
+        void OnPointerX(InputAction.CallbackContext context);
     }
     public interface IDebugConsoleActions
     {

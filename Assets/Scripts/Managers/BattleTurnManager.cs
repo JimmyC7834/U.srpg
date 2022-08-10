@@ -22,7 +22,7 @@ public class BattleTurnManager : MonoBehaviour
     public void NextKoku()
     {
         koku--;
-        if (koku < 0)
+        if (koku <= 0)
         {
             NextTurn();
         }

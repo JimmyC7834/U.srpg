@@ -325,7 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _eventSystem: {fileID: 475712582}
   _skillList: {fileID: 2024234431}
-  _timeline: {fileID: 0}
+  _timeline: {fileID: 1440715143}
   _damageIndicatorPrefab: {fileID: 2414543678920211091, guid: 2b27729735419de4c9ffbabdebc077c5, type: 3}
 --- !u!1 &38564417
 GameObject:
@@ -5223,6 +5223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e5af2666cc10245b3239699d2a689e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _horizontalLayouts:
   - {fileID: 974647546}
   - {fileID: 996253409}
@@ -5249,6 +5250,7 @@ MonoBehaviour:
   - {fileID: 808389560}
   - {fileID: 98724817}
   - {fileID: 214437808}
+  _kokuIndicator: {fileID: 262850018}
 --- !u!1 &1441063822
 GameObject:
   m_ObjectHideFlags: 0
@@ -6091,8 +6093,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
+  currentKokuUnits: []
   _unitDataset: {fileID: 11400000, guid: 71e6646d2a095274587c5b5df73760f6, type: 2}
-  _timelineIconController: {fileID: 0}
+  _timelineIconController: {fileID: 1673851509}
   _prefab: {fileID: 7782091336579945877, guid: 100d8a657301870469a5fa2d23858898, type: 3}
 --- !u!114 &1673851509
 MonoBehaviour:

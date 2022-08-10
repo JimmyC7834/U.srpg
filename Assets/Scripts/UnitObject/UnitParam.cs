@@ -22,6 +22,7 @@ namespace Game.Unit
         [SerializeField] private BaseStat _hitRate;
         [SerializeField] private BaseStat _dodgeRate;
         [SerializeField] private BaseStat _critRate;
+        [SerializeField] private BaseStat _counterRate;
 
         [SerializeField] private UnitStat _mov;
         [SerializeField] private UnitStat _dur;
@@ -38,6 +39,7 @@ namespace Game.Unit
             _hitRate = new BaseStat(BASE_HITRATE);
             _dodgeRate = new BaseStat(BASE_DODGERATE);
             _critRate = new BaseStat(BASE_CRITRATE);
+            _counterRate = new BaseStat(0f);
             _mov = new UnitStat(BASE_MOVERANGE);
 
             _param = new []
@@ -72,7 +74,7 @@ namespace Game.Unit
             
         public int MaxHP { get => _maxHP; }
         public float HPPercent { get => DUR/(float) _maxHP; }
-        public int MP { get; private set; }
+        public int MP;
         public int MOV { get => _mov.Value; }
         public int DUR { get => _dur.Value; }
         public int STR { get => _str.Value; }
@@ -149,6 +151,10 @@ namespace Game.Unit
             _critRate.AddModifier(new BaseStatModifier(_value, BaseStatModifier.ModifyType.Flat, _source));
         public void RemoveCritRateModifier(object _source) => _critRate.RemoveAllModifiersFromSource(_source);
         
+        public void ModifyCounterRate(float _value, object _source) =>
+            _counterRate.AddModifier(new BaseStatModifier(_value, BaseStatModifier.ModifyType.Flat, _source));
+        public void RemoveCounterRateModifier(object _source) => _counterRate.RemoveAllModifiersFromSource(_source);
+
         public void ModifyMOV(float _value, object _source) =>
             _mov.AddModifier(new BaseStatModifier(_value, BaseStatModifier.ModifyType.Flat, _source));
         public void RemoveMOVRateModifier(object _source) => _mov.RemoveAllModifiersFromSource(_source);
