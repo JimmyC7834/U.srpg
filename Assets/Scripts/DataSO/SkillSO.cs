@@ -21,6 +21,7 @@ namespace Game.Unit.Skill
         [SerializeField] private Sprite _icon;
         [SerializeField] private bool _unique;
         [SerializeField] private int _cost;
+        [SerializeField] private List<SkillTypeTag> _skillTypeTags;
 
         [Serializable]
         private struct SkillSelectionRange
@@ -60,6 +61,8 @@ namespace Game.Unit.Skill
         }
 
         public abstract IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo);
+
+        public bool IsTagged(SkillTypeTag tag) => _skillTypeTags.Contains(tag);
     }
     
     public enum SkillId

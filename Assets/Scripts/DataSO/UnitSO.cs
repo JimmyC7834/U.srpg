@@ -29,7 +29,7 @@ namespace Game.Unit
         }
     }
 
-    [CreateAssetMenu(menuName = "Game/Unit/UnitSO")]
+    [CreateAssetMenu(menuName = "Game/DataEntry/Unit")]
     public class UnitSO : DataEntrySO<UnitId>
     {
         [SerializeField] private Sprite _sprite;

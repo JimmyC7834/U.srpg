@@ -7,18 +7,22 @@ using UnityEngine;
 
 namespace Game.Battle
 {
-    [CreateAssetMenu(menuName = "Game/Battle/SkillCastInfo")]
-    public class SkillCastInfo : ScriptableObject
+    // [CreateAssetMenu(menuName = "Game/Battle/SkillCastInfo")]
+    public class SkillCastInfo
     {
-        public BattleBoardTile casterTile { get; private set; }
+        public SkillCastInfo(BattleBoardTile _casterTile, SkillSO skill)
+        {
+            casterTile = _casterTile;
+            castedSkill = skill;
+        }
+        
+        public BattleBoardTile casterTile { get; }
         public BattleBoardTile targetTile { get; private set; }
-        public SkillSO castedSkill { get; private set; }
+        public SkillSO castedSkill { get; }
 
         public UnitObject target => targetTile.unitOnTile;
         public UnitObject caster => casterTile.unitOnTile;
-
-        public void SetCasterTile(BattleBoardTile tile) => casterTile = tile;
+ 
         public void SetTargetTile(BattleBoardTile tile) => targetTile = tile;
-        public void SetCastedSkill(SkillSO skill) => castedSkill = skill;
     }
 }

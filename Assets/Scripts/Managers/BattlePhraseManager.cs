@@ -23,7 +23,6 @@ namespace Game.Battle
         {
             private BattlePhraseManager _parent;
             private BattleService battleService => _parent._battleService;
-            private SkillCastInfo skillCastInfo => _parent._skillCastInfo;
             private InputReader _input => _parent._input;
             private CursorController _cursor => _parent._cursor;
             
@@ -100,17 +99,16 @@ namespace Game.Battle
                         battleService.CurrentUnitObject,
                         (item) =>
                         {
-                            skillCastInfo.SetCastedSkill(item.skill);
-                            SkillConfirmed();
+                            SkillConfirmed(item.skill);
                         });
                     
                     _input.EnableMenuNaviInput();
                 }
 
-                private void SkillConfirmed()
+                private void SkillConfirmed(SkillSO skill)
                 {
                     _parent.Pop();
-                    _parent.Push(new TargetSelectionPhrase(_parent));
+                    _parent.Push(new TargetSelectionPhrase(_parent, skill));
                 }
 
                 private void ActionEnd()
@@ -138,13 +136,19 @@ namespace Game.Battle
             public class TargetSelectionPhrase : Phrase
             {
                 private SkillCaster _skillCaster;
-                
-                public TargetSelectionPhrase(BattlePhraseManager parent) : base(parent) { }
+                private SkillSO _skill;
+
+                public TargetSelectionPhrase(BattlePhraseManager parent, SkillSO skill) : base(parent)
+                {
+                    _skill = skill;
+                }
 
                 public override void Enter()
                 {
                     _input.DisableAllInput();
-                    _skillCaster = new SkillCaster(battleService, skillCastInfo);
+                    _skillCaster = new SkillCaster(battleService);
+                    _skillCaster.Initialize(new SkillCastInfo(battleService.CurrentTile, _skill));
+                    _skillCaster.HighlightRange();
                 }
 
                 public override void Start()
@@ -184,7 +188,7 @@ namespace Game.Battle
         }
 
         [SerializeField] private InputReader _input;
-        [SerializeField] private SkillCastInfo _skillCastInfo;
+        // private SkillCastInfo _skillCastInfo;
         private BattleService _battleService;
         private Phrase _top => _stack.Peek();
         private CursorController _cursor => _battleService.cursor;
@@ -215,7 +219,7 @@ namespace Game.Battle
         public void Initialize(BattleService battleService)
         {
             _battleService = battleService;
-            
+
             _stack = new Stack<Phrase>();
             // empty phrase to skip null check
             _stack.Push(new Phrase(this));

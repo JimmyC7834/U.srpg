@@ -7,10 +7,10 @@ namespace Game
 {
     public class Grid<TGridObject>
     {
-        private int width;
-        private int height;
-        private float cellSize;
-        private Vector3 originPosition;
+        public int width { get; private set; }
+        public int height { get; private set; }
+        public float cellSize { get; private set; }
+        public Vector3 originPosition { get; private set; }
 
         private TGridObject[,] gridArray;
 
@@ -24,7 +24,7 @@ namespace Game
             get => GetValue((int) v.x, (int) v.y); 
         }
 
-        public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<int, int, TGridObject> createTGridObject)
+        public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createTGridObject)
         {
             this.width = width;
             this.height = height;
@@ -37,7 +37,7 @@ namespace Game
             {
                 for (int j = 0; j < height; j++)
                 {
-                    gridArray[i, j] = createTGridObject(i, j);
+                    gridArray[i, j] = createTGridObject(this, i, j);
                 }
             }
         }
@@ -86,18 +86,7 @@ namespace Game
             gridArray[x, y] = gridObject;
         }
 
-        public int Width() => width;
-
-        public int Height() => height;
-
-        public float GetCellSize()
-        {
-            return cellSize;
-        }
-
         public int TileCount => width * height;
-
-        public Vector3 OriginPosition() => originPosition;
 
         public HashSet<TGridObject> GetNeigbhoursOfTile(int gx, int gy) {
             HashSet<TGridObject> neighbours = new HashSet<TGridObject>();
@@ -111,6 +100,17 @@ namespace Game
                 neighbours.Add(GetValue(gx, gy + 1));
 
             return neighbours;
+        }
+
+        public void Map(Action<TGridObject> func)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    func.Invoke(gridArray[i, j]);
+                }
+            }
         }
     }
 }

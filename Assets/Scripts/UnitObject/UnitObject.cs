@@ -29,6 +29,8 @@ namespace Game.Unit
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
         public BattleTeam _team { get => BattleTeam.Player; }
+        public int gridX => Mathf.FloorToInt(_transform.position.x);
+        public int gridY => Mathf.FloorToInt(_transform.position.z);
 
         public event Action<AttackInfo> OnInitiatingAttack;
         public event Action<AttackInfo> OnRecivingAttack;

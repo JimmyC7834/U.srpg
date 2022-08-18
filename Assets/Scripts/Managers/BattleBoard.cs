@@ -27,7 +27,7 @@ namespace Game.Battle.Map
     
     public class BattleBoard
     {
-        private int _size;
+        public int size { get; private set; }
         private Grid<BattleBoardTile> _board;
         
         public BattleBoardTile GetTile(Vector2 v) => GetTile((int) v.x, (int) v.y);
@@ -39,12 +39,12 @@ namespace Game.Battle.Map
         public bool AnyUnitAt(Vector2 v) => GetTile(v).HaveUnitOnTop;
         public bool AnyUnitAt(int x, int y) => GetTile(x, y).HaveUnitOnTop;
         public bool CoordOnBoard(Vector2 v) => CoordOnBoard((int) v.x, (int) v.y);
-        public bool CoordOnBoard(int x, int y) => (x >= 0 && x < _size - 1 && y >= 0 && y < _size - 1);
+        public bool CoordOnBoard(int x, int y) => (x >= 0 && x < size - 1 && y >= 0 && y < size - 1);
 
         public BattleBoard(BattleSO _battleSO)
         {
             _board = new Grid<BattleBoardTile>(_battleSO.mapSize, _battleSO.mapSize, 1.0f, Vector3.zero,
-                (x, y) =>
+                (_, x, y) =>
                 {
                     BattleBoardTile newTile = new BattleBoardTile(x, y);
                     if (x - 1 >= 0)
@@ -57,7 +57,7 @@ namespace Game.Battle.Map
                         newTile.neighbours.Add(new Vector2(x, y + 1));
                     return newTile;
                 });
-            _size = _battleSO.mapSize;
+            size = _battleSO.mapSize;
         }
 
         public void PlaceUnit(Vector2 v, UnitObject unit) => PlaceUnit((int) v.x, (int) v.y, unit);

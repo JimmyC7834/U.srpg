@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Game.Unit.Skill
 {
     [CreateAssetMenu(menuName = "Game/Skill/Sk_DealPoison", fileName = "Sk_DealPoison")]
-    public class Sk_DealPoison : SkillSO, ISk_Debuff
+    public class Sk_DealPoison : SkillSO
     {
         [SerializeField] private int _turns;
         

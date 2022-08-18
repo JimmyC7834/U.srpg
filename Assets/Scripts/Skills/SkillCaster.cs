@@ -30,25 +30,21 @@ namespace Game.Battle
         }
     
         private SelectionInfo _selectionInfo;
+        public SelectionInfo selectionInfo { get => _selectionInfo; }
 
-        public SkillCaster(BattleService battleService, SkillCastInfo skillCastInfo)
+        public SkillCaster(BattleService battleService)
         {
             _battleService = battleService;
+        }
+
+        public void Initialize(SkillCastInfo skillCastInfo)
+        {
             _skillCastInfo = skillCastInfo;
+            _selectionInfo = CalculateRange(_skillCastInfo);
+        }
 
-            _skillCastInfo.SetCasterTile(_battleService.CurrentTile);
-
-            UnitObject caster = _skillCastInfo.casterTile.unitOnTile;
-            SkillSO skill = _skillCastInfo.castedSkill;
-            _selectionInfo = GetRangeTilesFrom(
-                caster.location.x,
-                caster.location.y, 
-                skill.calWithMoveRange ? caster.param.GetMoveRange() : skill.range,
-                skill.ignoreTerrain, 
-                skill.includeSelf, 
-                skill.optionalRange);
-
-
+        public void HighlightRange()
+        {
             _battleService.mapHighlighter.HighlightTiles(
                 _selectionInfo.rangeTiles.Select(x => x.coord),
                 TileHighlightColor.InTargetRange);
@@ -67,8 +63,21 @@ namespace Game.Battle
             // TODO: phrase for animation
             _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, callback);
         }
-    
-        private SelectionInfo GetRangeTilesFrom(
+
+        public SelectionInfo CalculateRange(SkillCastInfo skillCastInfo)
+        {
+            UnitObject caster = skillCastInfo.casterTile.unitOnTile;
+            SkillSO skill = skillCastInfo.castedSkill;
+            return GetRangeTilesFrom(
+                caster.location.x,
+                caster.location.y, 
+                skill.calWithMoveRange ? caster.param.GetMoveRange() : skill.range,
+                skill.ignoreTerrain, 
+                skill.includeSelf, 
+                skill.optionalRange);
+        }
+        
+        public SelectionInfo GetRangeTilesFrom(
             int gx, int gy, int totalRange, bool ignoreTerrain, bool includeSelf, Optional<Vector2[]> optionalRange)
         {
             // BFS search

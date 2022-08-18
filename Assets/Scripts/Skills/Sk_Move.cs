@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Game.Unit.Skill
 {
     [CreateAssetMenu(menuName = "Game/Skill/Move", fileName = "Sk_Move")]
-    public class Sk_Move : SkillSO, ISk_Move
+    public class Sk_Move : SkillSO
     {
         [SerializeField] private float movingTimePerTile;
         
@@ -18,20 +18,33 @@ namespace Game.Unit.Skill
         {
             UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
             battleService.battleBoard.MoveUnitFromTo(skillCastInfo.casterTile, skillCastInfo.targetTile);
-            
-            Stack<Vector2> path = new Stack<Vector2>();
-            path.Push(skillCastInfo.targetTile.coord);
 
-            while (selectionInfo.tileParents.ContainsKey(path.Peek()))
-            {
-                path.Push(selectionInfo.tileParents[path.Peek()]);
-            }
+            PathFinder pathFinder = new PathFinder(battleService.battleBoard);
+            List<PathFinder.PathFindNode> pathNodes = pathFinder.FindPath(casterObject.gridX, casterObject.gridY, 
+                skillCastInfo.targetTile.x, skillCastInfo.targetTile.y);
+
+            // Stack<Vector2> path = new Stack<Vector2>();
+            // path.Push(skillCastInfo.targetTile.coord);
+            //
+            // while (selectionInfo.tileParents.ContainsKey(path.Peek()))
+            // {
+            //     path.Push(selectionInfo.tileParents[path.Peek()]);
+            // }
+            //
+            // casterObject.anim.SwitchStateTo(UnitAnimation.Move);
+            //
+            // while (path.Count != 0)
+            // {
+            //     yield return casterObject.anim.MoveUnitOnBroad(path.Pop(), movingTimePerTile);
+            // }
             
             casterObject.anim.SwitchStateTo(UnitAnimation.Move);
             
-            while (path.Count != 0)
+            while (pathNodes.Count != 0)
             {
-                yield return casterObject.anim.MoveUnitOnBroad(path.Pop(), movingTimePerTile);
+                Vector2 targetPos = new Vector2(pathNodes[0].x, pathNodes[0].y);
+                pathNodes.RemoveAt(0);
+                yield return casterObject.anim.MoveUnitOnBroad(targetPos, movingTimePerTile);
             }
             
             casterObject.anim.SwitchStateTo(UnitAnimation.Idle);
