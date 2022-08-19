@@ -58,7 +58,6 @@ namespace Game.Battle
 
         public void CastSkill(Action callback)
         {
-            _skillCastInfo.SetTargetTile(_battleService.CurrentTile);
             _battleService.mapHighlighter.RemoveHighlights();
             // TODO: phrase for animation
             _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, callback);

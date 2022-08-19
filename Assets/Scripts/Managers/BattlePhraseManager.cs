@@ -5,8 +5,10 @@ using System.Linq;
 using Game.Battle.Map;
 using Game.Unit;
 using Game.Unit.Skill;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.UIElements;
 
 namespace Game.Battle
@@ -48,9 +50,87 @@ namespace Game.Battle
                     {
                         battleService.battleTurnManager.NextKoku();
                     }
-                    
+
+                    List<UnitObject> cpus =
+                        battleService.unitManager.currentKokuUnits.Where(unit => unit.GetComponent<CpuUnitController>() != null).ToList();
+
                     _parent.Pop();
-                    _parent.Push(new UnitSelectionPhrase(_parent));
+                    if (cpus.Count != 0)
+                    {
+                        _parent.Push(new CpuActionPhrase(_parent, cpus));
+                    }
+                    else
+                    {
+                        _parent.Push(new UnitSelectionPhrase(_parent));
+                    }
+                }
+            }
+
+            public class CpuActionPhrase : Phrase
+            {
+                private List<UnitObject> _units;
+                private List<CpuActionInfo> _currentActions;
+                private SkillCastInfo _skillCastInfo;
+                private SkillCaster _skillCaster;
+
+                public CpuActionPhrase(BattlePhraseManager parent, List<UnitObject> units) : base(parent)
+                {
+                    _units = units;
+                    _skillCaster = new SkillCaster(battleService);
+                }
+
+                public override void Enter()
+                {
+                    _input.DisableAllInput();
+                }
+
+                public override void Start()
+                {
+                    GetActionsForNextCpu();
+                    ExecuteCurrentActions();
+                }
+
+                private void GetActionsForNextCpu()
+                {
+                    if (_units.Count == 0)
+                    {
+                        EndPhrase();
+                        return;
+                    }
+
+                    UnitObject unit = _units[0];
+                    CpuUnitController cpu = unit.GetComponent<CpuUnitController>();
+                    _currentActions = cpu.GetNextActions();
+                }
+
+                private void ExecuteCurrentActions()
+                {
+                    if (_currentActions == null || _currentActions.Count == 0) return;
+                    ExecuteNextAction();
+                }
+
+                private void ExecuteNextAction()
+                {
+                    if (_currentActions.Count == 0) return;
+                    UnitObject unit = _units[0];
+                    CpuActionInfo action = _currentActions[0];
+                    _currentActions.RemoveAt(0);
+                    
+                    _skillCastInfo = new SkillCastInfo(
+                        battleService.battleBoard.GetTile(unit.gridX, unit.gridY), action.skill);
+                    _skillCastInfo.SetTargetTile(action.targetTile);
+                    _skillCaster.Initialize(_skillCastInfo);
+                    _skillCaster.CastSkill(ExecuteNextAction);
+                }
+
+                private void NextCpu()
+                {
+                    _units.RemoveAt(0);
+                }
+
+                private void EndPhrase()
+                {
+                    
                 }
             }
             
@@ -137,6 +217,7 @@ namespace Game.Battle
             {
                 private SkillCaster _skillCaster;
                 private SkillSO _skill;
+                private SkillCastInfo _skillCastInfo;
 
                 public TargetSelectionPhrase(BattlePhraseManager parent, SkillSO skill) : base(parent)
                 {
@@ -147,7 +228,8 @@ namespace Game.Battle
                 {
                     _input.DisableAllInput();
                     _skillCaster = new SkillCaster(battleService);
-                    _skillCaster.Initialize(new SkillCastInfo(battleService.CurrentTile, _skill));
+                    _skillCastInfo = new SkillCastInfo(battleService.CurrentTile, _skill);
+                    _skillCaster.Initialize(_skillCastInfo);
                     _skillCaster.HighlightRange();
                 }
 
@@ -166,6 +248,7 @@ namespace Game.Battle
                     _parent.Pop();
                     SkillAnimationPhrase skillAnimationPhrase = new SkillAnimationPhrase(_parent);
                     _parent.Push(skillAnimationPhrase);
+                    _skillCastInfo.SetTargetTile(battleService.CurrentTile);
                     _skillCaster.CastSkill(skillAnimationPhrase.EndPhrase);
                 }
             }
@@ -188,7 +271,6 @@ namespace Game.Battle
         }
 
         [SerializeField] private InputReader _input;
-        // private SkillCastInfo _skillCastInfo;
         private BattleService _battleService;
         private Phrase _top => _stack.Peek();
         private CursorController _cursor => _battleService.cursor;
