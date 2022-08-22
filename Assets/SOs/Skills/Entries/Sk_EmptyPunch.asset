@@ -17,7 +17,7 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _unique: 0
   _cost: 11
-  _skillTypeTags: 00000000
+  _skillTypeTags: 02000000
   _skillSelectionRange:
     range: 10
     calWithMoveRange: 0

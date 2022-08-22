@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95a85a8e5040fd498275824614bf28a, type: 3}
   m_Name: PlayerUnit1
   m_EditorClassIdentifier: 
-  _displayName: 
+  _displayName: Player
   _id: 1000
   _icon: {fileID: 1934309722, guid: afb42b5bbd0e6794890f20b68ca8887f, type: 3}
   _sprite: {fileID: 1934309722, guid: afb42b5bbd0e6794890f20b68ca8887f, type: 3}

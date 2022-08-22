@@ -2021,7 +2021,7 @@ MonoBehaviour:
   _showConsole: 1
   _itemHeight: 18
   _position: {x: 0, y: 300}
-  _duration: 5
+  _duration: 20
 --- !u!1 &521040407
 GameObject:
   m_ObjectHideFlags: 0

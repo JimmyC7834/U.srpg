@@ -46,6 +46,8 @@ namespace Game.Battle
 
                 public override void Start()
                 {
+                    _input.DisableAllInput();
+                    
                     while (battleService.unitManager.currentKokuUnits.Count == 0)
                     {
                         battleService.battleTurnManager.NextKoku();
@@ -105,14 +107,26 @@ namespace Game.Battle
 
                 private void ExecuteCurrentActions()
                 {
-                    if (_currentActions == null || _currentActions.Count == 0) return;
+                    if (_currentActions == null || _currentActions.Count == 0)
+                    {
+                        NextCpu();
+                        return;
+                    }
+                    
                     ExecuteNextAction();
                 }
 
                 private void ExecuteNextAction()
                 {
-                    if (_currentActions.Count == 0) return;
                     UnitObject unit = _units[0];
+                    if (_currentActions.Count == 0)
+                    {
+                        battleService.unitManager.currentKokuUnits.Remove(unit);
+                        unit.EndAction();
+                        NextCpu();
+                        return;
+                    }
+                    
                     CpuActionInfo action = _currentActions[0];
                     _currentActions.RemoveAt(0);
                     
@@ -126,11 +140,22 @@ namespace Game.Battle
                 private void NextCpu()
                 {
                     _units.RemoveAt(0);
+                    if (_units.Count == 0)
+                    {
+                        EndPhrase();
+                        return;
+                    }
+                    
+                    GetActionsForNextCpu();
+                    ExecuteCurrentActions();
                 }
 
                 private void EndPhrase()
                 {
+                    _parent.Pop();
+
                     
+                    _parent.Push(new UnitSelectionPhrase(_parent));
                 }
             }
             
@@ -142,6 +167,12 @@ namespace Game.Battle
                 {
                     _cursor.OnConfirm += OnConfirm;
                     _input.EnableMapNaviInput();
+
+                    if (battleService.unitManager.currentKokuUnits.Count == 0)
+                    {
+                        _parent.Pop();
+                        _parent.Push(new HandleKokuPhrase(_parent));
+                    }
                 }
 
                 public override void Exit()

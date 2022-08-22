@@ -41,14 +41,19 @@ namespace Game.Unit
         public event Action<DamageInfo> OnStartTakenDamage;
         public event Action<AttackInfo> OnTakenAttack;
         public event Action<DamageInfo> OnTakenDamage;
-        public event Action<AttackInfo> OnStartDealDamage;
+        public event Action<AttackInfo> OnAbStartDealDamage;
+        public event Action<AttackInfo> OnSEStartDealDamage;
         public event Action<AttackInfo> OnDealDamage;
         public event Action<AttackInfo> OnDodgedAttack;
         public event Action<AttackInfo> OnMissedAttack;
         public event Action<AttackInfo> OnCounterAttack;
         public event Action<AttackInfo> OnExtendedAttack;
         public event Action<UnitObject> OnTurnChanged;
+        public event Action<UnitObject> OnAbTurnChanged;
+        public event Action<UnitObject> OnSETurnChanged;
         public event Action<UnitObject> OnKokuChanged;
+        public event Action<UnitObject> OnAbKokuChanged;
+        public event Action<UnitObject> OnSEKokuChanged;
         public event Action<UnitObject> OnEndingAction;
 
         public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(_transform.position));
@@ -81,8 +86,16 @@ namespace Game.Unit
         {
             param.ResetAP();
             OnTurnChanged?.Invoke(this);
+            OnAbTurnChanged?.Invoke(this);
+            OnSETurnChanged?.Invoke(this);
         }
-        private void InvokeOnKokuChanged(int koku) => OnKokuChanged?.Invoke(this);
+
+        private void InvokeOnKokuChanged(int koku)
+        {
+            OnKokuChanged?.Invoke(this);
+            OnAbKokuChanged?.Invoke(this);
+            OnSEKokuChanged?.Invoke(this);
+        }
 
         private void RegisterParts(UnitPartTree.UnitPartTreeNode node)
         {
@@ -149,7 +162,8 @@ namespace Game.Unit
             
             RollCritical(attackInfo);
             
-            OnStartDealDamage?.Invoke(attackInfo);
+            OnAbStartDealDamage?.Invoke(attackInfo);
+            OnSEStartDealDamage?.Invoke(attackInfo);
             attackInfo.target.TakeAttack(attackInfo);
             
             _battleService.logConsole.SendText($"{name} deal {attackInfo.damageModifier.value} damage to {attackInfo.target.name}");

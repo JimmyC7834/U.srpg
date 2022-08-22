@@ -17,13 +17,13 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.OnStartDealDamage += BoostAttack;
+            unit.OnAbStartDealDamage += BoostAttack;
         }
 
         public override void Remove()
         {
             if (unit.Equals(null)) return;
-            unit.OnStartDealDamage -= BoostAttack;
+            unit.OnAbStartDealDamage -= BoostAttack;
         }
         
         public void BoostAttack(AttackInfo attackInfo)
