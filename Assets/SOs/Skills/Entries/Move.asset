@@ -17,8 +17,10 @@ MonoBehaviour:
   _icon: {fileID: -1827896563, guid: 7544fbde4715e7843847ceb4bd39c2df, type: 3}
   _unique: 1
   _cost: 3
+  _skillTypeTags: 04000000
   _skillSelectionRange:
     range: 5
+    calWithMoveRange: 0
     ignoreTerrain: 1
     includeSelf: 1
     optionalRange:

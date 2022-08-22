@@ -9,8 +9,6 @@ namespace Game.Unit.Ability
 {
     public abstract class AbilitySO : DataEntrySO<AbilityId>
     {
-        public Sprite icon;
-        
         protected Dictionary<BaseStatModifier.ModifyType, Func<float, DamageStatModifier>> _modifierDict = new ()
         {
             {BaseStatModifier.ModifyType.Flat, (value) => 
@@ -37,6 +35,8 @@ namespace Game.Unit.Ability
         AttackDamageUpOver75HpP = 80,
         AttackDamageUpUnder50HpP= 90,
         DamageReductionFullHpP = 100,
+        ReduceAP = 110,
+        IncreaseAP = 120,
         AB_DEBUG = 9999,
         Count = 11,
     }

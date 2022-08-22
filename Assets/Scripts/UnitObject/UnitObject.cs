@@ -6,8 +6,6 @@ using Game.DataSet;
 using Game.Unit.Ability;
 using Game.Unit.Part;
 using Game.Unit.Skill;
-using Game.Unit.StatusEffect;
-using TMPro;
 using UnityEngine;
 
 
@@ -23,12 +21,17 @@ namespace Game.Unit
 
         private UnitSO unitSO;
         
+        // to see in editor
         public UnitParam param;
         public UnitAnimation anim { get; private set; }
         public UnitPartTree partTree { get; private set; }
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
+        public CpuUnitController cpuUnitController { get; private set; }
         public BattleTeam _team { get => BattleTeam.Player; }
+        
+        public string displayName { get; private set; }
+
         public int gridX => Mathf.FloorToInt(_transform.position.x);
         public int gridY => Mathf.FloorToInt(_transform.position.z);
 
@@ -54,8 +57,11 @@ namespace Game.Unit
         public void InitializeWith(UnitSO unitSO, BattleService battleService)
         {
             this.unitSO = unitSO;
+            displayName = unitSO.displayName;
             param = new UnitParam().Initialize(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
+            cpuUnitController = GetComponent<CpuUnitController>();
+            cpuUnitController.SetAI(unitSO.ai);
             anim = GetComponent<UnitAnimation>();
             anim.Initialize(this, unitSO.animatorOverrideController);
             _statusEffectRegisters = new List<StatusEffectRegister>();
@@ -69,15 +75,13 @@ namespace Game.Unit
             anim.SwitchStateTo(UnitAnimation.Idle);
             
             battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
-            OnTurnChanged += RefreshKoku;
         }
-
-        private void RefreshKoku(UnitObject _)
+        
+        private void InvokeOnTurnChanged(int turn)
         {
-            param.ResetMP();
+            param.ResetAP();
+            OnTurnChanged?.Invoke(this);
         }
-
-        private void InvokeOnTurnChanged(int turn) => OnTurnChanged?.Invoke(this);
         private void InvokeOnKokuChanged(int koku) => OnKokuChanged?.Invoke(this);
 
         private void RegisterParts(UnitPartTree.UnitPartTreeNode node)
@@ -147,6 +151,8 @@ namespace Game.Unit
             
             OnStartDealDamage?.Invoke(attackInfo);
             attackInfo.target.TakeAttack(attackInfo);
+            
+            _battleService.logConsole.SendText($"{name} deal {attackInfo.damageModifier.value} damage to {attackInfo.target.name}");
             OnDealDamage?.Invoke(attackInfo);
         }
         

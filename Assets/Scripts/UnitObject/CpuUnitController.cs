@@ -16,6 +16,13 @@ namespace Game.Battle
     {
         [SerializeField] private CpuUnitAI _ai;
 
+        public bool haveAI => _ai != null;
+
+        public void SetAI(CpuUnitAI ai)
+        {
+            _ai = ai;
+        }
+        
         public List<CpuActionInfo> GetNextActions() => _ai.GetNextActions(GetComponent<UnitObject>());
     }
     

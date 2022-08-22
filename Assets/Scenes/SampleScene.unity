@@ -1935,6 +1935,7 @@ GameObject:
   - component: {fileID: 497167032}
   - component: {fileID: 497167033}
   - component: {fileID: 497167034}
+  - component: {fileID: 497167035}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -2002,9 +2003,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8282b31b23329d244a6c6d85d742b6e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _showConsole: 0
+  _itemHeight: 18
+  _position: {x: 0, y: 225}
+--- !u!114 &497167035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497167030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9fd72474cb27e428d52e2aaffe0f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _showConsole: 1
   _itemHeight: 18
-  _position: {x: 580, y: 225}
+  _position: {x: 0, y: 300}
+  _duration: 5
 --- !u!1 &521040407
 GameObject:
   m_ObjectHideFlags: 0
@@ -6147,7 +6164,7 @@ MonoBehaviour:
   currentKokuUnits: []
   _unitDataset: {fileID: 11400000, guid: 71e6646d2a095274587c5b5df73760f6, type: 2}
   _timelineIconController: {fileID: 1673851509}
-  _prefab: {fileID: 7782091336579945877, guid: 100d8a657301870469a5fa2d23858898, type: 3}
+  _unitObjectPrefab: {fileID: 7782091336579945877, guid: 2b85c74c1eed15844b463c16e1d0dfb1, type: 3}
 --- !u!114 &1673851509
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,8 +16,11 @@ namespace Game.Unit.Skill
 
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
+            
             UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
             battleService.battleBoard.MoveUnitFromTo(skillCastInfo.casterTile, skillCastInfo.targetTile);
+            
+            battleService.logConsole.SendText($"{casterObject.displayName} moved from {skillCastInfo.casterTile.coord} to {skillCastInfo.targetTile.coord}");
 
             PathFinder pathFinder = new PathFinder(battleService.battleBoard);
             List<PathFinder.PathFindNode> pathNodes = pathFinder.FindPath(casterObject.gridX, casterObject.gridY, 

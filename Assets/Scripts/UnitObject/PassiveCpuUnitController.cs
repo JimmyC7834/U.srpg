@@ -27,6 +27,7 @@ namespace Game.Battle
             {
                 SkillCaster.SelectionInfo selection = GetRangeTilesFrom(unit.gridX, unit.gridY, movSkill, skill);
                 List<UnitObject> unitsInRange = selection.rangeTiles.Where(tile => tile.unitOnTile != null).Select(tile => tile.unitOnTile).ToList();
+                if (unitsInRange.Contains(unit)) unitsInRange.Remove(unit);
                 if (unitsInRange.Count == 0) continue;
                 foreach (UnitObject unitInRange in unitsInRange)
                 {

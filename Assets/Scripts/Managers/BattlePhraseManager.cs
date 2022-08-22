@@ -52,7 +52,7 @@ namespace Game.Battle
                     }
 
                     List<UnitObject> cpus =
-                        battleService.unitManager.currentKokuUnits.Where(unit => unit.GetComponent<CpuUnitController>() != null).ToList();
+                        battleService.unitManager.currentKokuUnits.Where(unit => unit.cpuUnitController.haveAI).ToList();
 
                     _parent.Pop();
                     if (cpus.Count != 0)

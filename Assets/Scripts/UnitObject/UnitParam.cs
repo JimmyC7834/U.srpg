@@ -13,9 +13,9 @@ namespace Game.Unit
         private static readonly float BASE_DODGERATE = 0.05f;
         private static readonly float BASE_HITRATE = 0.95f;
         private static readonly int BASE_MOVERANGE = 9;
-        private static readonly int DEFAULT_MP = 10;
+        private static readonly int DEFAULT_AP = 10;
         
-        [SerializeField] private int _maxMP;
+        [SerializeField] private int _maxAP;
         [SerializeField] private int _maxHP;
         [SerializeField] private int _maxSan;
 
@@ -34,6 +34,23 @@ namespace Game.Unit
         private UnitStat[] _param;
         private UnitObject _unit;
 
+        public int MaxHP { get => _maxHP; }
+        public float HPPercent { get => DUR/(float) _maxHP; }
+        public int AP;
+        public int MOV { get => _mov.Value; }
+        public int DUR { get => _dur.Value; }
+        public int STR { get => _str.Value; }
+        public int DEX { get => _dex.Value; }
+        public int TEC { get => _tec.Value; }
+        public int PER { get => _per.Value; }
+        public int SAN { get => _san.Value; }
+        
+        public event Action<UnitObject> OnHPChanged;
+        public event Action<UnitObject> OnAPChanged;
+        public event Action<UnitObject> OnAPConsumed;
+        public event Action<UnitObject> OnSANChanged;
+
+        
         public UnitParam Initialize(UnitObject unit)
         {
             _hitRate = new BaseStat(BASE_HITRATE);
@@ -53,10 +70,10 @@ namespace Game.Unit
             };
 
             _unit = unit;
-            MP = DEFAULT_MP;
+            AP = DEFAULT_AP;
             
             _maxHP = DUR;
-            _maxMP = DEFAULT_MP;
+            _maxAP = DEFAULT_AP;
             _maxSan = SAN;
             return this;
         }
@@ -71,23 +88,7 @@ namespace Game.Unit
         {
             get => _param[(int) statType];
         }
-            
-        public int MaxHP { get => _maxHP; }
-        public float HPPercent { get => DUR/(float) _maxHP; }
-        public int MP;
-        public int MOV { get => _mov.Value; }
-        public int DUR { get => _dur.Value; }
-        public int STR { get => _str.Value; }
-        public int DEX { get => _dex.Value; }
-        public int TEC { get => _tec.Value; }
-        public int PER { get => _per.Value; }
-        public int SAN { get => _san.Value; }
         
-        public event Action<UnitObject> OnHPChanged;
-        public event Action<UnitObject> OnMPChanged;
-        public event Action<UnitObject> OnMPConsumed;
-        public event Action<UnitObject> OnSANChanged;
-
         public void AddModifier(UnitStatModifier modifier)
         {
             this[modifier.statType].AddModifier(modifier);
@@ -105,17 +106,17 @@ namespace Game.Unit
             }
         }
 
-        public void ResetMP()
+        public void ResetAP()
         {
-            MP = _maxMP;
-            OnMPChanged?.Invoke(_unit);
+            AP = _maxAP;
+            OnAPChanged?.Invoke(_unit);
         }
         
-        public void ConsumeMp(int value)
+        public void ConsumeAP(int value)
         {
-            MP -= value;
-            OnMPChanged?.Invoke(_unit);
-            OnMPConsumed?.Invoke(_unit);
+            AP -= value;
+            OnAPChanged?.Invoke(_unit);
+            OnAPConsumed?.Invoke(_unit);
         }
         
         public void Evaluate()
@@ -128,10 +129,10 @@ namespace Game.Unit
             v = SAN;
         }
 
-        public void ChangeMP(int dv)
+        public void ChangeAP(int dv)
         {
-            MP += dv;
-            OnMPChanged?.Invoke(_unit);
+            AP += dv;
+            OnAPChanged?.Invoke(_unit);
         }
         
         public bool CheckCritical() => Random.Range(0f, 1f) < _critRate.Value;

@@ -15,11 +15,8 @@ namespace Game.Unit.Part
         [SerializeField] private AbilityId[] _abilities;
         [SerializeField] private UnitStat.StatBoostEntry[] _statBoostEntries;
         private UnitStatModifier[] _statBoost;
-        [SerializeField] private Sprite _icon;
         [SerializeField] private SkillId _skillId;
-
-        public Sprite icon { get => _icon; }
-
+        
         public UnitStatModifier[] statBoost
         {
             get

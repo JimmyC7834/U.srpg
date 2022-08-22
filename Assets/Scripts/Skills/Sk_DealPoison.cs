@@ -10,7 +10,7 @@ namespace Game.Unit.Skill
     public class Sk_DealPoison : SkillSO
     {
         [SerializeField] private int _turns;
-        
+         
         public override bool castableOn(BattleBoardTile tile) => tile.HaveUnitOnTop;
 
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)

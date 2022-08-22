@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fef1c348c4f0f34fbfab5c739a77553, type: 3}
   m_Name: PassiveCpuUnitController
   m_EditorClassIdentifier: 
-  _battleService: {fileID: 0}
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}

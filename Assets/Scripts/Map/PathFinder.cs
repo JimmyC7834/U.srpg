@@ -7,9 +7,8 @@ using Game;
 using Game.Battle.Map;
 using UnityEngine;
 
-public class PathFinder : MonoBehaviour
+public class PathFinder
 {
-
     private Grid<PathFindNode> _grid;
 
     public PathFinder(BattleBoard board)

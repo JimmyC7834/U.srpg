@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Battle;
 using Game.DataSet;
 using UnityEngine;
 
@@ -33,18 +34,21 @@ namespace Game.Unit
     public class UnitSO : DataEntrySO<UnitId>
     {
         [SerializeField] private Sprite _sprite;
+        [SerializeField] private CpuUnitAI _ai;
         [SerializeField] private AnimatorOverrideController _animatorOverrideController;
         [SerializeField] private PartNode _partTree;
 
         // make a copy of the raw data everytime to prevent change on dataset
         public PartNode PartTree => _partTree.Copy();
         public Sprite sprite { get => _sprite; }
+        public CpuUnitAI ai { get => _ai; }
         public AnimatorOverrideController animatorOverrideController { get => _animatorOverrideController; }
     }
 
     public enum UnitId
     {
         None = -1,
+        PlayerUnit1 = 1000,
         DebugUnit = 9900,
         Norm = 9910,
         Norm1 = 9920,

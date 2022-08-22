@@ -11,7 +11,7 @@ namespace Game
         [SerializeField] private Dictionary<string, DebugItem> _debugItems;
 
         [Header("Console Settings")]
-        private float _consoleWidth = Screen.width/3f;
+        private float _consoleWidth = Screen.width/2f;
         [SerializeField] private float _itemHeight;
         [SerializeField] private Vector2 _position;
 
