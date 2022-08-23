@@ -13,7 +13,7 @@ namespace Game.Unit.Ability
         
         public override void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node)
         {
-            unit.OnTurnChanged += ChangeAP;
+            unit.OnAbTurnChanged += ChangeAP;
         }
 
         public void ChangeAP(UnitObject unit) => unit.param.ChangeAP(value);

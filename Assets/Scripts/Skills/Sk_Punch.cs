@@ -18,11 +18,10 @@ namespace Game.Unit.Skill
             AttackInfo attackInfo = AttackInfo.From(sourceInfo, skillCastInfo.targetTile);
             
             attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
-            skillCastInfo.caster.DealDamageTo(attackInfo);
+            skillCastInfo.caster.Attack(attackInfo);
             
-            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, 0.5f);
-            skillCastInfo.caster.anim.StartAnimation();
-            yield return null;
+            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .5f);
+            yield return skillCastInfo.caster.anim.PlayAnimation();
         }
     }
 }

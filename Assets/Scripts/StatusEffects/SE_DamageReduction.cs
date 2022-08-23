@@ -13,12 +13,12 @@ namespace Game.Unit.StatusEffect
 
         protected override void Register()
         {
-            unit.OnStartTakenAttack += ReduceDamage;
+            unit.OnSETakeAttack += ReduceDamage;
         }
 
         public override void Remove()
         {
-            unit.OnStartTakenAttack -= ReduceDamage;
+            unit.OnSETakeAttack -= ReduceDamage;
         }
         
         public void ReduceDamage(AttackInfo attackInfo)

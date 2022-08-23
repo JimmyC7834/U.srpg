@@ -15,7 +15,7 @@ MonoBehaviour:
   _unitSpawnInfo:
   - coord: {x: 3, y: 0}
     unitId: 9910
-  - coord: {x: 3, y: 10}
+  - coord: {x: 0, y: 4}
     unitId: 9900
   - coord: {x: 0, y: 0}
     unitId: 1000

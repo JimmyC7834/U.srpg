@@ -10,8 +10,8 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.OnEndingAction += HandleActionEnd;
-            unit.OnTurnChanged += RecoverMP;
+            unit.OnSEActionEnd += HandleActionEnd;
+            unit.OnSETurnChanged += RecoverMP;
         }
 
         public void HandleActionEnd(UnitObject _)
@@ -31,8 +31,8 @@ namespace Game.Unit.StatusEffect
         
         public override void Remove()
         {
-            unit.OnEndingAction -= HandleActionEnd;
-            unit.OnTurnChanged -= RecoverMP;
+            unit.OnSEActionEnd -= HandleActionEnd;
+            unit.OnSETurnChanged -= RecoverMP;
         }
     }
 }

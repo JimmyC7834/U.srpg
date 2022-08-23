@@ -20,19 +20,19 @@ namespace Game.Unit.Ability
             switch (_buffType)
             {
                 case BuffType.DamageReduction:
-                    unit.OnStartTakenAttack += DamageReductionTrigger;
+                    unit.OnAbTakeAttack += DamageReductionTrigger;
                     break;
                 case BuffType.DamageUp:
-                    unit.OnStartTakenAttack += DamageUpTrigger;
+                    unit.OnAbTakeAttack += DamageUpTrigger;
                     break;
                 case BuffType.HitRateUp:
-                    unit.OnInitiatingAttack += HitRateUpTrigger;
+                    unit.OnAbAttackEarly += HitRateUpTrigger;
                     break;
                 case BuffType.DodgeRateUp:
-                    unit.OnRecivingAttack += DodgeRateUpTrigger;
+                    unit.OnAbTakeAttackEarly += DodgeRateUpTrigger;
                     break;
                 case BuffType.CirtRateUp:
-                    unit.OnInitiatingAttack += CritRateUpTrigger;
+                    unit.OnAbAttackEarly += CritRateUpTrigger;
                     break;
             }
         }
