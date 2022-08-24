@@ -62,9 +62,9 @@ namespace Game.Battle
         {
             UnitObject newUnit = _pool.Get();
             newUnit.InitializeWith(_unitDataset[id], _battleService);
-            _timelineIconController.RegisterIconOn(newUnit);
             _units.Add(newUnit);
             PlaceUnitObjectAt(newUnit, coord);
+            _timelineIconController.RegisterIconOn(newUnit);
             _battleService.battleBoard.PlaceUnit(coord, newUnit);
         }
 

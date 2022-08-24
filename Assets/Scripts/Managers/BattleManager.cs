@@ -46,6 +46,7 @@ namespace Game.Battle
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
             // initialize abilities/ status effects on turn and koku
             _battleTurnManager.Initialize();
+            _uiManager.Initialize();
             
             // ~ Battle Start
             _battlePhraseManager.Initialize(_battleService);

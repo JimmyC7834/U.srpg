@@ -25,22 +25,16 @@ namespace Game.Battle
         [SerializeField] private Transform _raycastPoint;
         [SerializeField] private Transform _markerSprite;
 
-        public Action<CursorController> OnMove;
-        public Action<CursorController> OnTileChange;
-        public Action<CursorController> OnConfirm;
-        public Action<CursorController> OnCancel;
+        public event Action<CursorController> OnMove = delegate {  };
+        public event Action<CursorController> OnTileChange = delegate {  };
+        public event Action<CursorController> OnConfirm = delegate {  };
+        public event Action<CursorController> OnCancel = delegate {  };
 
         private void OnEnable()
         {
             _input.cursorMoveEvent += InputOnCursorMoveEvent;
             _input.cursorConfirmEvent += () => OnConfirm.Invoke(this);
             _input.cursorCancelEvent += () => OnCancel.Invoke(this);
-            
-            // ignore ? check
-            OnMove += (_) => { };
-            OnTileChange += (_) => { };
-            OnConfirm += (_) => { };
-            OnCancel += (_) => { };
         }
 
         private void Update()

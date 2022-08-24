@@ -15,6 +15,7 @@ namespace Game
         [SerializeField] private EventSystem _eventSystem;
 
         [SerializeField] private UI_SkillSelectionMenu _skillList;
+        [SerializeField] private UI_UnitInfoSEPanel _unitInfoSePanel;
         [SerializeField] private UI_BattleTimeline _timeline;
 
         [SerializeField] private GameObject _damageIndicatorPrefab;
@@ -31,11 +32,11 @@ namespace Game
                 );
         }
 
-        public void RegisterTimelineIcon(UnitObject unitObject, UnitTimelineIconController unitTimelineIconController)
+        public void Initialize()
         {
-            
+            _unitInfoSePanel.Initialize();
         }
-        
+
         public void OpenSkillSelectionMenu(UnitObject unit, Action<UI_SkillSelectionMenuItem> callback)
         {
             // TODO: handle no skills

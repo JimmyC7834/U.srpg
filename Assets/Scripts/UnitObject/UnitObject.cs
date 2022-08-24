@@ -17,7 +17,7 @@ namespace Game.Unit
         [SerializeField] private BattleService _battleService;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private List<StatusEffectRegister> _statusEffectRegisters;
+        public List<StatusEffectRegister> statusEffectRegisters;
 
         private UnitSO unitSO;
         
@@ -94,7 +94,7 @@ namespace Game.Unit
             _spriteRenderer.sprite = unitSO.sprite;
             
             // setup unit values
-            _statusEffectRegisters = new List<StatusEffectRegister>();
+            statusEffectRegisters = new List<StatusEffectRegister>();
             _transform = transform;
 
             // setup parts and abilities
@@ -160,27 +160,27 @@ namespace Game.Unit
         public void RegisterStatusEffects(StatusEffect.StatusEffect statusEffect, object source) => RegisterStatusEffects(statusEffect, -1, source);
         public void RegisterStatusEffects(StatusEffect.StatusEffect statusEffect, int turns, object source)
         {
-            _statusEffectRegisters.Add(StatusEffectRegister.From(this, statusEffect, turns, source));
+            statusEffectRegisters.Add(StatusEffectRegister.From(this, statusEffect, turns, source));
         }
 
         public void RemoveStatusEffectRegister(StatusEffectRegister statusEffectRegister)
         {
-            if (!_statusEffectRegisters.Contains(statusEffectRegister)) return;
-            _statusEffectRegisters.Remove(statusEffectRegister);
+            if (!statusEffectRegisters.Contains(statusEffectRegister)) return;
+            statusEffectRegisters.Remove(statusEffectRegister);
         }
         
         public void RemoveStatusEffectRegister(object source)
         {
-            int index = _statusEffectRegisters.FindIndex(reg => reg.source.Equals(source));
+            int index = statusEffectRegisters.FindIndex(reg => reg.source.Equals(source));
             if (index < 0) return;
-            _statusEffectRegisters.RemoveAt(index);
+            statusEffectRegisters.RemoveAt(index);
         }
         
         public void RemoveStatusEffect(StatusEffect.StatusEffect statusEffect)
         {
-            int index = _statusEffectRegisters.FindIndex(reg => reg.statusEffect.Equals(statusEffect));
+            int index = statusEffectRegisters.FindIndex(reg => reg.statusEffect.Equals(statusEffect));
             if (index < 0) return;
-            _statusEffectRegisters.RemoveAt(index);
+            statusEffectRegisters.RemoveAt(index);
         }
 
         public void EndAction()
@@ -329,12 +329,14 @@ namespace Game.Unit
         public int turnsLeft { get; private set; }
         public UnitObject Unit => statusEffect.unit;
         public object source { get; private set; }
+        public event Action<StatusEffectRegister> OnCountDown;
 
         public void CountDown(UnitObject _)
         {
             if (turnsLeft <= -1) return;
             
             turnsLeft--;
+            OnCountDown?.Invoke(this);
             if (turnsLeft == 0)
             {
                 Unit.RemoveStatusEffectRegister(this);
