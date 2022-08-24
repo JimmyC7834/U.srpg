@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7936dc731a7941f408bca69f6681cb98, type: 3}
+  m_Name: TerrainDataSet
+  m_EditorClassIdentifier: 
+  _dataEntry:
+  - {fileID: 11400000, guid: aed262de46c34ca40926f8efb86c243e, type: 2}
+  - {fileID: 11400000, guid: a349e40893e22914092c8482b878afc1, type: 2}

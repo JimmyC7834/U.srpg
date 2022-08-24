@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d95a85a8e5040fd498275824614bf28a, type: 3}
+  m_Name: PlayerUnit1
+  m_EditorClassIdentifier: 
+  _displayName: Player
+  _id: 1000
+  _icon: {fileID: 1934309722, guid: afb42b5bbd0e6794890f20b68ca8887f, type: 3}
+  _sprite: {fileID: 1934309722, guid: afb42b5bbd0e6794890f20b68ca8887f, type: 3}
+  _ai: {fileID: 0}
+  _animatorOverrideController: {fileID: 22100000, guid: b2a79ad2543b86945b83b6456c7a0671, type: 2}
+  _partTree:
+    part: {fileID: 11400000, guid: c654f45572d433d4dab3f8e1a9deec01, type: 2}
+    children:
+      enabled: 1
+      value:
+      - part: {fileID: 11400000, guid: 8c41a07a3b33e7946999166115ff81f4, type: 2}
+        children:
+          enabled: 0
+          value: []
+      - part: {fileID: 11400000, guid: 8c41a07a3b33e7946999166115ff81f4, type: 2}
+        children:
+          enabled: 0
+          value: []
+      - part: {fileID: 11400000, guid: fc2eeb81ee7ad2f40aff5d6371a6631b, type: 2}
+        children:
+          enabled: 0
+          value:
+          - part: {fileID: 0}
+            children:
+              enabled: 0
+              value: []
+      - part: {fileID: 11400000, guid: fc2eeb81ee7ad2f40aff5d6371a6631b, type: 2}
+        children:
+          enabled: 0
+          value: []
+      - part: {fileID: 11400000, guid: 463c325e46f3f75449cb24e0893b60ce, type: 2}
+        children:
+          enabled: 0
+          value: []
+      - part: {fileID: 11400000, guid: 463c325e46f3f75449cb24e0893b60ce, type: 2}
+        children:
+          enabled: 0
+          value: []

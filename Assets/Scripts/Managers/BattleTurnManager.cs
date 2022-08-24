@@ -12,7 +12,7 @@ public class BattleTurnManager : MonoBehaviour
     public event Action<int> OnTurnChanged;
     public event Action<int> OnKokuChanged;
 
-    public void Awake()
+    public void Initialize()
     {
         koku = _kokuPerTurn;
         OnKokuChanged?.Invoke(koku);

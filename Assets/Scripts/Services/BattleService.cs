@@ -19,6 +19,7 @@ namespace Game.Battle
         public BattleTurnManager battleTurnManager { get; private set; }
         public MapHighlighter mapHighlighter { get; private set; }
         public DebugConsole debugConsole { get; private set; }
+        public LogConsole logConsole { get; private set; }
         
         // Provide services
         public void ProvideUnitManager(UnitManager _unitManager) => unitManager = _unitManager;
@@ -31,6 +32,8 @@ namespace Game.Battle
         {
             debugConsole = _debugConsole;
         }
+        
+        public void ProvideLogConsole(LogConsole _logConsole) => logConsole = _logConsole;
 
         public void InitializeDebugConsole()
         {

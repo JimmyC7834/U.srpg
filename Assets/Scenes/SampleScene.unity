@@ -1935,6 +1935,7 @@ GameObject:
   - component: {fileID: 497167032}
   - component: {fileID: 497167033}
   - component: {fileID: 497167034}
+  - component: {fileID: 497167035}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -2002,9 +2003,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8282b31b23329d244a6c6d85d742b6e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _showConsole: 0
+  _itemHeight: 18
+  _position: {x: 0, y: 225}
+--- !u!114 &497167035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497167030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9fd72474cb27e428d52e2aaffe0f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _showConsole: 1
   _itemHeight: 18
-  _position: {x: 580, y: 225}
+  _position: {x: 0, y: 300}
+  _duration: 20
 --- !u!1 &521040407
 GameObject:
   m_ObjectHideFlags: 0
@@ -2459,6 +2476,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &595694204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 595694205}
+  - component: {fileID: 595694206}
+  m_Layer: 0
+  m_Name: BoardEditor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &595694205
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595694204}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &595694206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595694204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863e10342bb9b6a41a0556cf2af713a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _terrainData: {fileID: 11400000, guid: 7cd9fba5bd6ebde4a9992a0fa5da35b1, type: 2}
+  _input: {fileID: 11400000, guid: 5f5e14dac104e5345a7ea138a43a567c, type: 2}
+  _size: {x: 16, y: 16}
+  _defaultTerrian: 10
+  _selectedTerrian: 20
+  _debugDrawHeight: 0.5
+  _boardData: {fileID: 11400000, guid: 50a201da9c9c2bd489e393c12a98110f, type: 2}
+  _mousePos: {x: 0, y: 0}
 --- !u!1 &649316307
 GameObject:
   m_ObjectHideFlags: 0
@@ -3919,7 +3988,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 11400000, guid: 5f5e14dac104e5345a7ea138a43a567c, type: 2}
-  _skillCastInfo: {fileID: 11400000, guid: 9dbdde408fda92644afa38a0bf1c5f47, type: 2}
 --- !u!4 &992611303
 Transform:
   m_ObjectHideFlags: 0
@@ -6096,7 +6164,7 @@ MonoBehaviour:
   currentKokuUnits: []
   _unitDataset: {fileID: 11400000, guid: 71e6646d2a095274587c5b5df73760f6, type: 2}
   _timelineIconController: {fileID: 1673851509}
-  _prefab: {fileID: 7782091336579945877, guid: 100d8a657301870469a5fa2d23858898, type: 3}
+  _unitObjectPrefab: {fileID: 7782091336579945877, guid: 2b85c74c1eed15844b463c16e1d0dfb1, type: 3}
 --- !u!114 &1673851509
 MonoBehaviour:
   m_ObjectHideFlags: 0

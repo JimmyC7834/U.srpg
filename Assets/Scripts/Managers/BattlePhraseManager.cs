@@ -5,8 +5,10 @@ using System.Linq;
 using Game.Battle.Map;
 using Game.Unit;
 using Game.Unit.Skill;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.UIElements;
 
 namespace Game.Battle
@@ -23,7 +25,6 @@ namespace Game.Battle
         {
             private BattlePhraseManager _parent;
             private BattleService battleService => _parent._battleService;
-            private SkillCastInfo skillCastInfo => _parent._skillCastInfo;
             private InputReader _input => _parent._input;
             private CursorController _cursor => _parent._cursor;
             
@@ -45,12 +46,115 @@ namespace Game.Battle
 
                 public override void Start()
                 {
+                    _input.DisableAllInput();
+                    
                     while (battleService.unitManager.currentKokuUnits.Count == 0)
                     {
                         battleService.battleTurnManager.NextKoku();
                     }
-                    
+
+                    List<UnitObject> cpus =
+                        battleService.unitManager.currentKokuUnits.Where(unit => unit.cpuUnitController.haveAI).ToList();
+
                     _parent.Pop();
+                    if (cpus.Count != 0)
+                    {
+                        _parent.Push(new CpuActionPhrase(_parent, cpus));
+                    }
+                    else
+                    {
+                        _parent.Push(new UnitSelectionPhrase(_parent));
+                    }
+                }
+            }
+
+            public class CpuActionPhrase : Phrase
+            {
+                private List<UnitObject> _units;
+                private List<CpuActionInfo> _currentActions;
+                private SkillCastInfo _skillCastInfo;
+                private SkillCaster _skillCaster;
+
+                public CpuActionPhrase(BattlePhraseManager parent, List<UnitObject> units) : base(parent)
+                {
+                    _units = units;
+                    _skillCaster = new SkillCaster(battleService);
+                }
+
+                public override void Enter()
+                {
+                    _input.DisableAllInput();
+                }
+
+                public override void Start()
+                {
+                    GetActionsForNextCpu();
+                    ExecuteCurrentActions();
+                }
+
+                private void GetActionsForNextCpu()
+                {
+                    if (_units.Count == 0)
+                    {
+                        EndPhrase();
+                        return;
+                    }
+
+                    UnitObject unit = _units[0];
+                    CpuUnitController cpu = unit.GetComponent<CpuUnitController>();
+                    _currentActions = cpu.GetNextActions();
+                }
+
+                private void ExecuteCurrentActions()
+                {
+                    if (_currentActions == null || _currentActions.Count == 0)
+                    {
+                        NextCpu();
+                        return;
+                    }
+                    
+                    ExecuteNextAction();
+                }
+
+                private void ExecuteNextAction()
+                {
+                    UnitObject unit = _units[0];
+                    if (_currentActions.Count == 0)
+                    {
+                        battleService.unitManager.currentKokuUnits.Remove(unit);
+                        unit.EndAction();
+                        NextCpu();
+                        return;
+                    }
+                    
+                    CpuActionInfo action = _currentActions[0];
+                    _currentActions.RemoveAt(0);
+                    
+                    _skillCastInfo = new SkillCastInfo(
+                        battleService.battleBoard.GetTile(unit.gridX, unit.gridY), action.skill);
+                    _skillCastInfo.SetTargetTile(action.targetTile);
+                    _skillCaster.Initialize(_skillCastInfo);
+                    _skillCaster.CastSkill(ExecuteNextAction);
+                }
+
+                private void NextCpu()
+                {
+                    _units.RemoveAt(0);
+                    if (_units.Count == 0)
+                    {
+                        EndPhrase();
+                        return;
+                    }
+                    
+                    GetActionsForNextCpu();
+                    ExecuteCurrentActions();
+                }
+
+                private void EndPhrase()
+                {
+                    _parent.Pop();
+
+                    
                     _parent.Push(new UnitSelectionPhrase(_parent));
                 }
             }
@@ -63,6 +167,12 @@ namespace Game.Battle
                 {
                     _cursor.OnConfirm += OnConfirm;
                     _input.EnableMapNaviInput();
+
+                    if (battleService.unitManager.currentKokuUnits.Count == 0)
+                    {
+                        _parent.Pop();
+                        _parent.Push(new HandleKokuPhrase(_parent));
+                    }
                 }
 
                 public override void Exit()
@@ -100,17 +210,16 @@ namespace Game.Battle
                         battleService.CurrentUnitObject,
                         (item) =>
                         {
-                            skillCastInfo.SetCastedSkill(item.skill);
-                            SkillConfirmed();
+                            SkillConfirmed(item.skill);
                         });
                     
                     _input.EnableMenuNaviInput();
                 }
 
-                private void SkillConfirmed()
+                private void SkillConfirmed(SkillSO skill)
                 {
                     _parent.Pop();
-                    _parent.Push(new TargetSelectionPhrase(_parent));
+                    _parent.Push(new TargetSelectionPhrase(_parent, skill));
                 }
 
                 private void ActionEnd()
@@ -138,13 +247,21 @@ namespace Game.Battle
             public class TargetSelectionPhrase : Phrase
             {
                 private SkillCaster _skillCaster;
-                
-                public TargetSelectionPhrase(BattlePhraseManager parent) : base(parent) { }
+                private SkillSO _skill;
+                private SkillCastInfo _skillCastInfo;
+
+                public TargetSelectionPhrase(BattlePhraseManager parent, SkillSO skill) : base(parent)
+                {
+                    _skill = skill;
+                }
 
                 public override void Enter()
                 {
                     _input.DisableAllInput();
-                    _skillCaster = new SkillCaster(battleService, skillCastInfo);
+                    _skillCaster = new SkillCaster(battleService);
+                    _skillCastInfo = new SkillCastInfo(battleService.CurrentTile, _skill);
+                    _skillCaster.Initialize(_skillCastInfo);
+                    _skillCaster.HighlightRange();
                 }
 
                 public override void Start()
@@ -162,6 +279,7 @@ namespace Game.Battle
                     _parent.Pop();
                     SkillAnimationPhrase skillAnimationPhrase = new SkillAnimationPhrase(_parent);
                     _parent.Push(skillAnimationPhrase);
+                    _skillCastInfo.SetTargetTile(battleService.CurrentTile);
                     _skillCaster.CastSkill(skillAnimationPhrase.EndPhrase);
                 }
             }
@@ -184,7 +302,6 @@ namespace Game.Battle
         }
 
         [SerializeField] private InputReader _input;
-        [SerializeField] private SkillCastInfo _skillCastInfo;
         private BattleService _battleService;
         private Phrase _top => _stack.Peek();
         private CursorController _cursor => _battleService.cursor;
@@ -215,7 +332,7 @@ namespace Game.Battle
         public void Initialize(BattleService battleService)
         {
             _battleService = battleService;
-            
+
             _stack = new Stack<Phrase>();
             // empty phrase to skip null check
             _stack.Push(new Phrase(this));

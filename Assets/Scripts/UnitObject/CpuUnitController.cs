@@ -1,27 +1,49 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Game.Battle.Map;
 using Game.Unit;
+using Game.Unit.Skill;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Battle
 {
-    public abstract class CpuUnitController : ScriptableObject
+    public enum SkillTypeTag { Attack, Buff, Debuff, Heal, Move }
+
+    public class CpuUnitController : MonoBehaviour
     {
-        [SerializeField] protected BattleService _battleService;
-        [SerializeField] protected SkillCastInfo _skillCastInfo;
-        public abstract void GetNextAction(UnitObject unit);
+        [SerializeField] private CpuUnitAI _ai;
+
+        public bool haveAI => _ai != null;
+
+        public void SetAI(CpuUnitAI ai)
+        {
+            _ai = ai;
+        }
+        
+        public List<CpuActionInfo> GetNextActions() => _ai.GetNextActions(GetComponent<UnitObject>());
     }
     
-    public class PassiveCpuUnitController : CpuUnitController
+    public abstract class CpuUnitAI : ScriptableObject
     {
-        public override void GetNextAction(UnitObject unit)
+        [SerializeField] protected BattleService _battleService;
+        protected static SkillCaster _skillCaster;
+        public abstract List<CpuActionInfo> GetNextActions(UnitObject unit);
+    }
+
+    public struct CpuActionInfo
+    {
+        public SkillSO skill { get; private set; }
+        public BattleBoardTile targetTile { get; private set; }
+
+        public static CpuActionInfo From(BattleBoardTile _targetTile, SkillSO _skill) => new CpuActionInfo()
         {
-            unit.partTree.GetAllSkills();
-            
-            // _skillCastInfo.SetCastedSkill();
-            SkillCaster skillCaster = new SkillCaster(_battleService, _skillCastInfo);
-            
-        }
+            skill = _skill,
+            targetTile = _targetTile,
+        };
+
+        public static CpuActionInfo Empty() => new CpuActionInfo();
     }
 }

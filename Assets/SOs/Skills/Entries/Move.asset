@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd402bbd748d8f248b2018db7b8150f5, type: 3}
+  m_Name: Move
+  m_EditorClassIdentifier: 
+  _displayName: 
+  _id: 9930
+  _icon: {fileID: -1827896563, guid: 7544fbde4715e7843847ceb4bd39c2df, type: 3}
+  _unique: 1
+  _cost: 3
+  _skillTypeTags: 04000000
+  _skillSelectionRange:
+    range: 5
+    calWithMoveRange: 0
+    ignoreTerrain: 1
+    includeSelf: 1
+    optionalRange:
+      enabled: 0
+      value:
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+      - {x: 0, y: 0}
+  movingTimePerTile: 0.15

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInput.IMenuNaviActions
+public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInput.IMenuNaviActions, GameInput.IBoardEditorActions
 {
     // MapNavi
     public event UnityAction<Vector2> cursorMoveEvent = delegate { };
@@ -16,6 +16,10 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
     public event UnityAction menuCancelEvent = delegate { };
     public event UnityAction menuXEvent = delegate { };
     public event UnityAction menuYEvent = delegate { };
+    
+    // BoardEditor
+    public event UnityAction placeTerrainEvent = delegate { };
+    public event UnityAction<Vector2> boardEditorMouseMoveEvent = delegate { };
 
     // !!! Remember to edit Input Reader functions upon updating the input map !!!
     private GameInput gameInput;
@@ -26,8 +30,10 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
 
             gameInput.MapNavi.SetCallbacks(this);
             gameInput.MenuNavi.SetCallbacks(this);
+            gameInput.BoardEditor.SetCallbacks(this);
         }
 
+        gameInput.BoardEditor.Enable();
         EnableMapNaviInput();
     }
 
@@ -82,7 +88,19 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
         if (context.phase == InputActionPhase.Performed)
             menuYEvent.Invoke();
     }
-
+    
+    // BoardEditor
+    public void OnPlaceTerrain(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+            placeTerrainEvent.Invoke();
+    }
+    
+    public void OnMouseMove(InputAction.CallbackContext context)
+    {
+        boardEditorMouseMoveEvent.Invoke(context.ReadValue<Vector2>());
+    }
+    
     // Input Reader
     public void EnableMapNaviInput() {
         DisableAllInput();
@@ -95,6 +113,11 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
 
         gameInput.MenuNavi.Enable();
     }
+    
+    // public void EnableBoardEditorInput() {
+    //     DisableAllInput();
+    //     gameInput.MapNavi.Enable();
+    // }
 
     public void DisableAllInput() {
         gameInput.MenuNavi.Disable();

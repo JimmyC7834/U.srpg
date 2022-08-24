@@ -6,8 +6,6 @@ using Game.DataSet;
 using Game.Unit.Ability;
 using Game.Unit.Part;
 using Game.Unit.Skill;
-using Game.Unit.StatusEffect;
-using TMPro;
 using UnityEngine;
 
 
@@ -23,60 +21,119 @@ namespace Game.Unit
 
         private UnitSO unitSO;
         
+        // to see in editor
         public UnitParam param;
         public UnitAnimation anim { get; private set; }
         public UnitPartTree partTree { get; private set; }
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
+        public CpuUnitController cpuUnitController { get; private set; }
         public BattleTeam _team { get => BattleTeam.Player; }
+        
+        public string displayName { get; private set; }
 
-        public event Action<AttackInfo> OnInitiatingAttack;
-        public event Action<AttackInfo> OnRecivingAttack;
-        public event Action<AttackInfo> OnStartTakenAttack;
-        public event Action<DamageInfo> OnStartTakenDamage;
-        public event Action<AttackInfo> OnTakenAttack;
-        public event Action<DamageInfo> OnTakenDamage;
-        public event Action<AttackInfo> OnStartDealDamage;
-        public event Action<AttackInfo> OnDealDamage;
-        public event Action<AttackInfo> OnDodgedAttack;
-        public event Action<AttackInfo> OnMissedAttack;
-        public event Action<AttackInfo> OnCounterAttack;
-        public event Action<AttackInfo> OnExtendedAttack;
-        public event Action<UnitObject> OnTurnChanged;
-        public event Action<UnitObject> OnKokuChanged;
-        public event Action<UnitObject> OnEndingAction;
+        public int gridX => Mathf.FloorToInt(_transform.position.x);
+        public int gridY => Mathf.FloorToInt(_transform.position.z);
 
         public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(_transform.position));
         public float height => _transform.position.y;
+
+        #region UnitGameEvents
+        public event Action<AttackInfo> OnAttackEarly = delegate { };
+        public event Action<AttackInfo> OnAttack = delegate { };
+        public event Action<AttackInfo> OnAttackLate = delegate { };
+        public event Action<AttackInfo> OnTakeAttackEarly = delegate { };
+        public event Action<AttackInfo> OnTakeAttack = delegate { };
+        public event Action<AttackInfo> OnTakeAttackLate = delegate { };
+        public event Action<DamageInfo> OnTakeDamageEarly = delegate { };
+        public event Action<DamageInfo> OnTakeDamageLate = delegate { };
+        public event Action<UnitObject> OnTurnChanged = delegate { };
+        public event Action<UnitObject> OnKokuChanged = delegate { };
+        public event Action<UnitObject> OnActionEnd = delegate { };
+        public event Action<AttackInfo> OnMissedAttack = delegate { };
+        public event Action<AttackInfo> OnDodgedAttack = delegate { };
+        #endregion
+        
+        #region UnitAbilityEvents
+        public event Action<AttackInfo> OnAbAttackEarly = delegate { };
+        public event Action<AttackInfo> OnAbAttack = delegate { };
+        public event Action<AttackInfo> OnAbAttackLate = delegate { };
+        public event Action<AttackInfo> OnAbTakeAttackEarly = delegate { };
+        public event Action<AttackInfo> OnAbTakeAttack = delegate { };
+        public event Action<AttackInfo> OnAbTakeAttackLate = delegate { };
+        public event Action<DamageInfo> OnAbTakeDamageEarly = delegate { };
+        public event Action<DamageInfo> OnAbTakeDamageLate = delegate { };
+        public event Action<UnitObject> OnAbTurnChanged = delegate { };
+        public event Action<UnitObject> OnAbKokuChanged = delegate { };
+        public event Action<UnitObject> OnAbActionEnd = delegate { };
+        public event Action<AttackInfo> OnAbMissedAttack = delegate { };
+        public event Action<AttackInfo> OnAbDodgedAttack = delegate { };
+        #endregion
+        
+        #region UnitSEEvents
+        public event Action<AttackInfo> OnSEAttackEarly = delegate { };
+        public event Action<AttackInfo> OnSEAttack = delegate { };
+        public event Action<AttackInfo> OnSEAttackLate = delegate { };
+        public event Action<AttackInfo> OnSETakeAttackEarly = delegate { };
+        public event Action<AttackInfo> OnSETakeAttack = delegate { };
+        public event Action<AttackInfo> OnSETakeAttackLate = delegate { };
+        public event Action<DamageInfo> OnSETakeDamageEarly = delegate { };
+        public event Action<DamageInfo> OnSETakeDamageLate = delegate { };
+        public event Action<UnitObject> OnSETurnChanged = delegate { };
+        public event Action<UnitObject> OnSEKokuChanged = delegate { };
+        public event Action<UnitObject> OnSEActionEnd = delegate { };
+        public event Action<AttackInfo> OnSEMissedAttack = delegate { };
+        public event Action<AttackInfo> OnSEDodgedAttack = delegate { };
+        #endregion
         
         public void InitializeWith(UnitSO unitSO, BattleService battleService)
         {
+            // setup SO values
             this.unitSO = unitSO;
+            displayName = unitSO.displayName;
+            _spriteRenderer.sprite = unitSO.sprite;
+            
+            // setup unit values
+            _statusEffectRegisters = new List<StatusEffectRegister>();
+            _transform = transform;
+
+            // setup parts and abilities
             param = new UnitParam().Initialize(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
+            
+            // set cpu ai
+            cpuUnitController = GetComponent<CpuUnitController>();
+            cpuUnitController.SetAI(unitSO.ai);
+            
+            // setup animation
             anim = GetComponent<UnitAnimation>();
             anim.Initialize(this, unitSO.animatorOverrideController);
-            _statusEffectRegisters = new List<StatusEffectRegister>();
+            anim.SwitchStateTo(UnitAnimation.Idle);
+
             
-            _transform = transform;
-            _spriteRenderer.sprite = unitSO.sprite;
             RegisterParts(partTree.root);
+            
             param.InitializeMaxValues();
             param.Evaluate();
             
-            anim.SwitchStateTo(UnitAnimation.Idle);
-            
+            // events
             battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
-            OnTurnChanged += RefreshKoku;
         }
-
-        private void RefreshKoku(UnitObject _)
+        
+        private void InvokeOnTurnChanged(int turn)
         {
-            param.ResetMP();
+            param.ResetAP();
+            OnTurnChanged.Invoke(this);
+            OnAbTurnChanged.Invoke(this);
+            OnSETurnChanged.Invoke(this);
         }
 
-        private void InvokeOnTurnChanged(int turn) => OnTurnChanged?.Invoke(this);
-        private void InvokeOnKokuChanged(int koku) => OnKokuChanged?.Invoke(this);
+        private void InvokeOnKokuChanged(int koku)
+        {
+            OnKokuChanged.Invoke(this);
+            OnAbKokuChanged.Invoke(this);
+            OnSEKokuChanged.Invoke(this);
+        }
 
         private void RegisterParts(UnitPartTree.UnitPartTreeNode node)
         {
@@ -128,50 +185,56 @@ namespace Game.Unit
 
         public void EndAction()
         {
-            OnEndingAction?.Invoke(this);
+            OnActionEnd.Invoke(this);
         }
         
-        public void DealDamageTo(AttackInfo attackInfo)
+        public void Attack(AttackInfo attackInfo)
         {
+            OnAbAttackEarly.Invoke(attackInfo);
+        
             RollHit(attackInfo);
             
             if (attackInfo.missed)
             {
-                OnMissedAttack?.Invoke(attackInfo);
+                OnMissedAttack.Invoke(attackInfo);
+                OnAbMissedAttack.Invoke(attackInfo);
                 return;
             }
             
             RollCritical(attackInfo);
             
-            OnStartDealDamage?.Invoke(attackInfo);
+            OnAbAttack.Invoke(attackInfo);
             attackInfo.target.TakeAttack(attackInfo);
-            OnDealDamage?.Invoke(attackInfo);
+            
+            _battleService.logConsole.SendText($"{name} deal {attackInfo.damageModifier.value} damage to {attackInfo.target.name}");
+            OnAbAttackLate.Invoke(attackInfo);
         }
         
         public void TakeAttack(AttackInfo attackInfo)
         {
-            OnRecivingAttack?.Invoke(attackInfo);
+            OnAbTakeAttackEarly.Invoke(attackInfo);
             RollDodge(attackInfo);
 
             if (attackInfo.dodge)
             {
-                OnDodgedAttack?.Invoke(attackInfo);
+                OnDodgedAttack.Invoke(attackInfo);
+                OnAbDodgedAttack.Invoke(attackInfo);
                 return;
             }
             
-            OnStartTakenAttack?.Invoke(attackInfo);
+            OnAbTakeAttack.Invoke(attackInfo);
             TakeDamage(attackInfo.damageInfo);
-            OnTakenAttack?.Invoke(attackInfo);
+            OnAbTakeAttackLate.Invoke(attackInfo);
         }
         
         public void TakeDamage(DamageInfo damageInfo)
         {
-            OnStartTakenDamage?.Invoke(damageInfo);
+            OnAbTakeDamageEarly.Invoke(damageInfo);
             UnitStatModifier damageModifier = damageInfo.damageModifier;
             param.AddModifier(damageModifier);
             _battleService.uiManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.damageStat.Value);
             param.Evaluate();
-            OnTakenDamage?.Invoke(damageInfo);
+            OnAbTakeDamageLate.Invoke(damageInfo);
         }
 
         public void RollHit(AttackInfo attackInfo)
@@ -195,7 +258,7 @@ namespace Game.Unit
             if (param.CheckDodge())
                 attackInfo.ToDodged();
         }
-        
+
         public class UnitPartTree
         {
             public class UnitPartTreeNode

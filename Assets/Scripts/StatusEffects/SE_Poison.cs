@@ -17,12 +17,12 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.OnTurnChanged += DealDamage;
+            unit.OnSETurnChanged += DealDamage;
         }
     
         public override void Remove()
         {
-            unit.OnTurnChanged -= DealDamage;
+            unit.OnSETurnChanged -= DealDamage;
         }
     
         public void DealDamage(UnitObject unit)
@@ -44,12 +44,12 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.OnKokuChanged += DealDamage;
+            unit.OnSEKokuChanged += DealDamage;
         }
     
         public override void Remove()
         {
-            unit.OnKokuChanged -= DealDamage;
+            unit.OnSEKokuChanged -= DealDamage;
         }
     
         public void DealDamage(UnitObject unit)

@@ -18,9 +18,9 @@ namespace Game.Unit.Skill
 
     public abstract class SkillSO : DataEntrySO<SkillId>
     {
-        [SerializeField] private Sprite _icon;
         [SerializeField] private bool _unique;
         [SerializeField] private int _cost;
+        [SerializeField] private List<SkillTypeTag> _skillTypeTags;
 
         [Serializable]
         private struct SkillSelectionRange
@@ -34,7 +34,6 @@ namespace Game.Unit.Skill
 
         [SerializeField] private SkillSelectionRange _skillSelectionRange;
         
-        public Sprite icon { get => _icon; }
         public bool unique { get => _unique; }
         public int range { get => _skillSelectionRange.range; }
         public bool calWithMoveRange { get => _skillSelectionRange.calWithMoveRange; }
@@ -48,7 +47,12 @@ namespace Game.Unit.Skill
             BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo, Action callback)
         {
             UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
-            casterObject.param.ConsumeMp(_cost);
+            casterObject.param.ConsumeAP(_cost);
+            if (skillCastInfo.target == null)
+                battleService.logConsole.SendText($"{casterObject.displayName} casted {skillCastInfo.castedSkill.displayName}");
+            else
+                battleService.logConsole.SendText($"{casterObject.displayName} casted {skillCastInfo.castedSkill.displayName} to {skillCastInfo.target.displayName}");
+
             casterObject.StartCoroutine(CallBackWrap(Cast(battleService, skillCastInfo, selectionInfo), callback));
         }
 
@@ -60,6 +64,8 @@ namespace Game.Unit.Skill
         }
 
         public abstract IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo);
+
+        public bool IsTagged(SkillTypeTag tag) => _skillTypeTags.Contains(tag);
     }
     
     public enum SkillId

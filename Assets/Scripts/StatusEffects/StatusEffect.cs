@@ -43,7 +43,7 @@ namespace Game.Unit.StatusEffect
 
         private void IncreaseMP(UnitObject _)
         {
-            unit.param.ChangeMP(_value);
+            unit.param.ChangeAP(_value);
         }
     }
 
@@ -121,17 +121,17 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.param.OnMPConsumed += ReduceMP;
+            unit.param.OnAPConsumed += ReduceAP;
         }
 
         public override void Remove()
         {
-            unit.param.OnMPConsumed -= ReduceMP;
+            unit.param.OnAPConsumed -= ReduceAP;
         }
 
-        private void ReduceMP(UnitObject _)
+        private void ReduceAP(UnitObject _)
         {
-            unit.param.ChangeMP(_value);
+            unit.param.ChangeAP(_value);
         }
     }
 }

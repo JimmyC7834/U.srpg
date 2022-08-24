@@ -37,11 +37,17 @@ namespace Game.Battle
             _battleService.ProvideBattleTurnManager(_battleTurnManager);
             _battleService.ProvideBattleBoard(new BattleBoard(_battleSO));
             _battleService.ProvideDebugConsole(GetComponent<DebugConsole>());
+            _battleService.ProvideLogConsole(GetComponent<LogConsole>());
         }
 
         private void Start()
         {
+            // initialize all units
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
+            // initialize abilities/ status effects on turn and koku
+            _battleTurnManager.Initialize();
+            
+            // ~ Battle Start
             _battlePhraseManager.Initialize(_battleService);
 
             _battleService.InitializeDebugConsole();

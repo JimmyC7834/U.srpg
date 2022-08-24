@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Game.Unit.Skill
 {
     [CreateAssetMenu(menuName = "Game/Skill/Punch", fileName = "Sk_Punch")]
-    public class Sk_Punch : SkillSO, ISk_Attack
+    public class Sk_Punch : SkillSO
     {
         [SerializeField] private int _value;
             
@@ -16,13 +16,12 @@ namespace Game.Unit.Skill
         {
             AttackSourceInfo sourceInfo = AttackSourceInfo.From(skillCastInfo);
             AttackInfo attackInfo = AttackInfo.From(sourceInfo, skillCastInfo.targetTile);
-
-            attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
-            skillCastInfo.caster.DealDamageTo(attackInfo);
             
-            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, 0.5f);
-            skillCastInfo.caster.anim.StartAnimation();
-            yield return null;
+            attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
+            skillCastInfo.caster.Attack(attackInfo);
+            
+            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .5f);
+            yield return skillCastInfo.caster.anim.PlayAnimation();
         }
     }
 }

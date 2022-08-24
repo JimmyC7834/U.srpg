@@ -17,7 +17,7 @@ namespace Game.Battle
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
         [SerializeField] private UnitTimelineIconController _timelineIconController;
-        [SerializeField] private UnitObject _prefab;
+        [SerializeField] private UnitObject _unitObjectPrefab;
 
         public void Initialize(BattleSO.UnitSpawnInfo[] unitSpawnInfo)
         {
@@ -40,12 +40,12 @@ namespace Game.Battle
 
         public void UpdateCurrentKokuUnits(int koku)
         {
-            currentKokuUnits = _units.Where(unit => unit.param.MP == koku).ToList();
+            currentKokuUnits = _units.Where(unit => unit.param.AP == koku).ToList();
         }
         
         private UnitObject CreateNewUnit()
         {
-            return Instantiate(_prefab);
+            return Instantiate(_unitObjectPrefab);
         }
 
         private void PoolUnit(UnitObject unit)

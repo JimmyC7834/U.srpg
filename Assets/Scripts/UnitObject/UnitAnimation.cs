@@ -45,21 +45,16 @@ namespace Game.Unit
 
         public void SwitchStateTo(int stateNameHash)
         {
-            if (!_animationHashSet.Contains(stateNameHash))
-            {
-                Debug.LogError($"Invalid StateNameHash: {stateNameHash}");
-                return;
-            }
-            
             if (stateNameHash == _currentState) return;
             _animator.CrossFade(stateNameHash, 0, 0);
             _currentState = stateNameHash;
         }
         
         // back to idle on finished animation on default
-        public void StartAnimation() => StartCoroutine(PlayAnimation(null));
+        public void StartAnimation() => StartCoroutine(PlayAnimation());
         public void StartAnimation(Action callback) => StartCoroutine(PlayAnimation(callback));
-        private IEnumerator PlayAnimation(Action callback)
+        public IEnumerator PlayAnimation() => PlayAnimation(null);
+        public IEnumerator PlayAnimation(Action callback)
         {
             yield return PlayAnimationStep();
             SwitchStateTo(Idle);

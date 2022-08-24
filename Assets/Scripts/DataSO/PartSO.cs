@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.Unit.Part
 {
-    [CreateAssetMenu(menuName = "Game/Unit/Part")]
+    [CreateAssetMenu(menuName = "Game/DataEntry/Part")]
     public class PartSO : DataEntrySO<PartId>
     {
         [SerializeField] private AbilityDataSetSO _abDataset;
@@ -15,11 +15,8 @@ namespace Game.Unit.Part
         [SerializeField] private AbilityId[] _abilities;
         [SerializeField] private UnitStat.StatBoostEntry[] _statBoostEntries;
         private UnitStatModifier[] _statBoost;
-        [SerializeField] private Sprite _icon;
         [SerializeField] private SkillId _skillId;
-
-        public Sprite icon { get => _icon; }
-
+        
         public UnitStatModifier[] statBoost
         {
             get
