@@ -29,7 +29,6 @@ namespace Game.Battle
     public abstract class CpuUnitAI : ScriptableObject
     {
         [SerializeField] protected BattleService _battleService;
-        [SerializeField] protected SkillCastInfo _skillCastInfo;
         protected static SkillCaster _skillCaster;
         public abstract List<CpuActionInfo> GetNextActions(UnitObject unit);
     }
