@@ -19,7 +19,7 @@ MonoBehaviour:
   _cost: 2
   _skillTypeTags: 00000000
   _skillSelectionRange:
-    range: 1
+    range: 3
     calWithMoveRange: 0
     ignoreTerrain: 1
     includeSelf: 1
