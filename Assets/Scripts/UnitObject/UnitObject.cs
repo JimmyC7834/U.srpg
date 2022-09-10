@@ -19,7 +19,7 @@ namespace Game.Unit
         [SerializeField] private SpriteRenderer _spriteRenderer;
         public List<StatusEffectRegister> statusEffectRegisters;
 
-        private UnitSO unitSO;
+        public UnitSO unitSO { get; private set; }
         
         // to see in editor
         public UnitParam param;
@@ -86,10 +86,10 @@ namespace Game.Unit
         public event Action<AttackInfo> OnSEDodgedAttack = delegate { };
         #endregion
         
-        public void InitializeWith(UnitSO unitSO, BattleService battleService)
+        public void InitializeWith(UnitSO _unitSO, BattleService battleService)
         {
             // setup SO values
-            this.unitSO = unitSO;
+            unitSO = _unitSO;
             displayName = unitSO.displayName;
             _spriteRenderer.sprite = unitSO.sprite;
             

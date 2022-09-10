@@ -22,7 +22,7 @@ namespace Game.Battle
         [SerializeField] private BattlePhraseManager _battlePhraseManager;
         [SerializeField] private MapHighlighter _mapHighlighter;
 
-        private void OnEnable()
+        private void Awake()
         {
             if (_battleSO == null || _battleService == null)
             {

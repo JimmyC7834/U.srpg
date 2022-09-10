@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Battle;
 using Game.UI;
 using Game.Unit;
 using UnityEngine;
@@ -12,11 +13,13 @@ namespace Game
 {
     public class UIManager : MonoBehaviour
     {
+        [SerializeField] private BattleService _battleService;
         [SerializeField] private EventSystem _eventSystem;
 
         [SerializeField] private UI_SkillSelectionMenu _skillList;
         [SerializeField] private UI_UnitInfoSEPanel _unitInfoSePanel;
         [SerializeField] private UI_BattleTimeline _timeline;
+        [SerializeField] private UI_UnitInfoStatusPanel _unitInfoStatusPanel;
 
         [SerializeField] private GameObject _damageIndicatorPrefab;
         private ObjectPool<UI_DamageIndicator> _damageIndicatorPool;
@@ -34,7 +37,8 @@ namespace Game
 
         public void Initialize()
         {
-            _unitInfoSePanel.Initialize();
+            _unitInfoSePanel.Initialize(_battleService);
+            _unitInfoStatusPanel.Initialize(_battleService);
         }
 
         public void OpenSkillSelectionMenu(UnitObject unit, Action<UI_SkillSelectionMenuItem> callback)

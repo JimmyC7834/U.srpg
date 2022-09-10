@@ -323,10 +323,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ce42bba778bbc4b8d9777764303240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _eventSystem: {fileID: 475712582}
   _skillList: {fileID: 2024234431}
   _unitInfoSePanel: {fileID: 38564419}
   _timeline: {fileID: 1440715143}
+  _unitInfoStatusPanel: {fileID: 342054400}
   _damageIndicatorPrefab: {fileID: 2414543678920211091, guid: 2b27729735419de4c9ffbabdebc077c5, type: 3}
 --- !u!224 &38564418 stripped
 RectTransform:
@@ -1409,6 +1411,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 342054399}
+  - component: {fileID: 342054400}
   m_Layer: 5
   m_Name: UnitStatus
   m_TagString: Untagged
@@ -1440,6 +1443,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 500, y: 250}
   m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &342054400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342054398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2836f93a4a3783343903ae745178b350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
+  _displayNameLabel: {fileID: 1521847170}
+  _hpBar: {fileID: 1472858627}
+  _icon: {fileID: 1059823400}
 --- !u!1 &363295226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1714,6 +1733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -1730,6 +1750,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 0}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &497167030
 GameObject:
   m_ObjectHideFlags: 0
@@ -3898,7 +3919,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 15, y: -30}
-  m_SizeDelta: {x: 300, y: 300}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1059823399
 MonoBehaviour:
@@ -4091,7 +4112,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.000061035156, y: -125}
-  m_SizeDelta: {x: 0, y: 5}
+  m_SizeDelta: {x: 0, y: 10}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1144490182
 GameObject:

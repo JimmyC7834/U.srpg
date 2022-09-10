@@ -17,8 +17,9 @@ namespace Game.UI
         [SerializeField] private List<UI_SEIndicator> _indicators;
         private ObjectPool<UI_SEIndicator> _pool;
 
-        public void Initialize()
+        public void Initialize(BattleService battleService)
         {
+            _battleService = battleService;
             _pool = new ObjectPool<UI_SEIndicator>(CreatSeIndicator, PoolItem, ReleaseItem);
             _indicators = new List<UI_SEIndicator>();
 
