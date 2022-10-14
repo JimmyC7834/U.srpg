@@ -17,7 +17,6 @@ namespace Game.Unit
         [SerializeField] private BattleService _battleService;
 
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        public List<StatusEffectRegister> statusEffectRegisters;
 
         public UnitSO unitSO { get; private set; }
         
@@ -28,6 +27,7 @@ namespace Game.Unit
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
         public Transform _transform { get; private set; }
         public CpuUnitController cpuUnitController { get; private set; }
+        public UnitSEHandler seHandler { get; private set; }
         public BattleTeam _team { get => BattleTeam.Player; }
         
         public string displayName { get; private set; }
@@ -94,7 +94,6 @@ namespace Game.Unit
             _spriteRenderer.sprite = unitSO.sprite;
             
             // setup unit values
-            statusEffectRegisters = new List<StatusEffectRegister>();
             _transform = transform;
 
             // setup parts and abilities
@@ -109,8 +108,10 @@ namespace Game.Unit
             anim = GetComponent<UnitAnimation>();
             anim.Initialize(this, unitSO.animatorOverrideController);
             anim.SwitchStateTo(UnitAnimation.Idle);
-
             
+            // set up SEs
+            seHandler = new UnitSEHandler(this);
+
             RegisterParts(partTree.root);
             
             param.InitializeMaxValues();
@@ -155,32 +156,6 @@ namespace Game.Unit
             for (int i = 0; i < abilities.Length; i++)
                 abilities[i].RegisterTo(this, node);
             param.AddModifiers(node.Part.statBoost);
-        }
-
-        public void RegisterStatusEffects(StatusEffect.StatusEffect statusEffect, object source) => RegisterStatusEffects(statusEffect, -1, source);
-        public void RegisterStatusEffects(StatusEffect.StatusEffect statusEffect, int turns, object source)
-        {
-            statusEffectRegisters.Add(StatusEffectRegister.From(this, statusEffect, turns, source));
-        }
-
-        public void RemoveStatusEffectRegister(StatusEffectRegister statusEffectRegister)
-        {
-            if (!statusEffectRegisters.Contains(statusEffectRegister)) return;
-            statusEffectRegisters.Remove(statusEffectRegister);
-        }
-        
-        public void RemoveStatusEffectRegister(object source)
-        {
-            int index = statusEffectRegisters.FindIndex(reg => reg.source.Equals(source));
-            if (index < 0) return;
-            statusEffectRegisters.RemoveAt(index);
-        }
-        
-        public void RemoveStatusEffect(StatusEffect.StatusEffect statusEffect)
-        {
-            int index = statusEffectRegisters.FindIndex(reg => reg.statusEffect.Equals(statusEffect));
-            if (index < 0) return;
-            statusEffectRegisters.RemoveAt(index);
         }
 
         public void EndAction()
@@ -322,44 +297,6 @@ namespace Game.Unit
         }
     }
 
-    [Serializable]
-    public struct StatusEffectRegister
-    {
-        public StatusEffect.StatusEffect statusEffect { get; private set; }
-        public int turnsLeft { get; private set; }
-        public UnitObject Unit => statusEffect.unit;
-        public object source { get; private set; }
-        public event Action<StatusEffectRegister> OnCountDown;
-
-        public void CountDown(UnitObject _)
-        {
-            if (turnsLeft <= -1) return;
-            
-            turnsLeft--;
-            OnCountDown?.Invoke(this);
-            if (turnsLeft == 0)
-            {
-                Unit.RemoveStatusEffectRegister(this);
-                statusEffect.Remove();
-                Unit.OnTurnChanged -= CountDown;
-            }
-        }
-        
-        public static StatusEffectRegister From(UnitObject _unit, StatusEffect.StatusEffect statusEffect, int turns, object _source)
-        {
-            StatusEffectRegister reg = new StatusEffectRegister()
-            {
-                turnsLeft = turns,
-                source = _source,
-                statusEffect = statusEffect,
-            };
-            
-            statusEffect.RegisterTo(_unit);
-            reg.Unit.OnTurnChanged += reg.CountDown;
-            return reg;
-        }
-    }
-    
     public struct DamageInfo
     {
         public DamageStat damageStat { get; private set; }

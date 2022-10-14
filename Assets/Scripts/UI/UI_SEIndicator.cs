@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Unit;
+using Game.Unit.StatusEffect;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 namespace Game.UI
 {
@@ -12,18 +14,19 @@ namespace Game.UI
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _label;
         [SerializeField] private int count;
+        [SerializeField] private StatusEffect _statusEffect;
 
-        public void Initialize(StatusEffectRegister register)
+        public void Initialize(StatusEffect statusEffect)
         {
-            count = register.turnsLeft;
-            _label.SetText(count.ToString());
+            _statusEffect = statusEffect;
+            UpdateCountNumber();
             // _icon.sprite = register.statusEffect.icon;
             // UpdateCountNumber(register);
         }
 
-        public void UpdateCountNumber(StatusEffectRegister register)
+        public void UpdateCountNumber()
         {
-            count = register.turnsLeft;
+            count = _statusEffect.count;
             _label.SetText(count.ToString());
         }
     }

@@ -14,7 +14,7 @@ namespace Game.Unit.Ability
 
         public override void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node)
         {
-            unit.RegisterStatusEffects(new SE_DamageReduction(.99f), node);
+            unit.seHandler.RegisterStatusEffects(new SE_DamageReduction(.99f, this));
         }
     }
     //

@@ -10,22 +10,14 @@ namespace Game.Unit.StatusEffect
     {
         [SerializeField] private float damagePerTurn;
 
-        public SE_Poison(float _damagePerTurn)
+        public SE_Poison(float _damagePerTurn, int _turns, ScriptableObject source) : base(source)
         {
             damagePerTurn = _damagePerTurn;
         }
-        
-        protected override void Register()
-        {
-            unit.OnSETurnChanged += DealDamage;
-        }
-    
-        public override void Remove()
-        {
-            unit.OnSETurnChanged -= DealDamage;
-        }
-    
-        public void DealDamage(UnitObject unit)
+
+        protected override void OnCountDown() => DealDamage();
+
+        public void DealDamage()
         {
             DamageInfo damageInfo = DamageInfo.From(this);
             damageInfo.AddModifier(new DamageStatModifier(damagePerTurn, BaseStatModifier.ModifyType.Flat));
@@ -37,7 +29,7 @@ namespace Game.Unit.StatusEffect
     {
         [SerializeField] private float damagePerTurn;
 
-        public SE_KokuPoison(float _damagePerTurn)
+        public SE_KokuPoison(float _damagePerTurn, int _turns, ScriptableObject source) : base(source)
         {
             damagePerTurn = _damagePerTurn;
         }
@@ -47,7 +39,7 @@ namespace Game.Unit.StatusEffect
             unit.OnSEKokuChanged += DealDamage;
         }
     
-        public override void Remove()
+        protected override void OnRemoval()
         {
             unit.OnSEKokuChanged -= DealDamage;
         }

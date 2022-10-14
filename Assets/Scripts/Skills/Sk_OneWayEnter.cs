@@ -14,7 +14,7 @@ namespace Game.Unit.Skill
 
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
-            skillCastInfo.caster.RegisterStatusEffects(new SE_OneWay(), this);
+            skillCastInfo.caster.seHandler.RegisterStatusEffects(new SE_OneWay(this));
             skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .25f);
             skillCastInfo.caster.anim.StartAnimation();
             skillCastInfo.caster.param.ChangeAP(-skillCastInfo.caster.param.AP);

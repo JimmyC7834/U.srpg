@@ -15,7 +15,7 @@ namespace Game.Unit.Skill
 
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {
-            skillCastInfo.target.RegisterStatusEffects(new SE_Poison(10f), _turns);
+            skillCastInfo.target.seHandler.RegisterStatusEffects(new SE_Poison(10f, _turns, this));
             yield return null;
         }
     }

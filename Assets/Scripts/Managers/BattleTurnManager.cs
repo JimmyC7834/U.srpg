@@ -9,14 +9,14 @@ public class BattleTurnManager : MonoBehaviour
     public int koku { get; private set; }
     public int turn { get; private set; }
 
-    public event Action<int> OnTurnChanged;
-    public event Action<int> OnKokuChanged;
+    public event Action<int> OnTurnChanged = delegate {  };
+    public event Action<int> OnKokuChanged = delegate {  };
 
     public void Initialize()
     {
         koku = _kokuPerTurn;
-        OnKokuChanged?.Invoke(koku);
-        OnTurnChanged?.Invoke(turn);
+        OnKokuChanged.Invoke(koku);
+        OnTurnChanged.Invoke(turn);
     }
 
     public void NextKoku()
@@ -26,14 +26,13 @@ public class BattleTurnManager : MonoBehaviour
         {
             NextTurn();
         }
-        OnKokuChanged?.Invoke(koku);
-        Debug.Log($"koku changed to: {koku}");
+        OnKokuChanged.Invoke(koku);
     }
     
     public void NextTurn()
     {
         turn++;
         koku = _kokuPerTurn;
-        OnTurnChanged?.Invoke(turn);
+        OnTurnChanged.Invoke(turn);
     }
 }
