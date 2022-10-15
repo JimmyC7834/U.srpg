@@ -10,7 +10,7 @@ namespace Game.Unit.StatusEffect
         [Tooltip("0f <= 1f: percentage add")]
         private float _value;
 
-        public SE_HitRateUp(float value)
+        public SE_HitRateUp(float value, ScriptableObject source) : base(source)
         {
             _value = value;
         }
@@ -20,7 +20,7 @@ namespace Game.Unit.StatusEffect
             unit.param.ModifyHitRate(_value, this);
         }
 
-        public override void Remove()
+        protected override void OnRemoval()
         {
             if (unit.Equals(null)) return;
             unit.param.RemoveHitRateModifier(this);
@@ -32,6 +32,6 @@ namespace Game.Unit.StatusEffect
         [Tooltip("0f <= 1f: percentage minus")]
         private float _value;
 
-        public SE_HitRateDown(float value) : base(-value) { }
+        public SE_HitRateDown(float value, ScriptableObject source) : base(-value, source) { }
     }
 }

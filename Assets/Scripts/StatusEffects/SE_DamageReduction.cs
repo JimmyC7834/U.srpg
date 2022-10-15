@@ -9,14 +9,14 @@ namespace Game.Unit.StatusEffect
         [Tooltip("0f < 1f: percentage add reduction\n>= 1f: flat reduction\nfloor value for float > 1")]
         private float _value;
 
-        public SE_DamageReduction(float value) => _value = value;
+        public SE_DamageReduction(float value, ScriptableObject source) : base(source) => _value = value;
 
         protected override void Register()
         {
             unit.OnSETakeAttack += ReduceDamage;
         }
 
-        public override void Remove()
+        protected override void OnRemoval()
         {
             unit.OnSETakeAttack -= ReduceDamage;
         }

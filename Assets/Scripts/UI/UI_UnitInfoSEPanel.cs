@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Battle;
 using Game.Unit;
+using Game.Unit.StatusEffect;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -40,23 +41,23 @@ namespace Game.UI
 
         private void UpdatePanel(CursorController _)
         {
-            if (_battleService.CurrentUnitObject == null) return;
-            LoadRegisters(_battleService.CurrentUnitObject.statusEffectRegisters);
+            if (!_battleService.CurrentUnitObject) return;
+            LoadRegisters(_battleService.CurrentUnitObject.seHandler.StatusEffects);
         }
         
-        public void LoadRegisters(List<StatusEffectRegister> registers)
+        public void LoadRegisters(StatusEffect[] statusEffects)
         {
             Clear();
-            foreach (StatusEffectRegister register in registers)
+            foreach (StatusEffect statusEffect in statusEffects)
             {
-                AddIndicator(register);
+                AddIndicator(statusEffect);
             }
         }
 
-        private void AddIndicator(StatusEffectRegister register)
+        private void AddIndicator(StatusEffect statusEffect)
         {
             UI_SEIndicator newIndicator = _pool.Get();
-            newIndicator.Initialize(register);
+            newIndicator.Initialize(statusEffect);
             newIndicator.transform.SetParent(_gridLayout.transform, false);
             _indicators.Add(newIndicator);
         }

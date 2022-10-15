@@ -346,9 +346,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3692b094158d54581b29de6ebbc053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconImg: {fileID: 1921790020686638085}
+  iconImg: {fileID: 1921790018675832505}
   itemText: {fileID: 1921790020109546431}
-  button: {fileID: 0}
+  skill: {fileID: 0}
 --- !u!114 &6188889909360282989
 MonoBehaviour:
   m_ObjectHideFlags: 0

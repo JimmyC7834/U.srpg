@@ -7,11 +7,12 @@ namespace Game.Unit.StatusEffect
     public class SE_OneWay : StatusEffect
     {
         private int _mpLeft;
+
+        public SE_OneWay(ScriptableObject source) : base(source) { }
         
         protected override void Register()
         {
             unit.OnSEActionEnd += HandleActionEnd;
-            unit.OnSETurnChanged += RecoverMP;
         }
 
         public void HandleActionEnd(UnitObject _)
@@ -19,20 +20,21 @@ namespace Game.Unit.StatusEffect
             _mpLeft = unit.param.AP;
             if (_mpLeft < 0)
             {
-                unit.RemoveStatusEffect(this);
+                Remove();
             }
             unit.param.ChangeAP(-_mpLeft);
         }
 
-        public void RecoverMP(UnitObject _)
+        protected override void OnCountDown() => RecoverMP();
+
+        public void RecoverMP()
         {
             unit.param.ChangeAP(_mpLeft);
         }
         
-        public override void Remove()
+        protected override void OnRemoval()
         {
             unit.OnSEActionEnd -= HandleActionEnd;
-            unit.OnSETurnChanged -= RecoverMP;
         }
     }
 }

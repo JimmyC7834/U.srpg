@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeline: {fileID: 0}
+  _unit: {fileID: 0}
   _transform: {fileID: 2044102387578688428}
   _image: {fileID: 2044102388846127643}
 --- !u!1 &2044102388846127641
