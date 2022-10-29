@@ -188,46 +188,44 @@ namespace Game.Battle
                     if (!battleService.unitManager.currentKokuUnits.Contains(unit)) return;
                     Debug.Log($"Confrimed on unit {battleService.CurrentTile}");
                     _parent.Pop();
-                    _parent.Push(new SkillSelectionPhrase(_parent));
+                    _parent.Push(new ActionSelectionPhrase(_parent));
                 }
 
                 public override string ToString() => "UnitSelectionPhrase";
             }
             
-            public class SkillSelectionPhrase : Phrase
+            public class ActionSelectionPhrase : Phrase
             {
-                public SkillSelectionPhrase(BattlePhraseManager parent) : base(parent) { }
-                
+                public ActionSelectionPhrase(BattlePhraseManager parent) : base(parent) { }
+
                 public override void Enter()
                 {
                     _input.DisableAllInput();
-                    _input.menuXEvent += ActionEnd;
-                }
-
-                public override void Start()
-                {
-                    battleService.uiManager.OpenSkillSelectionMenu(
-                        battleService.CurrentUnitObject,
-                        (item) =>
-                        {
-                            SkillConfirmed(item.skill);
-                        });
-                    
                     _input.EnableMenuNaviInput();
+                    _input.menuLeftEvent += ActionEnd;
+                    _input.menuUpEvent += ActionEnd;
+                    _input.menuConfirmEvent += OnConfirm;
+                    _input.menuCancelEvent += OnCancel;
+                    
+                    battleService.cursor.gameObject.SetActive(false);
+                    battleService.uiManager.ToggleActionMenu(true);
                 }
-
-                private void SkillConfirmed(SkillSO skill)
+                
+                public override void Exit()
                 {
-                    _parent.Pop();
-                    _parent.Push(new TargetSelectionPhrase(_parent, skill));
+                    _input.menuUpEvent -= ActionEnd;
+                    _input.menuLeftEvent -= ActionEnd;
+                    _input.menuCancelEvent -= OnCancel;
+                    _input.menuConfirmEvent -= OnConfirm;
+                    battleService.cursor.gameObject.SetActive(true);
+                    battleService.uiManager.ToggleActionMenu(false);
                 }
-
+                
                 private void ActionEnd()
                 {
                     battleService.unitManager.currentKokuUnits.Remove(battleService.CurrentUnitObject);
                     battleService.CurrentUnitObject.EndAction();
-                    battleService.uiManager.CloseSkillSelectionMenu();
-                    // battleService.unitManager.UpdateCurrentKokuUnits(battleService.currentKoku);
+                    // battleService.uiManager.CloseSkillSelectionMenu();
                     _parent.Pop();
                     if (battleService.unitManager.currentKokuUnits.Count == 0)
                     {
@@ -238,9 +236,43 @@ namespace Game.Battle
                     _parent.Push(new UnitSelectionPhrase(_parent));
                 }
 
-                public override void Exit()
+                private void OnCancel()
                 {
-                    _input.menuXEvent -= ActionEnd;
+                    // back to unit selection pharse
+                    _parent.Pop();
+                    _parent.Push(new UnitSelectionPhrase(_parent));
+                }
+                
+                private void OnConfirm()
+                {
+                    // back to unit selection pharse
+                    _parent.Pop();
+                    _parent.Push(new SkillSelectionPhrase(_parent));
+                }
+            }
+            
+            public class SkillSelectionPhrase : Phrase
+            {
+                public SkillSelectionPhrase(BattlePhraseManager parent) : base(parent) { }
+                
+                public override void Enter()
+                {
+                    _input.DisableAllInput();
+                }
+
+                public override void Start()
+                {
+                    battleService.uiManager.OpenSkillSelectionMenu(
+                        battleService.CurrentUnitObject,
+                        (skill) => SkillConfirmed(skill));
+                    
+                    _input.EnableMenuNaviInput();
+                }
+
+                private void SkillConfirmed(SkillSO skill)
+                {
+                    _parent.Pop();
+                    _parent.Push(new TargetSelectionPhrase(_parent, skill));
                 }
             }
             

@@ -9,37 +9,26 @@ using UnityEngine;
 
 namespace Game.UI
 {
-    public class UI_SkillSelectionMenu : UI_Menu<UI_SkillSelectionMenuItem>
+    public class UI_SkillSelectionMenu : UI_DataEntryMenu<SkillSO, SkillId>
     {
-        private event Action<UI_SkillSelectionMenuItem> confirmEvent;
-        
-        public void OpenMenu(List<SkillSO> skills, Action<UI_SkillSelectionMenuItem> callback)
-        {
-            gameObject.SetActive(true);
-
-            foreach (SkillSO skill in skills)
-            {
-                UI_SkillSelectionMenuItem item = AddItem(skill, (item) =>
-                {
-                    confirmEvent?.Invoke(item);
-                });
-            }
-
-            confirmEvent += callback;
-        }
-
-        public UI_SkillSelectionMenuItem AddItem(SkillSO skill, Action<UI_SkillSelectionMenuItem> callback = null)
-        {
-            UI_SkillSelectionMenuItem newItem = base.AddItem(callback);
-            newItem.Initialize(skill);
-            return newItem;
-        }
-        
-        public void CloseMenu()
+        public void OpenMenu(List<SkillSO> skills, Action<SkillSO> _callback)
         {
             Clear();
+            gameObject.SetActive(true);
+            callback += _callback;
+            
+            foreach (SkillSO skill in skills)
+                AddItem(skill);
+        }
+
+        public override void OnConfirmed(SkillSO dataEntry)
+        {
+            CloseMenu();
+        }
+
+        public void CloseMenu()
+        {
             gameObject.SetActive(false);
-            confirmEvent = null;
         }
     }
 }

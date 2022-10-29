@@ -50,7 +50,6 @@ MonoBehaviour:
   _skillDataSet: {fileID: 11400000, guid: f3ee47c0fdaf55a44b222eeaed73b6a1, type: 2}
   _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _spriteRenderer: {fileID: 7782091336593499974}
-  statusEffectRegisters: []
   param:
     _maxAP: 0
     _maxHP: 0
@@ -103,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9dd84ac2bc98ff4ea3a17a8b9696619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ai: {fileID: 0}
+  _ai: {fileID: 11400000, guid: 831d64846e0cc2147a40b6cb4b90ea2e, type: 2}
 --- !u!1 &7782091336593499972
 GameObject:
   m_ObjectHideFlags: 0

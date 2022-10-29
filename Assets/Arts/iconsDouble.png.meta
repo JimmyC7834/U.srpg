@@ -3,7 +3,7 @@ guid: 7544fbde4715e7843847ceb4bd39c2df
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 128
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -63,6 +63,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -5495,13 +5496,13 @@ TextureImporter:
       iconsDouble_192: -2006440705
       iconsDouble_122: 1565878381
       iconsDouble_105: -192486291
-      iconsDouble_40: -1512768767
+      iconsDouble_165: -908024011
       iconsDouble_103: 11552969
       iconsDouble_143: -2123136640
       iconsDouble_140: 2002560510
       iconsDouble_164: -2124124530
+      iconsDouble_40: -1512768767
       iconsDouble_1: -581651460
-      iconsDouble_165: -908024011
       iconsDouble_238: -1003171980
       iconsDouble_218: 67467758
       iconsDouble_123: 1266738862

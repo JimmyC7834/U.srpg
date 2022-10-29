@@ -20,4 +20,4 @@ MonoBehaviour:
   _statBoostEntries:
   - unitStatType: 0
     value: 1
-  _skillId: 9950
+  _skillId: 9940
