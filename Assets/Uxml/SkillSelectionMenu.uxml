@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="DataEntryMenuItem" src="project://database/Assets/Uxml/DataEntryMenuItem.uxml?fileID=9197481963319205126&amp;guid=eb1d81701e55d19458456ffc0b47e9a9&amp;type=3#DataEntryMenuItem" />
+    <ui:VisualElement style="left: 50%; top: 30%; width: 30%; height: 45%;">
+        <ui:Foldout text="Foldout">
+            <ui:Instance template="DataEntryMenuItem" name="DataEntryMenuItem" />
+            <ui:Instance template="DataEntryMenuItem" name="DataEntryMenuItem" />
+            <ui:Instance template="DataEntryMenuItem" name="DataEntryMenuItem" />
+            <ui:Instance template="DataEntryMenuItem" name="DataEntryMenuItem" />
+        </ui:Foldout>
+    </ui:VisualElement>
+</ui:UXML>

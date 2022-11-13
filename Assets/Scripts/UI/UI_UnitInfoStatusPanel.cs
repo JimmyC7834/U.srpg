@@ -9,16 +9,15 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public class UI_UnitInfoStatusPanel : MonoBehaviour
+    public class UI_UnitInfoStatusPanel : UI_View
     {
         [SerializeField] private BattleService _battleService;
         [SerializeField] private TMP_Text _displayNameLabel;
         [SerializeField] private Image _hpBar;
         [SerializeField] private Image _icon;
 
-        public void Initialize(BattleService battleService)
+        public override void Enter()
         {
-            _battleService = battleService;
             _battleService.cursor.OnTileChange += UpdatePanel;
         }
 

@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 namespace Game
 {
-    public class UIManager : MonoBehaviour
+    public class BattleUIManager : MonoBehaviour
     {
         [SerializeField] private BattleService _battleService;
 
@@ -16,29 +16,37 @@ namespace Game
         [SerializeField] private UI_UnitInfoSEPanel _unitInfoSePanel;
         [SerializeField] private UI_BattleTimeline _timeline;
         [SerializeField] private UI_UnitInfoStatusPanel _unitInfoStatusPanel;
-        [SerializeField] private GameObject _actionMenu;
+        [SerializeField] private UI_PlayerBattleActionMenu _actionMenu;
 
-        [SerializeField] private GameObject _damageIndicatorPrefab;
-        private GameObjectPool<UI_DamageIndicator> _damageIndicatorPool;
+        [SerializeField] private UI_DamageIndicator _prefab;
         
+        private UI_ViewController _viewController;
+        private GameObjectPool<UI_DamageIndicator> _damageIndicatorPool;
+
         public UI_BattleTimeline timeline { get => _timeline; }
         
         private void Awake()
         {
-            _damageIndicatorPool = new GameObjectPool<UI_DamageIndicator>(_damageIndicatorPrefab, transform);
+            _viewController = new UI_ViewController();
+            _damageIndicatorPool = new GameObjectPool<UI_DamageIndicator>(_prefab, transform);
         }
 
         public void Initialize()
         {
-            _unitInfoSePanel.Initialize(_battleService);
-            _unitInfoStatusPanel.Initialize(_battleService);
+            _viewController.PushView(_unitInfoSePanel);
+            _viewController.PushView(_unitInfoStatusPanel);
+            _viewController.PushView(_timeline);
         }
 
         public void OpenSkillSelectionMenu(UnitObject unit, Action<SkillSO> callback)
         {
             // TODO: handle no skills
-            _skillSelectionMenu.OpenMenu(unit.partTree.GetAllSkills(), callback);
-            EventSystem.current.SetSelectedGameObject(_skillSelectionMenu.items[0].gameObject);
+            _skillSelectionMenu.OpenMenu(unit.partTree.GetAllSkills(), (skill) =>
+            {
+                callback.Invoke(skill);
+                _viewController.PopView();
+            });
+            _viewController.PushView(_skillSelectionMenu);
         }
         
         public void ToggleActionMenu(bool value) => _actionMenu.gameObject.SetActive(value);

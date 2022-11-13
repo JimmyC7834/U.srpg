@@ -1,21 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Game.DataSet;
-using Game.Unit.Skill;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Pool;
 using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public abstract class UI_DataEntryMenu<T, E> : MonoBehaviour where T : DataEntrySO<E> where E : Enum
+    public abstract class UI_DataEntryMenu<T, E> : UI_View where T : DataEntrySO<E> where E : Enum
     {
         [SerializeField] private RectTransform _itemContainer;
-        [SerializeField] private GameObject _itemPrefab;
+        [SerializeField] private UI_DataEntryMenuItem<T, E> _prefab;
         private GameObjectPool<UI_DataEntryMenuItem<T, E>> _pool;
-        public List<UI_DataEntryMenuItem<T, E>> items { get; protected set; }
+        protected List<UI_DataEntryMenuItem<T, E>> items { get; set; }
         protected event Action<T> callback = delegate {  };
         private Transform _transform;
 
@@ -23,7 +20,7 @@ namespace Game.UI
         {
             items = new List<UI_DataEntryMenuItem<T, E>>();
             _transform = transform;
-            _pool = new GameObjectPool<UI_DataEntryMenuItem<T, E>>(_itemPrefab, _itemContainer);
+            _pool = new GameObjectPool<UI_DataEntryMenuItem<T, E>>(_prefab, _itemContainer);
         }
 
         public UI_DataEntryMenuItem<T, E> AddItem(T dataEntry)

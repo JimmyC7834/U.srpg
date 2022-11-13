@@ -10,33 +10,21 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public class UI_UnitInfoSEPanel : MonoBehaviour
+    public class UI_UnitInfoSEPanel : UI_View
     {
         [SerializeField] private BattleService _battleService;
         [SerializeField] private GridLayoutGroup _gridLayout;
-        [SerializeField] private GameObject _prefab;
-        [SerializeField] private List<UI_SEIndicator> _indicators;
-        private ObjectPool<UI_SEIndicator> _pool;
 
-        public void Initialize(BattleService battleService)
+        [SerializeField] private List<UI_SEIndicator> _indicators;
+        [SerializeField] private UI_SEIndicator _prefab;
+        private GameObjectPool<UI_SEIndicator> _pool;
+
+        public override void Enter()
         {
-            _battleService = battleService;
-            _pool = new ObjectPool<UI_SEIndicator>(CreatSeIndicator, PoolItem, ReleaseItem);
+            _pool = new GameObjectPool<UI_SEIndicator>(_prefab, _gridLayout.transform);
             _indicators = new List<UI_SEIndicator>();
 
             _battleService.cursor.OnTileChange += UpdatePanel;
-        }
-
-        public UI_SEIndicator CreatSeIndicator() => Instantiate(_prefab).GetComponent<UI_SEIndicator>();
-        
-        private void PoolItem(UI_SEIndicator item)
-        {
-            item.gameObject.SetActive(true);
-        }
-        
-        private void ReleaseItem(UI_SEIndicator item)
-        {
-            item.gameObject.SetActive(false);
         }
 
         private void UpdatePanel(CursorController _)
@@ -56,9 +44,7 @@ namespace Game.UI
 
         private void AddIndicator(StatusEffect statusEffect)
         {
-            UI_SEIndicator newIndicator = _pool.Get();
-            newIndicator.Initialize(statusEffect);
-            newIndicator.transform.SetParent(_gridLayout.transform, false);
+            UI_SEIndicator newIndicator = _pool.Get(obj => obj.Initialize(statusEffect));
             _indicators.Add(newIndicator);
         }
 

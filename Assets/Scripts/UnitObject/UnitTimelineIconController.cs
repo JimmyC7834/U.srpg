@@ -11,38 +11,18 @@ namespace Game.Unit
     public class UnitTimelineIconController : MonoBehaviour
     {
         [SerializeField] private BattleService _battleService;
-        [SerializeField] private GameObject _timelineIconPrefab;
-        [SerializeField] private ObjectPool<UI_BattleTimelineIcon> _iconPool;
+        [SerializeField] private UI_BattleTimelineIcon _prefab;
+        private GameObjectPool<UI_BattleTimelineIcon> _iconPool;
 
         private void Awake()
         {
-            _iconPool = new ObjectPool<UI_BattleTimelineIcon>(
-                CreateNewIcon,
-                PoolIcon,
-                ReleaseIcon
-            );
+            _iconPool = new GameObjectPool<UI_BattleTimelineIcon>(_prefab, transform);
         }
 
         public void RegisterIconOn(UnitObject _unit)
         {
-            UI_BattleTimelineIcon newIcon = _iconPool.Get();
-            newIcon.Initialize(_battleService.uiManager.timeline, _unit);
-            newIcon.UpdatePositionOnTimeline(_unit);
-        }
-        
-        private UI_BattleTimelineIcon CreateNewIcon()
-        {
-            return Instantiate(_timelineIconPrefab).GetComponent<UI_BattleTimelineIcon>();
-        }
-
-        private void PoolIcon(UI_BattleTimelineIcon icon)
-        {
-            icon.gameObject.SetActive(true);
-        }
-        
-        private void ReleaseIcon(UI_BattleTimelineIcon icon)
-        {
-            icon.gameObject.SetActive(false);
+            UI_BattleTimelineIcon newIcon = _iconPool.Get(
+                obj => obj.Initialize(_battleService.BattleUIManager.timeline, _unit));
         }
     }
 }

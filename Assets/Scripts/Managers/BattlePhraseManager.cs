@@ -208,7 +208,7 @@ namespace Game.Battle
                     _input.menuCancelEvent += OnCancel;
                     
                     battleService.cursor.gameObject.SetActive(false);
-                    battleService.uiManager.ToggleActionMenu(true);
+                    battleService.BattleUIManager.ToggleActionMenu(true);
                 }
                 
                 public override void Exit()
@@ -218,7 +218,7 @@ namespace Game.Battle
                     _input.menuCancelEvent -= OnCancel;
                     _input.menuConfirmEvent -= OnConfirm;
                     battleService.cursor.gameObject.SetActive(true);
-                    battleService.uiManager.ToggleActionMenu(false);
+                    battleService.BattleUIManager.ToggleActionMenu(false);
                 }
                 
                 private void ActionEnd()
@@ -262,7 +262,7 @@ namespace Game.Battle
 
                 public override void Start()
                 {
-                    battleService.uiManager.OpenSkillSelectionMenu(
+                    battleService.BattleUIManager.OpenSkillSelectionMenu(
                         battleService.CurrentUnitObject,
                         (skill) => SkillConfirmed(skill));
                     
