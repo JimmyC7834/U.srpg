@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Unit;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Pool;
 
 namespace Game.Battle
@@ -11,21 +13,18 @@ namespace Game.Battle
     {
         [SerializeField] private BattleService _battleService;
         
-        private IObjectPool<UnitObject> _pool;
+        private GameObjectPool<UnitObject> _pool;
         private List<UnitObject> _units;
         public List<UnitObject> currentKokuUnits;
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
-        [SerializeField] private UnitTimelineIconController _timelineIconController;
-        [SerializeField] private UnitObject _unitObjectPrefab;
+        [SerializeField] private UnitObject _prefab;
 
+        public event Action<UnitObject> OnUnitSpawned = delegate {  };
+        
         public void Initialize(BattleSO.UnitSpawnInfo[] unitSpawnInfo)
         {
-            _pool = new ObjectPool<UnitObject>(
-                CreateNewUnit,
-                PoolUnit,
-                ReleaseUnit
-                );
+            _pool = new GameObjectPool<UnitObject>(_prefab, transform);
 
             currentKokuUnits = new List<UnitObject>();
             _units = new List<UnitObject>();
@@ -42,44 +41,26 @@ namespace Game.Battle
         {
             currentKokuUnits = _units.Where(unit => unit.param.AP == koku).ToList();
         }
-        
-        private UnitObject CreateNewUnit()
-        {
-            return Instantiate(_unitObjectPrefab);
-        }
 
-        private void PoolUnit(UnitObject unit)
-        {
-            unit.gameObject.SetActive(true);
-        }
-        
-        private void ReleaseUnit(UnitObject unit)
-        {
-            unit.gameObject.SetActive(false);
-        }
-        
         public void SpawnUnitAt(UnitId id, Vector2Int coord)
         {
-            UnitObject newUnit = _pool.Get();
-            newUnit.InitializeWith(_unitDataset[id], _battleService);
+            UnitObject newUnit = _pool.Get(
+                obj => obj.InitializeWith(_unitDataset[id], _battleService));
+            
             _units.Add(newUnit);
             PlaceUnitObjectAt(newUnit, coord);
-            _timelineIconController.RegisterIconOn(newUnit);
+            
+            OnUnitSpawned.Invoke(newUnit);
             _battleService.battleBoard.PlaceUnit(coord, newUnit);
         }
 
         private void PlaceUnitObjectAt(UnitObject unit, Vector2Int coord)
         {
             RaycastHit hit;
-            if (Physics.Raycast(new Ray(new Vector3(coord.x, 10, coord.y), Vector3.down), out hit, 20f))
-            {
-                // ray hits, update unit position
-                unit.transform.position = hit.point;
-            }
-            else
-            {
-                Debug.LogError($"Failed to place unit {unit} at {coord}.");
-            }
+            Ray ray = new Ray(new Vector3(coord.x, 10, coord.y), Vector3.down);
+            Assert.IsTrue(Physics.Raycast(ray, out hit, 20f), 
+                $"Failed to place unit {unit} at {coord}.");
+            unit.transform.position = hit.point;
         }
     }
 }

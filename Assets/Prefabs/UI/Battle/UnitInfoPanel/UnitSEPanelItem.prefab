@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 2384152683874388815}
   - component: {fileID: 473785042062808524}
   m_Layer: 5
-  m_Name: StatusEffectItem
+  m_Name: UnitSEPanelItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

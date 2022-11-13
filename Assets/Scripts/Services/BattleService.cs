@@ -14,7 +14,7 @@ namespace Game.Battle
         // ---MANAGERS GETTER---
         public UnitManager unitManager { get; private set; }
         public CursorController cursor  { get; private set; }
-        public UIManager uiManager { get; private set; }
+        public BattleUIManager BattleUIManager { get; private set; }
         public BattleBoard battleBoard { get; private set; }
         public BattleTurnManager battleTurnManager { get; private set; }
         public MapHighlighter mapHighlighter { get; private set; }
@@ -24,7 +24,7 @@ namespace Game.Battle
         // Provide services
         public void ProvideUnitManager(UnitManager _unitManager) => unitManager = _unitManager;
         public void ProvideCursorController(CursorController _cursor) => cursor = _cursor;
-        public void ProvideUIManager(UIManager _uiManager) => uiManager = _uiManager;
+        public void ProvideUIManager(BattleUIManager battleUIManager) => BattleUIManager = battleUIManager;
         public void ProvideBattleBoard(BattleBoard _battleBoard) => battleBoard = _battleBoard;
         public void ProvideBattleTurnManager(BattleTurnManager _battleTurnManager) => battleTurnManager = _battleTurnManager;
         public void ProvideMapHighlighter(MapHighlighter _mapHighlighter) => mapHighlighter = _mapHighlighter;

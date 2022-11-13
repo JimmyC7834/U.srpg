@@ -26,6 +26,8 @@ namespace Game.UI
             _unit = unit;
             
             unit.param.OnAPChanged += UpdatePositionOnTimeline;
+            
+            UpdatePositionOnTimeline(unit);
         }
         
         public void UpdatePositionOnTimeline(UnitObject _)

@@ -1,65 +1,77 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Game.DataSet;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Pool;
+using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public class UI_Menu<T> : MonoBehaviour where T : MonoBehaviour, IUI_MenuItem<T>
+    public abstract class UI_DataEntryMenu<T, E> : UI_View where T : DataEntrySO<E> where E : Enum
     {
         [SerializeField] private RectTransform _itemContainer;
-        [SerializeField] private GameObject _itemPrefab;
-        [SerializeField] private List<T> _items;
-        private ObjectPool<T> _pool;
+        [SerializeField] private UI_DataEntryMenuItem<T, E> _prefab;
+        private GameObjectPool<UI_DataEntryMenuItem<T, E>> _pool;
+        protected List<UI_DataEntryMenuItem<T, E>> items { get; set; }
+        protected event Action<T> callback = delegate {  };
+        private Transform _transform;
 
         public void Awake()
         {
-            _items = new List<T>();
-            _pool = new ObjectPool<T>(
-                CreatItem,
-                PoolItem,
-                ReleaseItem
-            );
+            items = new List<UI_DataEntryMenuItem<T, E>>();
+            _transform = transform;
+            _pool = new GameObjectPool<UI_DataEntryMenuItem<T, E>>(_prefab, _itemContainer);
         }
 
-        private T CreatItem() => Instantiate(_itemPrefab, _itemContainer).GetComponent<T>();
-        
-        private void PoolItem(T item)
+        public UI_DataEntryMenuItem<T, E> AddItem(T dataEntry)
         {
-            item.gameObject.SetActive(true);
-        }
-        
-        private void ReleaseItem(T item)
-        {
-            item.gameObject.SetActive(false);
-        }
-
-        public T AddItem(Action<T> callback = null)
-        {
-            T newItem = _pool.Get();
-            if (callback != null)
-                newItem.confirmEvent += callback;
-            _items.Add(newItem);
+            UI_DataEntryMenuItem<T, E> newItem = 
+                _pool.Get((item) => item.Initialize(dataEntry, OnConfirmed_));
+            items.Add(newItem);
             return newItem;
         }
 
-        public T GetItemAt(int i) => _items[i].GetComponent<T>();
-
+        private void OnConfirmed_(T dataEntry)
+        {
+            callback.Invoke(dataEntry);
+            OnConfirmed(dataEntry);
+        }
+        
+        public abstract void OnConfirmed(T dataEntry);
+        
         public void Clear()
         {
-            foreach (T item in _items)
+            for (int i = 0; i < items.Count; i++)
             {
-                _pool.Release(item);
+                items[i].transform.SetParent(_transform);
+                _pool.Release(items[i]);
             }
             
-            _items.Clear();
+            callback = delegate {  };
+            items.Clear();
         }
     }
-
-    public interface IUI_MenuItem<T> where T : IUI_MenuItem<T>
+    
+    public class UI_DataEntryMenuItem<T, E> : MonoBehaviour where T : DataEntrySO<E> where E : Enum
     {
-        public event Action<T> confirmEvent;
+        public T _dataEntry;
+        public Image iconImg;
+        public Button button;
+        public TMP_Text itemText;
+        
+        public event Action<T> onConfirm = delegate {  };
+        
+        public virtual void Initialize(T dataEntry, Action<T> callback)
+        {
+            _dataEntry = dataEntry;
+            if (callback == null) callback = delegate {  };
+            onConfirm = callback;
+            iconImg.sprite = _dataEntry.icon;
+            itemText.SetText(dataEntry.name);
+
+            button.onClick.AddListener(Confirm);
+        }
+
+        public void Confirm() => onConfirm.Invoke(_dataEntry);
     }
 }

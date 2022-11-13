@@ -36,6 +36,7 @@ namespace Game.Unit.Skill
         
         public bool unique { get => _unique; }
         public int range { get => _skillSelectionRange.range; }
+        public int cost { get => _cost; }
         public bool calWithMoveRange { get => _skillSelectionRange.calWithMoveRange; }
         public bool ignoreTerrain { get => _skillSelectionRange.ignoreTerrain; }
         public bool includeSelf { get => _skillSelectionRange.includeSelf; }

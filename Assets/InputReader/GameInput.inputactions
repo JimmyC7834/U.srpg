@@ -118,7 +118,7 @@
             "id": "084934ca-5ac8-4944-83cf-d5a7ef977a2b",
             "actions": [
                 {
-                    "name": "PointerMove",
+                    "name": "Move",
                     "type": "Value",
                     "id": "234c6d3e-0b5a-4767-a405-57ff51b9ec3c",
                     "expectedControlType": "Vector2",
@@ -127,7 +127,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "PointerConfirm",
+                    "name": "Confirm",
                     "type": "Button",
                     "id": "b46ab431-a252-49f8-8390-8670f98240de",
                     "expectedControlType": "Button",
@@ -136,7 +136,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PointerCancel",
+                    "name": "Cancel",
                     "type": "Button",
                     "id": "0a1a935e-8a73-4ccd-a4d8-ff11ff7a4ee5",
                     "expectedControlType": "Button",
@@ -145,7 +145,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PointerY",
+                    "name": "Up",
                     "type": "Button",
                     "id": "dbd68b43-12df-437b-aadd-5c6c6e420e8f",
                     "expectedControlType": "Button",
@@ -154,7 +154,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PointerX",
+                    "name": "Left",
                     "type": "Button",
                     "id": "af72b70d-81bf-47f6-b73a-123549f04ad8",
                     "expectedControlType": "Button",
@@ -171,7 +171,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerMove",
+                    "action": "Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -182,7 +182,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerMove",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -193,7 +193,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerMove",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -204,7 +204,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerMove",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -215,7 +215,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerMove",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -226,7 +226,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerConfirm",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -237,7 +237,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerCancel",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -248,7 +248,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerY",
+                    "action": "Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -259,7 +259,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PointerX",
+                    "action": "Left",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -14,7 +14,7 @@ namespace Game.UI
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _label;
         [SerializeField] private int count;
-        [SerializeField] private StatusEffect _statusEffect;
+        private StatusEffect _statusEffect;
 
         public void Initialize(StatusEffect statusEffect)
         {

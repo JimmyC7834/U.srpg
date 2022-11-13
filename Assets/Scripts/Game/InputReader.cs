@@ -14,8 +14,8 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
     public event UnityAction<Vector2> menuMoveEvent = delegate { };
     public event UnityAction menuConfirmEvent = delegate { };
     public event UnityAction menuCancelEvent = delegate { };
-    public event UnityAction menuXEvent = delegate { };
-    public event UnityAction menuYEvent = delegate { };
+    public event UnityAction menuUpEvent = delegate { };
+    public event UnityAction menuLeftEvent = delegate { };
     
     // BoardEditor
     public event UnityAction placeTerrainEvent = delegate { };
@@ -60,33 +60,33 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
     }
 
     // -----MENUNAVI-----
-    public void OnPointerMove(InputAction.CallbackContext context)
+    public void OnMove(InputAction.CallbackContext context)
     {
         menuMoveEvent.Invoke(context.ReadValue<Vector2>());
     }
 
-    public void OnPointerConfirm(InputAction.CallbackContext context)
+    public void OnConfirm(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
             menuConfirmEvent.Invoke();
     }
 
-    public void OnPointerCancel(InputAction.CallbackContext context)
+    public void OnCancel(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
             menuCancelEvent.Invoke();
     }
     
-    public void OnPointerX(InputAction.CallbackContext context)
+    public void OnUp(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            menuXEvent.Invoke();
+            menuUpEvent.Invoke();
     }
 
-    public void OnPointerY(InputAction.CallbackContext context)
+    public void OnLeft(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            menuYEvent.Invoke();
+            menuLeftEvent.Invoke();
     }
     
     // BoardEditor

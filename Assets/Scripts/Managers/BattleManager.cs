@@ -17,7 +17,7 @@ namespace Game.Battle
         
         [SerializeField] private CursorController _cursor;
         [SerializeField] private UnitManager _unitManager;
-        [SerializeField] private UIManager _uiManager;
+        [SerializeField] private BattleUIManager battleUIManager;
         [SerializeField] private BattleTurnManager _battleTurnManager;
         [SerializeField] private BattlePhraseManager _battlePhraseManager;
         [SerializeField] private MapHighlighter _mapHighlighter;
@@ -32,7 +32,7 @@ namespace Game.Battle
 
             _battleService.ProvideCursorController(_cursor);
             _battleService.ProvideUnitManager(_unitManager);
-            _battleService.ProvideUIManager(_uiManager);
+            _battleService.ProvideUIManager(battleUIManager);
             _battleService.ProvideMapHighlighter(_mapHighlighter);
             _battleService.ProvideBattleTurnManager(_battleTurnManager);
             _battleService.ProvideBattleBoard(new BattleBoard(_battleSO));
@@ -42,12 +42,12 @@ namespace Game.Battle
 
         private void Start()
         {
+            battleUIManager.Initialize();
             // initialize all units
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
             // initialize abilities/ status effects on turn and koku
             _battleTurnManager.Initialize();
-            _uiManager.Initialize();
-            
+
             // ~ Battle Start
             _battlePhraseManager.Initialize(_battleService);
 

@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement>
+        <ui:Button display-tooltip-when-elided="true" style="-unity-text-align: middle-left; font-size: 12%; height: 25px; width: 300px; flex-direction: row; flex-shrink: 0; flex-grow: 0; flex-basis: auto;">
+            <ui:VisualElement style="width: 10%;">
+                <ui:VisualElement style="background-image: url(&apos;project://database/Assets/Arts/iconsDouble.png?fileID=153370081&amp;guid=7544fbde4715e7843847ceb4bd39c2df&amp;type=3#iconsDouble_93&apos;); width: 20px; height: 20px; top: 0; align-items: flex-start; justify-content: flex-start; margin-top: 2px;" />
+            </ui:VisualElement>
+            <ui:Label text="Skill Name" display-tooltip-when-elided="true" style="font-size: 16px; width: 80%;" />
+            <ui:Label text="0" display-tooltip-when-elided="true" style="font-size: 16px; left: 0; width: 10%;" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>
