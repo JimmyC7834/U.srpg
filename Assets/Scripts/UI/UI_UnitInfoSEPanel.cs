@@ -19,7 +19,7 @@ namespace Game.UI
         [SerializeField] private UI_SEIndicator _prefab;
         private GameObjectPool<UI_SEIndicator> _pool;
 
-        public override void Enter()
+        protected override void Enter()
         {
             _pool = new GameObjectPool<UI_SEIndicator>(_prefab, _gridLayout.transform);
             _indicators = new List<UI_SEIndicator>();

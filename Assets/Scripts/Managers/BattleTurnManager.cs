@@ -23,9 +23,7 @@ public class BattleTurnManager : MonoBehaviour
     {
         koku--;
         if (koku <= 0)
-        {
             NextTurn();
-        }
         OnKokuChanged.Invoke(koku);
     }
     

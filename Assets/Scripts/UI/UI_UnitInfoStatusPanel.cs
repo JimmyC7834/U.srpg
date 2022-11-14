@@ -16,7 +16,7 @@ namespace Game.UI
         [SerializeField] private Image _hpBar;
         [SerializeField] private Image _icon;
 
-        public override void Enter()
+        protected override void Enter()
         {
             _battleService.cursor.OnTileChange += UpdatePanel;
         }

@@ -10,7 +10,6 @@ namespace Game.Battle
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private InputReader _input;
-        [SerializeField] private BattleService _battleService;
 
         // cursor movement
         [SerializeField] private float _cameraAngle;
@@ -46,26 +45,25 @@ namespace Game.Battle
         {
             if (_velocity.magnitude != 0)
             {
-                transform.position += _velocity.GameV2ToV3() * _cursorMoveSpeed * Time.deltaTime;
+                transform.position += _cursorMoveSpeed * Time.deltaTime * _velocity.GameV2ToV3();
                 _mapCoord = _newMapCoord;
                 OnMove.Invoke(this);
-                if (_mapCoord != _prevMapCoord)
+                if (_mapCoord == _prevMapCoord) return;
+                
+                RaycastHit hit;
+                Ray ray = new Ray(_raycastPoint.position, Vector3.down);
+                if (Physics.Raycast(ray, out hit, 10f))
                 {
-                    RaycastHit hit;
-                    if (Physics.Raycast(new Ray(_raycastPoint.position, Vector3.down), out hit, 10f))
-                    {
-                        // ray hits, update cursor position
-                        _prevMapCoord = _mapCoord;
-                        _markerSprite.position = _prevMapCoord.GameV2ToV3() + hit.point.ExtractY();
-                        OnTileChange.Invoke(this);
-                    }
-                    else
-                    {
-                        // if ray no hit, outside of map -> reset v 
-                        _velocity = Vector2.zero;
-                        UpdateCursorPosition();
-                    }
+                    // ray hits, update cursor position
+                    _prevMapCoord = _mapCoord;
+                    _markerSprite.position = _prevMapCoord.GameV2ToV3() + hit.point.ExtractY();
+                    OnTileChange.Invoke(this);
+                    return;
                 }
+
+                // if ray no hit, outside of map -> reset v 
+                _velocity = Vector2.zero;
+                UpdateCursorPosition();
             }
             else
             {

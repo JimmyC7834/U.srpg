@@ -21,7 +21,7 @@ namespace Game.UI
         
         public HorizontalLayoutGroup[] horizontalLayouts { get => _horizontalLayouts; }
 
-        public override void Enter()
+        protected override void Enter()
         {
             _iconPool = new GameObjectPool<UI_BattleTimelineIcon>(_prefab, transform);
             _battleService.battleTurnManager.OnKokuChanged += UpdateKokuIndicator;

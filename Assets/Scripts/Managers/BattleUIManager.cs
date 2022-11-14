@@ -4,7 +4,6 @@ using Game.UI;
 using Game.Unit;
 using Game.Unit.Skill;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Game
 {
@@ -49,7 +48,7 @@ namespace Game
             _viewController.PushView(_skillSelectionMenu);
         }
         
-        public void ToggleActionMenu(bool value) => _actionMenu.gameObject.SetActive(value);
+        public void OpenActionMenu() => _viewController.PushExitOnNextPushView(_actionMenu);
 
         public void CreateDamageIndicator(Vector3 worldPosition, int value)
         {

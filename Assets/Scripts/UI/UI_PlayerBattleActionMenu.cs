@@ -6,7 +6,7 @@ namespace Game.UI
 {
     public class UI_PlayerBattleActionMenu : UI_View
     {
-        public override void Enter() => gameObject.SetActive(true);
-        public override void Exit() => gameObject.SetActive(false);
+        protected override void Enter() => gameObject.SetActive(true);
+        protected override void Exit() => gameObject.SetActive(false);
     }
 }

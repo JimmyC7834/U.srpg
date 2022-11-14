@@ -3,17 +3,25 @@ using UnityEngine;
 
 namespace Game.UI
 {
-    public abstract class UI_View : MonoBehaviour
+    public class UI_View : MonoBehaviour
     {
-        // public Action OnEnter = delegate {  };
-        // public Action OnExit = delegate {  };
+        public Action OnEnter = delegate {  };
+        public Action OnExit = delegate {  };
 
-        public virtual void Enter() { }
+        protected virtual void Enter() { }
 
-        public virtual void Exit() { }
+        protected virtual void Exit() { }
 
-        // public void Enter() => OnEnter.Invoke();
+        public void EnterView()
+        {
+            Enter();            
+            OnEnter.Invoke();
+        }
 
-        // public void Exit() => OnExit.Invoke();
+        public void ExitView()
+        {
+            Exit();
+            OnExit.Invoke();
+        }
     }
 }

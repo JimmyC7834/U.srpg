@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Battle.Map;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Game.Battle
 {
@@ -24,12 +25,10 @@ namespace Game.Battle
 
         private void Awake()
         {
-            if (_battleSO == null || _battleService == null)
-            {
-                Debug.LogError("Null battle SO or Data!");
-                return;
-            }
-
+            Assert.IsFalse(
+                _battleSO == null || _battleService == null, 
+                "Null battle SO or Data!");
+            
             _battleService.ProvideCursorController(_cursor);
             _battleService.ProvideUnitManager(_unitManager);
             _battleService.ProvideUIManager(battleUIManager);
@@ -42,9 +41,13 @@ namespace Game.Battle
 
         private void Start()
         {
+            // push default UI views
+            // depend on unitManager
             battleUIManager.Initialize();
+            
             // initialize all units
             _unitManager.Initialize(_battleSO.unitSpawnInfos);
+            
             // initialize abilities/ status effects on turn and koku
             _battleTurnManager.Initialize();
 

@@ -27,9 +27,9 @@ namespace Game.Battle.Map
     
     public class BattleBoard
     {
-        public int size { get; private set; }
         private Grid<BattleBoardTile> _board;
-        
+        public int size { get; }
+
         public BattleBoardTile GetTile(Vector2 v) => GetTile((int) v.x, (int) v.y);
 
         public BattleBoardTile GetTile(int x, int y) => _board[x, y];
