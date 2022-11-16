@@ -1,10 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using Game.Unit;
 using UnityEngine;
 
 namespace Game.Battle.Map
 {
+    /**
+     * Immutable tile on the BattleBoard
+     */
     public class BattleBoardTile
     {
         public int x { get; }
@@ -14,17 +16,20 @@ namespace Game.Battle.Map
         public int cost = 1;
         public UnitObject unitOnTile;
         public bool walkable = true;
-        public bool HaveUnitOnTop => unitOnTile != null;
+        public bool ContainsUnit => unitOnTile != null;
 
-        public BattleBoardTile(int _x, int _y)
+        public BattleBoardTile(int _x, int _y, HashSet<Vector2> _neighbours)
         {
             x = _x;
             y = _y;
             coord = new Vector2(x, y);
-            neighbours = new HashSet<Vector2>();
+            neighbours = new HashSet<Vector2>(_neighbours);
         }
     }
     
+    /**
+     * Mutable grid of tiles representing BattleBoard of a battle/level/gameplay
+     */
     public class BattleBoard
     {
         private Grid<BattleBoardTile> _board;
@@ -36,27 +41,24 @@ namespace Game.Battle.Map
 
         public UnitObject GetUnit(Vector2 v) => GetTile(v).unitOnTile;
         public UnitObject GetUnit(int x, int y) => GetTile(x, y).unitOnTile;
-        public bool AnyUnitAt(Vector2 v) => GetTile(v).HaveUnitOnTop;
-        public bool AnyUnitAt(int x, int y) => GetTile(x, y).HaveUnitOnTop;
-        public bool CoordOnBoard(Vector2 v) => CoordOnBoard((int) v.x, (int) v.y);
-        public bool CoordOnBoard(int x, int y) => (x >= 0 && x < size - 1 && y >= 0 && y < size - 1);
+        public bool AnyUnitAt(Vector2 v) => GetTile(v).ContainsUnit;
+        public bool AnyUnitAt(int x, int y) => GetTile(x, y).ContainsUnit;
+        public bool ContainsCoord(Vector2 v) => ContainsCoord((int) v.x, (int) v.y);
+        public bool ContainsCoord(int x, int y) => (x >= 0 && x < size - 1 && y >= 0 && y < size - 1);
 
         public BattleBoard(BattleSO _battleSO)
         {
+            HashSet<Vector2> neighbours = new HashSet<Vector2>();
             _board = new Grid<BattleBoardTile>(_battleSO.mapSize, _battleSO.mapSize, 1.0f, Vector3.zero,
                 (_, x, y) =>
                 {
-                    BattleBoardTile newTile = new BattleBoardTile(x, y);
-                    if (x - 1 >= 0)
-                        newTile.neighbours.Add(new Vector2(x - 1, y));
-                    if (x + 1 < _battleSO.mapSize)
-                        newTile.neighbours.Add(new Vector2(x + 1, y));
-                    if (y - 1 >= 0)
-                        newTile.neighbours.Add(new Vector2(x, y - 1));
-                    if (y + 1 < _battleSO.mapSize)
-                        newTile.neighbours.Add(new Vector2(x, y + 1));
-                    return newTile;
+                    if (x - 1 >= 0) neighbours.Add(new Vector2(x - 1, y));
+                    if (y - 1 >= 0) neighbours.Add(new Vector2(x, y - 1));
+                    if (x + 1 < _battleSO.mapSize) neighbours.Add(new Vector2(x + 1, y));
+                    if (y + 1 < _battleSO.mapSize) neighbours.Add(new Vector2(x, y + 1));
+                    return new BattleBoardTile(x, y, neighbours);
                 });
+            neighbours.Clear();
             size = _battleSO.mapSize;
         }
 

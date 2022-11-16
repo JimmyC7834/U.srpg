@@ -25,14 +25,14 @@ namespace Game.UI
             _image.sprite = unit.spriteRenderer.sprite;
             _unit = unit;
             
-            unit.param.OnAPChanged += UpdatePositionOnTimeline;
+            unit.stats.OnAPChanged += UpdatePositionOnTimeline;
             
             UpdatePositionOnTimeline(unit);
         }
         
         public void UpdatePositionOnTimeline(UnitObject _)
         {
-            int index = 20 - _unit.param.AP;
+            int index = 20 - _unit.stats.AP;
             _transform.SetParent(_timeline.horizontalLayouts[index].gameObject.transform, false);
         }
     }

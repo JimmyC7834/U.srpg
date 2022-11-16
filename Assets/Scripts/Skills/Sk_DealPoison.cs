@@ -11,7 +11,7 @@ namespace Game.Unit.Skill
     {
         [SerializeField] private int _turns;
          
-        public override bool castableOn(BattleBoardTile tile) => tile.HaveUnitOnTop;
+        public override bool castableOn(BattleBoardTile tile) => tile.ContainsUnit;
 
         public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
         {

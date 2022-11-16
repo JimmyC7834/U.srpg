@@ -17,7 +17,7 @@ namespace Game.Unit.Skill
             AttackSourceInfo sourceInfo = AttackSourceInfo.From(skillCastInfo);
             AttackInfo attackInfo = AttackInfo.From(sourceInfo, skillCastInfo.targetTile);
             
-            attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.Flat));
+            attackInfo.AddModifier(new DamageValueModifier(_value, ParamModifier.ModifyType.Flat));
             skillCastInfo.caster.Attack(attackInfo);
             
             skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .5f);

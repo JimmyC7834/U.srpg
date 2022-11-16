@@ -11,7 +11,7 @@ namespace Game.Unit.Ability
 
         public override void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node)
         {
-            unit.param.ModifyCounterRate(_value, this);
+            unit.stats.ModifyCounterRate(_value, this);
         }
     }
 }

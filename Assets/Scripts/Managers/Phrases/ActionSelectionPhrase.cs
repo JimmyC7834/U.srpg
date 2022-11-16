@@ -13,7 +13,7 @@
             _input.menuConfirmEvent += OnConfirm;
             _input.menuCancelEvent += OnCancel;
             
-            battleService.cursor.gameObject.SetActive(false);
+            _cursor.gameObject.SetActive(false);
             battleService.BattleUIManager.OpenActionMenu();
         }
         
@@ -23,7 +23,7 @@
             _input.menuLeftEvent -= ActionEnd;
             _input.menuCancelEvent -= OnCancel;
             _input.menuConfirmEvent -= OnConfirm;
-            battleService.cursor.gameObject.SetActive(true);
+            _cursor.gameObject.SetActive(true);
         }
         
         private void ActionEnd()

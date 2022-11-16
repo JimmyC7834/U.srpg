@@ -16,6 +16,6 @@ namespace Game.Unit.Ability
             unit.OnAbTurnChanged += ChangeAP;
         }
 
-        public void ChangeAP(UnitObject unit) => unit.param.ChangeAP(value);
+        public void ChangeAP(UnitObject unit) => unit.stats.ChangeAP(value);
     }
 }

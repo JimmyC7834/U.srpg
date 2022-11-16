@@ -27,7 +27,7 @@ namespace Game.UI
             if (unit == null) return;
             
             _displayNameLabel.SetText(unit.displayName);
-            _hpBar.fillAmount = unit.param.HPPercent;
+            _hpBar.fillAmount = unit.stats.DurPercentage;
             _icon.sprite = unit.unitSO.sprite;
         }
     }

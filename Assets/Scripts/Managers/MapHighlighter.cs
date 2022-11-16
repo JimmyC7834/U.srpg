@@ -15,8 +15,12 @@ namespace Game.Battle.Map
         Count
     }
     
+    /**
+     * Provides interface to highlight tile on the map
+     */
     public class MapHighlighter : MonoBehaviour
     {
+        // TODO: Need to rewrite
         [SerializeField] private Color[] _colors;
         [SerializeField] private TileHighlight _prefab;
         private GameObjectPool<TileHighlight> _pool;

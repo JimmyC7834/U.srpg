@@ -29,11 +29,11 @@ namespace Game.Unit.StatusEffect
         {
             if (Mathf.Abs(_value) < 1f)
             {
-                attackInfo.AddModifier(new DamageStatModifier(_value, BaseStatModifier.ModifyType.PercentAdd));
+                attackInfo.AddModifier(new DamageValueModifier(_value, ParamModifier.ModifyType.PercentAdd));
                 return;
             }
             
-            attackInfo.AddModifier(new DamageStatModifier((int)_value, BaseStatModifier.ModifyType.Flat));
+            attackInfo.AddModifier(new DamageValueModifier((int)_value, ParamModifier.ModifyType.Flat));
         }
     }
 

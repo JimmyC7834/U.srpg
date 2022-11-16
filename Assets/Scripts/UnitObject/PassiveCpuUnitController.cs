@@ -119,7 +119,7 @@ namespace Game.Battle
                 foreach (Vector2 v in optionalRange.Value)
                 {
                     Vector2 coord = v + _battleService.CurrentCoord;
-                    if (battleBoard.CoordOnBoard(coord))
+                    if (battleBoard.ContainsCoord(coord))
                         rangeTiles.Add(battleBoard.GetTile(coord));
                 }
             }

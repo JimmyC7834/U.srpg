@@ -12,7 +12,7 @@ namespace Game.Unit.Ability
         
         [Header("Buff Settings")]
         [SerializeField] private BuffType _buffType;
-        [SerializeField] private BaseStatModifier.ModifyType _modifyType;
+        [SerializeField] private ParamModifier.ModifyType _modifyType;
         [SerializeField] private float _modifyValue;
 
         public override void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node)
@@ -40,7 +40,7 @@ namespace Game.Unit.Ability
         public void DamageReductionTrigger(AttackInfo attackInfo)
         {
             UnitObject self = attackInfo.target;
-            UnitObject foe = attackInfo.source.sourceUnit;
+            UnitObject foe = attackInfo.source.unit;
             
             if (self.height - foe.height >= _triggerValue)
             {
@@ -51,7 +51,7 @@ namespace Game.Unit.Ability
         public void DamageUpTrigger(AttackInfo attackInfo)
         {
             UnitObject foe = attackInfo.target;
-            UnitObject self = attackInfo.source.sourceUnit;
+            UnitObject self = attackInfo.source.unit;
             
             if (self.height - foe.height >= _triggerValue)
             {
@@ -62,33 +62,33 @@ namespace Game.Unit.Ability
         public void HitRateUpTrigger(AttackInfo attackInfo)
         {
             UnitObject foe = attackInfo.target;
-            UnitObject self = attackInfo.source.sourceUnit;
+            UnitObject self = attackInfo.source.unit;
             
             if (self.height - foe.height >= _triggerValue)
             {
-                self.param.ModifyHitRate(_modifyValue, this);
+                self.stats.ModifyHitRate(_modifyValue, this);
             }
         }
         
         public void DodgeRateUpTrigger(AttackInfo attackInfo)
         {
             UnitObject self = attackInfo.target;
-            UnitObject foe = attackInfo.source.sourceUnit;
+            UnitObject foe = attackInfo.source.unit;
             
             if (self.height - foe.height >= _triggerValue)
             {
-                self.param.ModifyDodgeRate(_modifyValue, this);
+                self.stats.ModifyDodgeRate(_modifyValue, this);
             }
         }
         
         public void CritRateUpTrigger(AttackInfo attackInfo)
         {
             UnitObject foe = attackInfo.target;
-            UnitObject self = attackInfo.source.sourceUnit;
+            UnitObject self = attackInfo.source.unit;
             
             if (self.height - foe.height >= _triggerValue)
             {
-                self.param.ModifyCritRate(_modifyValue, this);
+                self.stats.ModifyCritRate(_modifyValue, this);
             }
         }
     }

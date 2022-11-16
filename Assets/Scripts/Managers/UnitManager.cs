@@ -6,6 +6,7 @@ using Game.Unit;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Pool;
+using Utils;
 
 namespace Game.Battle
 {
@@ -14,6 +15,7 @@ namespace Game.Battle
         [SerializeField] private BattleService _battleService;
         
         private GameObjectPool<UnitObject> _pool;
+        private PriorityQueue<UnitObject, int> _unitsQueue;
         private List<UnitObject> _units;
         public List<UnitObject> currentKokuUnits;
 
@@ -28,6 +30,7 @@ namespace Game.Battle
 
             currentKokuUnits = new List<UnitObject>();
             _units = new List<UnitObject>();
+            _unitsQueue = new PriorityQueue<UnitObject, int>();
 
             for (int i = 0; i < unitSpawnInfo.Length; i++)
             {
@@ -39,7 +42,7 @@ namespace Game.Battle
 
         public void UpdateCurrentKokuUnits(int koku)
         {
-            currentKokuUnits = _units.Where(unit => unit.param.AP == koku).ToList();
+            currentKokuUnits = _units.Where(unit => unit.stats.AP == koku).ToList();
         }
 
         public void SpawnUnitAt(UnitId id, Vector2Int coord)
@@ -48,6 +51,7 @@ namespace Game.Battle
                 obj => obj.InitializeWith(_unitDataset[id], _battleService));
             
             _units.Add(newUnit);
+            // _unitsQueue.Enqueue(newUnit, newUnit.param.AP);
             PlaceUnitObjectAt(newUnit, coord);
             
             OnUnitSpawned.Invoke(newUnit);
@@ -56,7 +60,8 @@ namespace Game.Battle
 
         private void PlaceUnitObjectAt(UnitObject unit, Vector2Int coord)
         {
-            RaycastHit hit;
+            // just to get rid of possible uninitialized error
+            RaycastHit hit = new RaycastHit();
             Ray ray = new Ray(new Vector3(coord.x, 10, coord.y), Vector3.down);
             Assert.IsTrue(Physics.Raycast(ray, out hit, 20f), 
                 $"Failed to place unit {unit} at {coord}.");

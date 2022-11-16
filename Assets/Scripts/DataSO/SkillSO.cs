@@ -48,7 +48,7 @@ namespace Game.Unit.Skill
             BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo, Action callback)
         {
             UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
-            casterObject.param.ConsumeAP(_cost);
+            casterObject.stats.ConsumeAP(_cost);
             if (skillCastInfo.target == null)
                 battleService.logConsole.SendText($"{casterObject.displayName} casted {skillCastInfo.castedSkill.displayName}");
             else

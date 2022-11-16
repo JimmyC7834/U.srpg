@@ -1,5 +1,8 @@
 ﻿namespace Game.Battle
 {
+    /**
+     * A phrase representing the current game logic/control
+     */
     public class Phrase
     {
         protected BattlePhraseManager _parent;

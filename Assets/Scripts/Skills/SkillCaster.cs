@@ -70,7 +70,7 @@ namespace Game.Battle
             return GetRangeTilesFrom(
                 caster.location.x,
                 caster.location.y, 
-                skill.calWithMoveRange ? caster.param.GetMoveRange() : skill.range,
+                skill.calWithMoveRange ? caster.stats.GetMoveRange() : skill.range,
                 skill.ignoreTerrain, 
                 skill.includeSelf, 
                 skill.optionalRange);
@@ -125,7 +125,7 @@ namespace Game.Battle
                 foreach (Vector2 v in optionalRange.Value)
                 {
                     Vector2 coord = v + _battleService.CurrentCoord;
-                    if (battleBoard.CoordOnBoard(coord))
+                    if (battleBoard.ContainsCoord(coord))
                         rangeTiles.Add(battleBoard.GetTile(coord));
                 }
             }

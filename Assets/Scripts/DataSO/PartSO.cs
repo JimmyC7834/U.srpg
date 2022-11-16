@@ -13,24 +13,24 @@ namespace Game.Unit.Part
         [SerializeField] private AbilityDataSetSO _abDataset;
         
         [SerializeField] private AbilityId[] _abilities;
-        [SerializeField] private UnitStat.StatBoostEntry[] _statBoostEntries;
-        private UnitStatModifier[] _statBoost;
+        [SerializeField] private UnitParam.ParamBoostEntry[] _paramBoostEntries;
+        private UnitStatModifier[] _paramBoosts;
         [SerializeField] private SkillId _skillId;
         
-        public UnitStatModifier[] statBoost
+        public UnitStatModifier[] ParamBoosts
         {
             get
             {
-                if (_statBoost == null)
+                if (_paramBoosts == null)
                 {
-                    _statBoost = new UnitStatModifier[_statBoostEntries.Length];
-                    for (int i = 0; i < _statBoostEntries.Length; i++)
+                    _paramBoosts = new UnitStatModifier[_paramBoostEntries.Length];
+                    for (int i = 0; i < _paramBoostEntries.Length; i++)
                     {
-                        _statBoost[i] = _statBoostEntries[i].ToModifier();
+                        _paramBoosts[i] = _paramBoostEntries[i].ToModifier();
                     }
                 }
 
-                return _statBoost;
+                return _paramBoosts;
             }
         }
         public SkillId skillId { get => _skillId; }

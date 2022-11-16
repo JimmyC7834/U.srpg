@@ -5,10 +5,17 @@ using Object = UnityEngine.Object;
 
 namespace Game
 {
+    /**
+     * Simple Object Pool for Generic MonoBehaviour
+     */
     public class GameObjectPool<T> where T : MonoBehaviour
     {
         private ObjectPool<T> _pool;
         private T _prefab;
+        
+        /**
+         * the parent of pool object
+         */
         private Transform _parent;
 
         public GameObjectPool(T prefab, Transform parent = null)
@@ -24,10 +31,10 @@ namespace Game
 
         public T GetRaw() => _pool.Get();
 
-        public T Get(Action<T> Initialize)
+        public T Get(Action<T> initialize)
         {
             T newObject = _pool.Get();
-            Initialize.Invoke(newObject);
+            initialize.Invoke(newObject);
             newObject.transform.SetParent(_parent, false);
             return newObject;
         }

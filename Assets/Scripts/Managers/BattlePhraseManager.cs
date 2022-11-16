@@ -9,7 +9,11 @@ namespace Game.Battle
         Player,
         CPU,
     }
-
+    
+    /**
+     * Provide an interface to manage a stack of BattlePhrases for
+     * switching current game logic.
+     */
     public class BattlePhraseManager : MonoBehaviour
     {
 

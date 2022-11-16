@@ -568,6 +568,7 @@ MonoBehaviour:
   _battleTurnManager: {fileID: 497167033}
   _battlePhraseManager: {fileID: 992611302}
   _mapHighlighter: {fileID: 1515405242}
+  _camera: {fileID: 1441063823}
 --- !u!114 &497167033
 MonoBehaviour:
   m_ObjectHideFlags: 0

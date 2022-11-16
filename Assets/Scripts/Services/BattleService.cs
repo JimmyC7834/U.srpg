@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Game.Battle.Map;
 using Game.Unit;
 using Game.Unit.Skill;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace Game.Battle
 {
-    [CreateAssetMenu(menuName = "Game/Battle/Service")]
+    [CreateAssetMenu(menuName = "Game/Service/Battle")]
     public class BattleService : ScriptableObject
     {
         // ---MANAGERS GETTER---
@@ -20,6 +21,7 @@ namespace Game.Battle
         public MapHighlighter mapHighlighter { get; private set; }
         public DebugConsole debugConsole { get; private set; }
         public LogConsole logConsole { get; private set; }
+        public CinemachineVirtualCamera camera { get; private set; }
         
         // Provide services
         public void ProvideUnitManager(UnitManager _unitManager) => unitManager = _unitManager;
@@ -34,6 +36,7 @@ namespace Game.Battle
         }
         
         public void ProvideLogConsole(LogConsole _logConsole) => logConsole = _logConsole;
+        public void ProvideCamera(CinemachineVirtualCamera _camera) => camera = _camera;
 
         public void InitializeDebugConsole()
         {
@@ -41,13 +44,13 @@ namespace Game.Battle
             debugConsole.AddItem("Turn", () => battleTurnManager.turn.ToString());
             debugConsole.AddItem("Current Selected Unit", () =>
             {
-                if (battleBoard.CoordOnBoard(cursor.MapCoord))
+                if (battleBoard.ContainsCoord(cursor.MapCoord))
                     return CurrentUnitObject == null ? "null" : CurrentUnitObject.name;
                 return "null";
             });
             debugConsole.AddItem("Current Selected Tile", () => 
             {
-                if (battleBoard.CoordOnBoard(cursor.MapCoord))
+                if (battleBoard.ContainsCoord(cursor.MapCoord))
                     return CurrentTile.ToString();
                 return "null";
             });

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Game.UI
 {
-    public class UI_ViewController
+    public class UI_ViewController : MonoBehaviour
     {
         private struct ViewItem
         {
