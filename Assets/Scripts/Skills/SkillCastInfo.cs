@@ -7,7 +7,9 @@ using UnityEngine;
 
 namespace Game.Battle
 {
-    // [CreateAssetMenu(menuName = "Game/Battle/SkillCastInfo")]
+    /**
+     * Immutable object with info of a single skill cast
+     */
     public class SkillCastInfo
     {
         public SkillCastInfo(BattleBoardTile _casterTile, SkillSO skill)

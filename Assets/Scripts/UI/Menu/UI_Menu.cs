@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
+    // TODO: remake menu logic
     public abstract class UI_DataEntryMenu<T, E> : UI_View where T : DataEntrySO<E> where E : Enum
     {
         [SerializeField] private RectTransform _itemContainer;

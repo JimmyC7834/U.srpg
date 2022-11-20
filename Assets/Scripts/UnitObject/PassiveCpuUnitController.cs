@@ -44,8 +44,8 @@ namespace Game.Battle
             List<CpuActionInfo> actions = new List<CpuActionInfo>();
 
             PathFinder pathFinder = new PathFinder(_battleService.battleBoard);
-            List<PathFinder.PathFindNode> path = 
-                pathFinder.FindPath(unit.gridX, unit.gridY, target.gridX, target.gridY);
+            List<PathFinder.AStarNode> path = 
+                pathFinder.AStar(unit.gridX, unit.gridY, target.gridX, target.gridY);
             
             for (int i = 0; i < path.Count; i++)
             {
@@ -119,7 +119,7 @@ namespace Game.Battle
                 foreach (Vector2 v in optionalRange.Value)
                 {
                     Vector2 coord = v + _battleService.CurrentCoord;
-                    if (battleBoard.CoordOnBoard(coord))
+                    if (battleBoard.ContainsCoord(coord))
                         rangeTiles.Add(battleBoard.GetTile(coord));
                 }
             }

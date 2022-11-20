@@ -568,6 +568,7 @@ MonoBehaviour:
   _battleTurnManager: {fileID: 497167033}
   _battlePhraseManager: {fileID: 992611302}
   _mapHighlighter: {fileID: 1515405242}
+  _camera: {fileID: 1441063823}
 --- !u!114 &497167033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,7 +1681,7 @@ MonoBehaviour:
   _colors:
   - {r: 0, g: 1, b: 0.88881755, a: 0.19607843}
   - {r: 1, g: 0.3160377, b: 0.3160377, a: 0.19607843}
-  _prefab: {fileID: 5238512967740848058, guid: 742bdfd19941cd043be4db73a6d5cc0b, type: 3}
+  _prefab: {fileID: 1530770934696221608, guid: 742bdfd19941cd043be4db73a6d5cc0b, type: 3}
 --- !u!1 &1673851506
 GameObject:
   m_ObjectHideFlags: 0
@@ -2242,7 +2243,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 11400000, guid: 5f5e14dac104e5345a7ea138a43a567c, type: 2}
-  _battleService: {fileID: 11400000, guid: 87619980d6292c745a67fcad2fdd2f56, type: 2}
   _cameraAngle: -45
   _cursorMoveSpeed: 8
   _velocity: {x: 0, y: 0}

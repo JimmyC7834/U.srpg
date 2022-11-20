@@ -17,13 +17,13 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.param.ModifyHitRate(_value, this);
+            unit.stats.ModifyHitRate(_value, this);
         }
 
         protected override void OnRemoval()
         {
             if (unit.Equals(null)) return;
-            unit.param.RemoveHitRateModifier(this);
+            unit.stats.RemoveHitRateModifier(this);
         }
     }
     

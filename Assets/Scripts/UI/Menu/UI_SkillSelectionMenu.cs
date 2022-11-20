@@ -7,7 +7,7 @@ namespace Game.UI
 {
     public class UI_SkillSelectionMenu : UI_DataEntryMenu<SkillSO, SkillId>
     {
-        public override void Enter()
+        protected override void Enter()
         {
             EventSystem.current.SetSelectedGameObject(items[0].gameObject);
         }
@@ -29,6 +29,7 @@ namespace Game.UI
 
         public void CloseMenu()
         {
+            Clear();
             gameObject.SetActive(false);
         }
     }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Unit.StatusEffect
-{
+{ 
+    // TODO: rethink SE structure
     public abstract class StatusEffect
     {
         public enum EffectType { Stackable, Duration, CountDown, Special }
@@ -97,7 +98,7 @@ namespace Game.Unit.StatusEffect
             _value = value;
         }
 
-        protected override void OnCountDown() => unit.param.ChangeAP(_value);
+        protected override void OnCountDown() => unit.stats.ChangeAP(_value);
     }
 
     public class SE_MPRegenDown : SE_MPRegenUp
@@ -121,13 +122,13 @@ namespace Game.Unit.StatusEffect
         {
             if (Mathf.Abs(_value) < 1f)
             {
-                unit.param.AddModifier(new UnitStatModifier(
-                    UnitStatType.DUR, _value, BaseStatModifier.ModifyType.PercentAdd, this));
+                unit.stats.AddModifier(new UnitParamModifier(
+                    UnitStatType.DUR, _value, ParamModifier.ModifyType.PercentAdd, this));
                 return;
             }
             
-            unit.param.AddModifier(new UnitStatModifier(
-                UnitStatType.DUR, (int) _value, BaseStatModifier.ModifyType.Flat, this));
+            unit.stats.AddModifier(new UnitParamModifier(
+                UnitStatType.DUR, (int) _value, ParamModifier.ModifyType.Flat, this));
         }
     }
     
@@ -143,12 +144,12 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.param.ModifyMOV(_value, this);
+            unit.stats.ModifyMOV(_value, this);
         }
 
         protected override void OnRemoval()
         {
-            unit.param.RemoveMOVRateModifier(this);
+            unit.stats.RemoveMOVRateModifier(this);
         }
     }
 
@@ -168,17 +169,17 @@ namespace Game.Unit.StatusEffect
         
         protected override void Register()
         {
-            unit.param.OnAPConsumed += ReduceAP;
+            unit.stats.OnAPConsumed += ReduceAP;
         }
 
         protected override void OnRemoval()
         {
-            unit.param.OnAPConsumed -= ReduceAP;
+            unit.stats.OnAPConsumed -= ReduceAP;
         }
 
         private void ReduceAP(UnitObject _)
         {
-            unit.param.ChangeAP(_value);
+            unit.stats.ChangeAP(_value);
         }
     }
 }

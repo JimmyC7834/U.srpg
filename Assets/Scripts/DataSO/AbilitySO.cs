@@ -9,14 +9,14 @@ namespace Game.Unit.Ability
 {
     public abstract class AbilitySO : DataEntrySO<AbilityId>
     {
-        protected Dictionary<BaseStatModifier.ModifyType, Func<float, DamageStatModifier>> _modifierDict = new ()
+        protected Dictionary<ParamModifier.ModifyType, Func<float, DamageValueModifier>> _modifierDict = new ()
         {
-            {BaseStatModifier.ModifyType.Flat, (value) => 
-                new DamageStatModifier(value, BaseStatModifier.ModifyType.Flat)},
-            {BaseStatModifier.ModifyType.Percent, (value) => 
-                new DamageStatModifier(1 + value, BaseStatModifier.ModifyType.Percent)},
-            {BaseStatModifier.ModifyType.PercentAdd, (value) => 
-                new DamageStatModifier(value, BaseStatModifier.ModifyType.PercentAdd)},
+            {ParamModifier.ModifyType.Flat, (value) => 
+                new DamageValueModifier(value, ParamModifier.ModifyType.Flat)},
+            {ParamModifier.ModifyType.Percent, (value) => 
+                new DamageValueModifier(1 + value, ParamModifier.ModifyType.Percent)},
+            {ParamModifier.ModifyType.PercentAdd, (value) => 
+                new DamageValueModifier(value, ParamModifier.ModifyType.PercentAdd)},
         };
         
         public abstract void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node);

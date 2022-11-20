@@ -17,7 +17,7 @@ namespace Game.Unit.Skill
             skillCastInfo.caster.seHandler.RegisterStatusEffects(new SE_OneWay(this));
             skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .25f);
             skillCastInfo.caster.anim.StartAnimation();
-            skillCastInfo.caster.param.ChangeAP(-skillCastInfo.caster.param.AP);
+            skillCastInfo.caster.stats.ChangeAP(-skillCastInfo.caster.stats.AP);
             yield return null;
         }
     }

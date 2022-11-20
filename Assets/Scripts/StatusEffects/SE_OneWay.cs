@@ -17,19 +17,19 @@ namespace Game.Unit.StatusEffect
 
         public void HandleActionEnd(UnitObject _)
         {
-            _mpLeft = unit.param.AP;
+            _mpLeft = unit.stats.AP;
             if (_mpLeft < 0)
             {
                 Remove();
             }
-            unit.param.ChangeAP(-_mpLeft);
+            unit.stats.ChangeAP(-_mpLeft);
         }
 
         protected override void OnCountDown() => RecoverMP();
 
         public void RecoverMP()
         {
-            unit.param.ChangeAP(_mpLeft);
+            unit.stats.ChangeAP(_mpLeft);
         }
         
         protected override void OnRemoval()

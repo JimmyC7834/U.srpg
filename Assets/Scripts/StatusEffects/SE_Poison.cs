@@ -20,7 +20,7 @@ namespace Game.Unit.StatusEffect
         public void DealDamage()
         {
             DamageInfo damageInfo = DamageInfo.From(this);
-            damageInfo.AddModifier(new DamageStatModifier(damagePerTurn, BaseStatModifier.ModifyType.Flat));
+            damageInfo.AddModifier(new DamageValueModifier(damagePerTurn, ParamModifier.ModifyType.Flat));
             unit.TakeDamage(damageInfo);
         }
     }
@@ -47,7 +47,7 @@ namespace Game.Unit.StatusEffect
         public void DealDamage(UnitObject unit)
         {
             DamageInfo damageInfo = DamageInfo.From(this);
-            damageInfo.AddModifier(new DamageStatModifier(damagePerTurn, BaseStatModifier.ModifyType.Flat));
+            damageInfo.AddModifier(new DamageValueModifier(damagePerTurn, ParamModifier.ModifyType.Flat));
             unit.TakeDamage(damageInfo);
         }
     }

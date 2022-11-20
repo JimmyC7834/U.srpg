@@ -23,7 +23,7 @@ namespace Game.Unit.Skill
             battleService.logConsole.SendText($"{casterObject.displayName} moved from {skillCastInfo.casterTile.coord} to {skillCastInfo.targetTile.coord}");
 
             PathFinder pathFinder = new PathFinder(battleService.battleBoard);
-            List<PathFinder.PathFindNode> pathNodes = pathFinder.FindPath(casterObject.gridX, casterObject.gridY, 
+            List<PathFinder.AStarNode> pathNodes = pathFinder.AStar(casterObject.gridX, casterObject.gridY, 
                 skillCastInfo.targetTile.x, skillCastInfo.targetTile.y);
 
             // Stack<Vector2> path = new Stack<Vector2>();

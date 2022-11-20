@@ -11,6 +11,9 @@ using UnityEngine;
 
 namespace Game.Unit
 {
+    /**
+     * GameObject of a unit
+     */
     public class UnitObject : MonoBehaviour
     {
         [SerializeField] private SkillDataSetSO _skillDataSet;
@@ -20,8 +23,7 @@ namespace Game.Unit
 
         public UnitSO unitSO { get; private set; }
         
-        // to see in editor
-        public UnitParam param;
+        [field: SerializeField] public UnitStats stats { get; private set; }
         public UnitAnimation anim { get; private set; }
         public UnitPartTree partTree { get; private set; }
         public SpriteRenderer spriteRenderer { get => _spriteRenderer; }
@@ -97,7 +99,7 @@ namespace Game.Unit
             _transform = transform;
 
             // setup parts and abilities
-            param = new UnitParam().Initialize(this);
+            stats = new UnitStats(this);
             partTree = new UnitPartTree(this, unitSO.PartTree);
             
             // set cpu ai
@@ -114,16 +116,17 @@ namespace Game.Unit
 
             RegisterParts(partTree.root);
             
-            param.InitializeMaxValues();
-            param.Evaluate();
+            stats.InitializeMaxValues();
+            stats.Evaluate();
             
             // events
             battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
+            battleService.battleTurnManager.OnKokuChanged += InvokeOnKokuChanged;
         }
         
         private void InvokeOnTurnChanged(int turn)
         {
-            param.ResetAP();
+            stats.ResetAP();
             OnTurnChanged.Invoke(this);
             OnAbTurnChanged.Invoke(this);
             OnSETurnChanged.Invoke(this);
@@ -155,7 +158,7 @@ namespace Game.Unit
             AbilitySO[] abilities = node.Part.GetAbilities();
             for (int i = 0; i < abilities.Length; i++)
                 abilities[i].RegisterTo(this, node);
-            param.AddModifiers(node.Part.statBoost);
+            stats.AddModifiers(node.Part.ParamBoosts);
         }
 
         public void EndAction()
@@ -205,35 +208,36 @@ namespace Game.Unit
         public void TakeDamage(DamageInfo damageInfo)
         {
             OnAbTakeDamageEarly.Invoke(damageInfo);
-            UnitStatModifier damageModifier = damageInfo.damageModifier;
-            param.AddModifier(damageModifier);
-            _battleService.BattleUIManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.damageStat.Value);
-            param.Evaluate();
+            UnitParamModifier damageModifier = damageInfo.damageModifier;
+            stats.AddModifier(damageModifier);
+            _battleService.BattleUIManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.DamageValue.Value);
+            stats.Evaluate();
             OnAbTakeDamageLate.Invoke(damageInfo);
         }
 
         public void RollHit(AttackInfo attackInfo)
         {
-            if (!param.CheckHit())
+            if (!stats.CheckHit())
                 attackInfo.ToMissed();
         }
         
         public void RollCritical(AttackInfo attackInfo)
         {
-            if (param.CheckCritical())
+            if (stats.CheckCritical())
             {
                 attackInfo.ToCritical();
-                
             }
-
         }
         
         public void RollDodge(AttackInfo attackInfo)
         {
-            if (param.CheckDodge())
+            if (stats.CheckDodge())
                 attackInfo.ToDodged();
         }
-
+        
+        /**
+         * Immutable Tree represent the parts that forms the unit
+         */
         public class UnitPartTree
         {
             public class UnitPartTreeNode
@@ -256,15 +260,15 @@ namespace Game.Unit
                 }
             }
 
-            public UnitObject unit;
-            public UnitPartTreeNode root;
-            public List<UnitPartTreeNode> nodes;
+            private readonly UnitObject _unit;
+            public readonly UnitPartTreeNode root;
+            private readonly List<UnitPartTreeNode> _nodes;
             
             public UnitPartTree(UnitObject _unit, PartNode partTree)
             {
-                unit = _unit;
-                nodes = new List<UnitPartTreeNode>();
-                root = new UnitPartTreeNode(nodes, partTree);
+                this._unit = _unit;
+                _nodes = new List<UnitPartTreeNode>();
+                root = new UnitPartTreeNode(_nodes, partTree);
             }
     
             public List<SkillId> GetAllSkillIds()
@@ -282,12 +286,12 @@ namespace Game.Unit
             public List<SkillSO> GetAllSkills()
             {
                 List<SkillSO> skills = new List<SkillSO>();
-                foreach (UnitPartTreeNode node in nodes)
+                foreach (UnitPartTreeNode node in _nodes)
                 {
                     if (node.Part.skillId == SkillId.None)
                         continue;
                     
-                    SkillSO skill = unit._skillDataSet[node.Part.skillId];
+                    SkillSO skill = _unit._skillDataSet[node.Part.skillId];
                     if (!(skill.unique && skills.Contains(skill)))
                         skills.Add(skill);
                 }
@@ -296,23 +300,34 @@ namespace Game.Unit
             }
         }
     }
-
+    
+    /**
+     * Mutable struct of single damage deal
+     */
     public struct DamageInfo
     {
-        public DamageStat damageStat { get; private set; }
+        public DamageValue DamageValue { get; private set; }
         public object source { get; private set; }
         
-        public void AddModifier(DamageStatModifier damageStatModifier) => damageStat.AddModifier(damageStatModifier);
-        public UnitStatModifier damageModifier => 
-            new UnitStatModifier(UnitStatType.DUR, -damageStat.Value, BaseStatModifier.ModifyType.Flat, source);
+        public void AddModifier(DamageValueModifier damageValueModifier) => 
+            DamageValue.AddModifier(damageValueModifier);
+        
+        /**
+         * Generate final UnitStatModifier to modify DUR base on the damage value
+         */
+        public UnitParamModifier damageModifier => 
+            new UnitParamModifier(UnitStatType.DUR, -DamageValue.Value, ParamModifier.ModifyType.Flat, source);
         
         public static DamageInfo From(object _source) => new DamageInfo()
         {
-            damageStat = new DamageStat(),
+            DamageValue = new DamageValue(),
             source = _source,
         };
     }
     
+    /**
+     * Mutable struct of info of a single attack preformed by an unit
+     */
     public class AttackInfo
     {
         public AttackSourceInfo source { get; private set; }
@@ -342,32 +357,28 @@ namespace Game.Unit
         public bool ToMissed() => missed = true;
         public bool ToDodged() => dodge = true;
         
-        public void AddModifier(DamageStatModifier damageStatModifier) => damageInfo.AddModifier(damageStatModifier);
+        public void AddModifier(DamageValueModifier damageValueModifier) => damageInfo.AddModifier(damageValueModifier);
 
-        public UnitStatModifier damageModifier => damageInfo.damageModifier;
+        public UnitParamModifier damageModifier => damageInfo.damageModifier;
     }
-
+    
+    /**
+     * Immutable struct of info of source of an attack
+     */
     public struct AttackSourceInfo
     {
-        public BattleBoardTile sourceTile { get; private set; }
-        public UnitObject sourceUnit { get; private set; }
-        public SkillSO sourceSkill { get; private set; }
+        public BattleBoardTile tile { get; private set; }
+        public UnitObject unit { get; private set; }
+        public SkillSO skill { get; private set; }
 
-        public static AttackSourceInfo Empty => new AttackSourceInfo()
-        {
-            sourceTile = null,
-            sourceUnit = null,
-            sourceSkill = null,
-        };
-        
         public static AttackSourceInfo From(SkillCastInfo skillCastInfo) =>
             From(skillCastInfo.casterTile, skillCastInfo.castedSkill);
         
         public static AttackSourceInfo From(BattleBoardTile sourceTile, SkillSO _sourceSkill) => new AttackSourceInfo()
         {
-            sourceTile = sourceTile,
-            sourceUnit = sourceTile.unitOnTile,
-            sourceSkill = _sourceSkill,
+            tile = sourceTile,
+            unit = sourceTile.unitOnTile,
+            skill = _sourceSkill,
         };
     }
 }

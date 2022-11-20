@@ -2,9 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Game.Unit
 {
+    /**
+     * Animation controller for UnitObject. Used by adding instructions
+     * into animation queue and play the queued animations.
+     */
     public class UnitAnimation : MonoBehaviour
     {
         public static readonly int Idle = Animator.StringToHash("Idle");
@@ -38,13 +43,16 @@ namespace Game.Unit
             _animator.runtimeAnimatorController = animatorOverrideController;
         }
 
-        public void AddAnimationStep(int state, float duration)
+        public void AddAnimationStep(int stateNameHash, float duration)
         {
-            _animationQueue.Enqueue(AnimationStep.From(state, duration));
+            if (!_animationHashSet.Contains(stateNameHash)) return;
+            _animationQueue.Enqueue(AnimationStep.From(stateNameHash, duration));
         }
 
         public void SwitchStateTo(int stateNameHash)
         {
+            Assert.IsTrue(_animationHashSet.Contains(stateNameHash));
+            // if (!_animationHashSet.Contains(stateNameHash)) return;
             if (stateNameHash == _currentState) return;
             _animator.CrossFade(stateNameHash, 0, 0);
             _currentState = stateNameHash;
@@ -90,7 +98,10 @@ namespace Game.Unit
             _unit.transform.position = currentPosition.GameV2ToV3() + hit.point.ExtractY();
             yield return null;
         }
-
+        
+        /**
+         * ImmutableObject represent an animation step used for the animation queue
+         */
         private struct AnimationStep
         {
             // use UnitAnimation.HASEDSTATE

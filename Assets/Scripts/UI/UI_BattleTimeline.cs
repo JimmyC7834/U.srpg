@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Game.Battle;
 using Game.Unit;
 using UnityEngine;
@@ -8,6 +5,9 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
+    /**
+     * Controls the Battle Timeline UI behaviour
+     */
     public class UI_BattleTimeline : UI_View
     {
         [SerializeField] private BattleService _battleService;
@@ -21,7 +21,7 @@ namespace Game.UI
         
         public HorizontalLayoutGroup[] horizontalLayouts { get => _horizontalLayouts; }
 
-        public override void Enter()
+        protected override void Enter()
         {
             _iconPool = new GameObjectPool<UI_BattleTimelineIcon>(_prefab, transform);
             _battleService.battleTurnManager.OnKokuChanged += UpdateKokuIndicator;
