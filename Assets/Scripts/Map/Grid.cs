@@ -5,14 +5,17 @@ using UnityEngine;
 
 namespace Game
 {
+    /**
+     * A generic type grid
+     */
     public class Grid<TGridObject>
     {
-        public int width { get; private set; }
-        public int height { get; private set; }
-        public float cellSize { get; private set; }
-        public Vector3 originPosition { get; private set; }
+        public readonly int width;
+        public readonly int height;
+        public readonly float cellSize;
+        public readonly Vector3 originPosition;
 
-        private TGridObject[,] gridArray;
+        private readonly TGridObject[,] _array;
 
         public TGridObject this[int x, int y]
         {
@@ -24,20 +27,21 @@ namespace Game
             get => GetValue((int) v.x, (int) v.y); 
         }
 
-        public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createTGridObject)
+        public Grid(int width, int height, float cellSize, 
+            Vector3 originPosition,Func<Grid<TGridObject>, int, int, TGridObject> createTGridObject)
         {
             this.width = width;
             this.height = height;
             this.cellSize = cellSize;
             this.originPosition = originPosition;
 
-            gridArray = new TGridObject[width, height];
+            _array = new TGridObject[width, height];
 
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    gridArray[i, j] = createTGridObject(this, i, j);
+                    _array[i, j] = createTGridObject(this, i, j);
                 }
             }
         }
@@ -77,13 +81,13 @@ namespace Game
             return Vector3Int.FloorToInt(pos - originPosition);
         }
 
-        public TGridObject GetValue(int x, int y) => gridArray[x, y];
+        public TGridObject GetValue(int x, int y) => _array[x, y];
 
         public TGridObject GetValue(Vector3 pos) => GetValue((int)pos.x, (int)pos.y);
 
         public void SetValue(int x, int y, TGridObject gridObject)
         {
-            gridArray[x, y] = gridObject;
+            _array[x, y] = gridObject;
         }
 
         public int TileCount => width * height;
@@ -108,7 +112,7 @@ namespace Game
             {
                 for (int j = 0; j < height; j++)
                 {
-                    func.Invoke(gridArray[i, j]);
+                    func.Invoke(_array[i, j]);
                 }
             }
         }

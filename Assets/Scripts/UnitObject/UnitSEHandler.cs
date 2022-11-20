@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Game
 {
+    /**
+     * Manager of Status Effects of an unit
+     */
     public class UnitSEHandler
     {
         private UnitObject _unit;

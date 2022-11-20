@@ -15,6 +15,9 @@ namespace Game.Unit
         Count,
     }
     
+    /**
+     * Object represent one parameter of UnitObject
+     */
     [Serializable]
     public class UnitParam : ModifiableParam
     {
@@ -34,22 +37,25 @@ namespace Game.Unit
         {
             public UnitStatType unitStatType;
             public int value;
-            public UnitStatModifier ToModifier() => 
-                new UnitStatModifier(unitStatType, value, ParamModifier.ModifyType.Flat, null);
+            public UnitParamModifier ToModifier() => 
+                new UnitParamModifier(unitStatType, value, ParamModifier.ModifyType.Flat, null);
         }
     }
     
-    public class UnitStatModifier : ParamModifier
+    /**
+     * Modifier for UnitParam
+     */
+    public class UnitParamModifier : ParamModifier
     {
         public readonly UnitStatType statType;
 
-        public UnitStatModifier(UnitStatType _statType, float _value, ModifyType _type, int _priority, object _source) : 
+        public UnitParamModifier(UnitStatType _statType, float _value, ModifyType _type, int _priority, object _source) : 
             base(_value, _type, _priority, _source)
         {
             statType = _statType;
         }
         
-        public UnitStatModifier(UnitStatType _statType, float _value, ModifyType _type, object _source) : 
+        public UnitParamModifier(UnitStatType _statType, float _value, ModifyType _type, object _source) : 
             this(_statType, _value, _type, (int)_type, _source) { }
     }
     

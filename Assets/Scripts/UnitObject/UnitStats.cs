@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 namespace Game.Unit
 {
     /**
-     * Mutable collection of params represent the stats of a unit
+     * Mutable collection of params represent the stats of an unit
      */
     [Serializable]
     public class UnitStats
@@ -90,7 +90,7 @@ namespace Game.Unit
             get => _param[(int) statType];
         }
         
-        public void AddModifier(UnitStatModifier modifier)
+        public void AddModifier(UnitParamModifier modifier)
         {
             this[modifier.statType].AddModifier(modifier);
             if (modifier.statType == UnitStatType.DUR)
@@ -99,9 +99,9 @@ namespace Game.Unit
             }
         }
 
-        public void AddModifiers(IEnumerable<UnitStatModifier> modifiers)
+        public void AddModifiers(IEnumerable<UnitParamModifier> modifiers)
         {
-            foreach (UnitStatModifier modifier in modifiers)
+            foreach (UnitParamModifier modifier in modifiers)
                 AddModifier(modifier);
         }
 

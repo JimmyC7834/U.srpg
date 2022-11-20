@@ -14,16 +14,16 @@ namespace Game.Unit.Part
         
         [SerializeField] private AbilityId[] _abilities;
         [SerializeField] private UnitParam.ParamBoostEntry[] _paramBoostEntries;
-        private UnitStatModifier[] _paramBoosts;
+        private UnitParamModifier[] _paramBoosts;
         [SerializeField] private SkillId _skillId;
         
-        public UnitStatModifier[] ParamBoosts
+        public UnitParamModifier[] ParamBoosts
         {
             get
             {
                 if (_paramBoosts == null)
                 {
-                    _paramBoosts = new UnitStatModifier[_paramBoostEntries.Length];
+                    _paramBoosts = new UnitParamModifier[_paramBoostEntries.Length];
                     for (int i = 0; i < _paramBoostEntries.Length; i++)
                     {
                         _paramBoosts[i] = _paramBoostEntries[i].ToModifier();

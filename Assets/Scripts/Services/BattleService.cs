@@ -30,11 +30,7 @@ namespace Game.Battle
         public void ProvideBattleBoard(BattleBoard _battleBoard) => battleBoard = _battleBoard;
         public void ProvideBattleTurnManager(BattleTurnManager _battleTurnManager) => battleTurnManager = _battleTurnManager;
         public void ProvideMapHighlighter(MapHighlighter _mapHighlighter) => mapHighlighter = _mapHighlighter;
-        public void ProvideDebugConsole(DebugConsole _debugConsole)
-        {
-            debugConsole = _debugConsole;
-        }
-        
+        public void ProvideDebugConsole(DebugConsole _debugConsole) => debugConsole = _debugConsole;
         public void ProvideLogConsole(LogConsole _logConsole) => logConsole = _logConsole;
         public void ProvideCamera(CinemachineVirtualCamera _camera) => camera = _camera;
 
@@ -60,7 +56,7 @@ namespace Game.Battle
         public UnitObject CurrentUnitObject => battleBoard.GetUnit(cursor.MapCoord);
         public BattleBoardTile CurrentTile => battleBoard.GetTile(cursor.MapCoord);
         public Vector2 CurrentCoord => cursor.MapCoord;
-        public int currentKoku => battleTurnManager.koku;
-        public int currentTurn => battleTurnManager.turn;
+        // public int currentKoku => battleTurnManager.koku;
+        // public int currentTurn => battleTurnManager.turn;
     }
 }

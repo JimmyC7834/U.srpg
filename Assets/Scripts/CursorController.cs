@@ -7,6 +7,9 @@ using UnityEngine.InputSystem;
 
 namespace Game.Battle
 {
+    /**
+     * Controller for cursor on the battle grid map
+     */
     public class CursorController : MonoBehaviour
     {
         [SerializeField] private InputReader _input;

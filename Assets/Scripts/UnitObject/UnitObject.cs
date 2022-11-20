@@ -208,7 +208,7 @@ namespace Game.Unit
         public void TakeDamage(DamageInfo damageInfo)
         {
             OnAbTakeDamageEarly.Invoke(damageInfo);
-            UnitStatModifier damageModifier = damageInfo.damageModifier;
+            UnitParamModifier damageModifier = damageInfo.damageModifier;
             stats.AddModifier(damageModifier);
             _battleService.BattleUIManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.DamageValue.Value);
             stats.Evaluate();
@@ -315,8 +315,8 @@ namespace Game.Unit
         /**
          * Generate final UnitStatModifier to modify DUR base on the damage value
          */
-        public UnitStatModifier damageModifier => 
-            new UnitStatModifier(UnitStatType.DUR, -DamageValue.Value, ParamModifier.ModifyType.Flat, source);
+        public UnitParamModifier damageModifier => 
+            new UnitParamModifier(UnitStatType.DUR, -DamageValue.Value, ParamModifier.ModifyType.Flat, source);
         
         public static DamageInfo From(object _source) => new DamageInfo()
         {
@@ -359,7 +359,7 @@ namespace Game.Unit
         
         public void AddModifier(DamageValueModifier damageValueModifier) => damageInfo.AddModifier(damageValueModifier);
 
-        public UnitStatModifier damageModifier => damageInfo.damageModifier;
+        public UnitParamModifier damageModifier => damageInfo.damageModifier;
     }
     
     /**

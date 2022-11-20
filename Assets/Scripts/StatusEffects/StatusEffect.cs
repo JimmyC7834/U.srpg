@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Unit.StatusEffect
-{
+{ 
+    // TODO: rethink SE structure
     public abstract class StatusEffect
     {
         public enum EffectType { Stackable, Duration, CountDown, Special }
@@ -121,12 +122,12 @@ namespace Game.Unit.StatusEffect
         {
             if (Mathf.Abs(_value) < 1f)
             {
-                unit.stats.AddModifier(new UnitStatModifier(
+                unit.stats.AddModifier(new UnitParamModifier(
                     UnitStatType.DUR, _value, ParamModifier.ModifyType.PercentAdd, this));
                 return;
             }
             
-            unit.stats.AddModifier(new UnitStatModifier(
+            unit.stats.AddModifier(new UnitParamModifier(
                 UnitStatType.DUR, (int) _value, ParamModifier.ModifyType.Flat, this));
         }
     }

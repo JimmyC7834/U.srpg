@@ -17,8 +17,6 @@ namespace Game.Battle
         {
             _input.DisableAllInput();
             _skillCaster = new SkillCaster(battleService);
-            _skillCastInfo = new SkillCastInfo(battleService.CurrentTile, _skill);
-            _skillCaster.Initialize(_skillCastInfo);
             _skillCaster.HighlightRange();
         }
 
@@ -37,7 +35,11 @@ namespace Game.Battle
             _parent.Pop();
             SkillAnimationPhrase skillAnimationPhrase = new SkillAnimationPhrase(_parent);
             _parent.Push(skillAnimationPhrase);
+            
+            _skillCastInfo = new SkillCastInfo(battleService.CurrentTile, _skill);
+            _skillCaster.Initialize(_skillCastInfo);
             _skillCastInfo.SetTargetTile(battleService.CurrentTile);
+            
             _skillCaster.CastSkill(skillAnimationPhrase.EndPhrase);
         }
     }
