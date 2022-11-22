@@ -13,9 +13,9 @@ namespace Game.Unit.Skill
          
         public override bool castableOn(BattleBoardTile tile) => tile.ContainsUnit;
 
-        public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
+        public override IEnumerator Cast(BattleService battleService, SkillCast skillCast)
         {
-            skillCastInfo.target.seHandler.RegisterStatusEffects(new SE_Poison(10f, _turns, this));
+            skillCast.target.seHandler.RegisterStatusEffects(new SE_Poison(10f, _turns, this));
             yield return null;
         }
     }

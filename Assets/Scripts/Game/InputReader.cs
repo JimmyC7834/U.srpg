@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInput.IMenuNaviActions, GameInput.IBoardEditorActions
+public class InputReader : ScriptableObject, 
+    GameInput.IMapNaviActions ,GameInput.IMenuNaviActions, GameInput.IDebugConsoleActions
 {
     // MapNavi
     public event UnityAction<Vector2> cursorMoveEvent = delegate { };
@@ -17,9 +18,12 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
     public event UnityAction menuUpEvent = delegate { };
     public event UnityAction menuLeftEvent = delegate { };
     
-    // BoardEditor
-    public event UnityAction placeTerrainEvent = delegate { };
-    public event UnityAction<Vector2> boardEditorMouseMoveEvent = delegate { };
+    // Debug Console
+    public event UnityAction toggleDebugConsole = delegate { };
+
+    // // BoardEditor
+    // public event UnityAction placeTerrainEvent = delegate { };
+    // public event UnityAction<Vector2> boardEditorMouseMoveEvent = delegate { };
 
     // !!! Remember to edit Input Reader functions upon updating the input map !!!
     private GameInput gameInput;
@@ -30,10 +34,10 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
 
             gameInput.MapNavi.SetCallbacks(this);
             gameInput.MenuNavi.SetCallbacks(this);
-            gameInput.BoardEditor.SetCallbacks(this);
+            // gameInput.BoardEditor.SetCallbacks(this);
         }
 
-        gameInput.BoardEditor.Enable();
+        // gameInput.BoardEditor.Enable();
         EnableMapNaviInput();
     }
 
@@ -89,17 +93,24 @@ public class InputReader : ScriptableObject, GameInput.IMapNaviActions ,GameInpu
             menuLeftEvent.Invoke();
     }
     
-    // BoardEditor
-    public void OnPlaceTerrain(InputAction.CallbackContext context)
+    // Debug Console
+    public void OnToggleDebugConsole(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
-            placeTerrainEvent.Invoke();
+            toggleDebugConsole.Invoke();
     }
-    
-    public void OnMouseMove(InputAction.CallbackContext context)
-    {
-        boardEditorMouseMoveEvent.Invoke(context.ReadValue<Vector2>());
-    }
+
+    // BoardEditor
+    // public void OnPlaceTerrain(InputAction.CallbackContext context)
+    // {
+    //     if (context.phase == InputActionPhase.Performed)
+    //         placeTerrainEvent.Invoke();
+    // }
+    //
+    // public void OnMouseMove(InputAction.CallbackContext context)
+    // {
+    //     boardEditorMouseMoveEvent.Invoke(context.ReadValue<Vector2>());
+    // }
     
     // Input Reader
     public void EnableMapNaviInput() {

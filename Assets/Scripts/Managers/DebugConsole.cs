@@ -7,22 +7,19 @@ namespace Game
 {
     public class DebugConsole : MonoBehaviour
     {
+        [SerializeField] private InputReader _input;
         [SerializeField] private bool _showConsole = true;
-        [SerializeField] private Dictionary<string, DebugItem> _debugItems;
+        private Dictionary<string, DebugItem> _debugItems;
 
         [Header("Console Settings")]
         private float _consoleWidth = Screen.width/2f;
         [SerializeField] private float _itemHeight;
         [SerializeField] private Vector2 _position;
 
-        public void OnToggleDebug(InputValue inputValue)
-        {
-            _showConsole = !_showConsole;
-        }
-
         public void Awake()
         {
             _debugItems = new Dictionary<string, DebugItem>();
+            _input.toggleDebugConsole += () => _showConsole = !_showConsole;
         }
 
         public void AddItem(string name, Func<string> bind)

@@ -44,17 +44,20 @@ namespace Game.Unit.Skill
         
         public abstract bool castableOn(BattleBoardTile tile);
 
-        public virtual void StartCasting(
-            BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo, Action callback)
+        public virtual void StartCasting(BattleService battleService, 
+            SkillCast skillCast, Action callback)
         {
-            UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
+            UnitObject casterObject = skillCast.casterTile.unitOnTile;
             casterObject.stats.ConsumeAP(_cost);
-            if (skillCastInfo.target == null)
-                battleService.logConsole.SendText($"{casterObject.displayName} casted {skillCastInfo.castedSkill.displayName}");
+            if (skillCast.target == null)
+                battleService.logConsole.SendText(
+                    $"{casterObject.displayName} casted {skillCast.skill.displayName}");
             else
-                battleService.logConsole.SendText($"{casterObject.displayName} casted {skillCastInfo.castedSkill.displayName} to {skillCastInfo.target.displayName}");
+                battleService.logConsole.SendText(
+                    $"{casterObject.displayName} casted {skillCast.skill.displayName} to {skillCast.target.displayName}");
 
-            casterObject.StartCoroutine(CallBackWrap(Cast(battleService, skillCastInfo, selectionInfo), callback));
+            casterObject.StartCoroutine(
+                CallBackWrap(Cast(battleService, skillCast), callback));
         }
 
         public IEnumerator CallBackWrap(IEnumerator enumerator, Action callback)
@@ -64,7 +67,8 @@ namespace Game.Unit.Skill
             callback.Invoke();
         }
 
-        public abstract IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo);
+        public abstract IEnumerator Cast(BattleService battleService, 
+            SkillCast skillCast);
 
         public bool IsTagged(SkillTypeTag tag) => _skillTypeTags.Contains(tag);
     }

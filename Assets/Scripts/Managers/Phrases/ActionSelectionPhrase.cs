@@ -14,7 +14,7 @@
             _input.menuCancelEvent += OnCancel;
             
             _cursor.gameObject.SetActive(false);
-            battleService.BattleUIManager.OpenActionMenu();
+            battleService.BattleUIManager.ToggleActionMenu(true);
         }
         
         public override void Exit()
@@ -24,15 +24,16 @@
             _input.menuCancelEvent -= OnCancel;
             _input.menuConfirmEvent -= OnConfirm;
             _cursor.gameObject.SetActive(true);
+            battleService.BattleUIManager.ToggleActionMenu(false);
         }
         
         private void ActionEnd()
         {
-            battleService.unitManager.currentKokuUnits.Remove(battleService.CurrentUnitObject);
-            battleService.CurrentUnitObject.EndAction();
+            battleService.unitManager.ReturnToHeap(battleService.CurrentUnit);
+            battleService.CurrentUnit.EndAction();
             // battleService.uiManager.CloseSkillSelectionMenu();
             _parent.Pop();
-            if (battleService.unitManager.currentKokuUnits.Count == 0)
+            if (battleService.unitManager.NoCurrentUnits())
             {
                 _parent.Push(new HandleKokuPhrase(_parent));
                 return;

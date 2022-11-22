@@ -11,127 +11,31 @@ using UnityEngine;
 namespace Game.Battle
 {
     // TODO: rewrite skill cast logic
-    public class SkillCaster
-    {
-        private BattleService _battleService;
-        private SkillCastInfo _skillCastInfo;
-    
-        public struct SelectionInfo
-        {
-            public HashSet<BattleBoardTile> rangeTiles { get; private set; }
-            public Dictionary<Vector2, Vector2> tileParents { get; private set; }
-            public IEnumerable<Vector2> rangeV2 { get; private set; }
-                    
-            public static SelectionInfo From(HashSet<BattleBoardTile> _rangeTiles, Dictionary<Vector2, Vector2> _tileParents) => new SelectionInfo
-            {
-                rangeTiles = _rangeTiles,
-                rangeV2 = _rangeTiles.Select(x => x.coord),
-                tileParents = _tileParents,
-            };
-        }
-    
-        private SelectionInfo _selectionInfo;
-        public SelectionInfo selectionInfo { get => _selectionInfo; }
-
-        public SkillCaster(BattleService battleService)
-        {
-            _battleService = battleService;
-        }
-
-        public void Initialize(SkillCastInfo skillCastInfo)
-        {
-            _skillCastInfo = skillCastInfo;
-            _selectionInfo = CalculateRange(_skillCastInfo);
-        }
-
-        public void HighlightRange()
-        {
-            _battleService.mapHighlighter.HighlightTiles(
-                _selectionInfo.rangeTiles.Select(x => x.coord),
-                TileHighlightColor.InTargetRange);
-        }
-
-        public bool Castable()
-        {
-            return (_selectionInfo.rangeV2.Contains(_battleService.CurrentCoord) &&
-                    _skillCastInfo.castedSkill.castableOn(_battleService.CurrentTile));
-        }
-
-        public void CastSkill(Action callback)
-        {
-            _battleService.mapHighlighter.RemoveHighlights();
-            // TODO: phrase for animation
-            _skillCastInfo.castedSkill.StartCasting(_battleService, _skillCastInfo, _selectionInfo, callback);
-        }
-
-        public SelectionInfo CalculateRange(SkillCastInfo skillCastInfo)
-        {
-            UnitObject caster = skillCastInfo.casterTile.unitOnTile;
-            SkillSO skill = skillCastInfo.castedSkill;
-            return GetRangeTilesFrom(
-                caster.location.x,
-                caster.location.y, 
-                skill.calWithMoveRange ? caster.stats.GetMoveRange() : skill.range,
-                skill.ignoreTerrain, 
-                skill.includeSelf, 
-                skill.optionalRange);
-        }
-        
-        public SelectionInfo GetRangeTilesFrom(
-            int gx, int gy, int totalRange, bool ignoreTerrain, bool includeSelf, Optional<Vector2[]> optionalRange)
-        {
-            // BFS search
-            Queue<BattleBoardTile> queue = new Queue<BattleBoardTile>();
-            HashSet<Vector2> explored = new HashSet<Vector2>();
-            Dictionary<Vector2, float> tileCostLeft = new Dictionary<Vector2, float>();
-            Dictionary<Vector2, Vector2> tileParents = new Dictionary<Vector2, Vector2>();
-            HashSet<BattleBoardTile> rangeTiles = new HashSet<BattleBoardTile>();
-
-            BattleBoard battleBoard = _battleService.battleBoard;
-            BattleBoardTile startTile = battleBoard.GetTile(gx, gy);
-            explored.Add(startTile.coord);
-            queue.Enqueue(startTile);
-            tileCostLeft.Add(startTile.coord, totalRange);
-
-            while (queue.Count != 0)
-            {
-                BattleBoardTile currentTile = queue.Dequeue();
-                rangeTiles.Add(currentTile);
-                foreach (Vector2 tileCoord in battleBoard.GetTile(currentTile.x, currentTile.y).neighbours)
-                {
-                    BattleBoardTile tile = battleBoard.GetTile(tileCoord);
-                    float costLeft = tileCostLeft[currentTile.coord] - (ignoreTerrain ? 1 : 2);
-                    if (!explored.Contains(tileCoord) && costLeft >= 0f && tile.walkable)
-                    {
-                        queue.Enqueue(tile);
-                        explored.Add(tileCoord);
-
-                        if (!tileParents.ContainsKey(tileCoord))
-                            tileParents.Add(tileCoord, currentTile.coord);
-
-                        if (!tileCostLeft.ContainsKey(tileCoord))
-                            tileCostLeft.Add(tileCoord, costLeft);
-
-                        tileCostLeft[tileCoord] = costLeft;
-                    }
-                }
-            }
-
-            if (!includeSelf)
-                rangeTiles.Remove(startTile);
-        
-            // add optional range
-            if (optionalRange.Enabled)
-            {
-                foreach (Vector2 v in optionalRange.Value)
-                {
-                    Vector2 coord = v + _battleService.CurrentCoord;
-                    if (battleBoard.ContainsCoord(coord))
-                        rangeTiles.Add(battleBoard.GetTile(coord));
-                }
-            }
-
-            return SelectionInfo.From(rangeTiles, tileParents);
-        }
-    }
+    // public class SkillCaster
+    // {
+    //     private BattleService _battleService;
+    //     private UnitObject _caster;
+    //     private SkillSO _skill;
+    //     private SkillCast
+    //
+    //     private SelectionInfo _selectionInfo;
+    //     public SelectionInfo selectionInfo { get => _selectionInfo; }
+    //     public HashSet<BattleBoardTile> rangeTiles { get; private set; }
+    //     public Dictionary<Vector2, Vector2> tileParents { get; private set; }
+    //     public IEnumerable<Vector2> rangeV2 { get; private set; }
+    //
+    //     public SkillCaster(BattleService battleService, UnitObject caster, SkillSO skill)
+    //     {
+    //         _battleService = battleService;
+    //         _caster = caster;
+    //         _skill = skill;
+    //     }
+    //
+    //     public void HighlightRange()
+    //     {
+    //         _battleService.mapHighlighter.HighlightTiles(
+    //             _selectionInfo.rangeTiles.Select(x => x.coord),
+    //             TileHighlightColor.InTargetRange);
+    //     }
+    // }
 }

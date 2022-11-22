@@ -12,7 +12,7 @@ namespace Game.Battle
             _cursor.OnConfirm += OnConfirm;
             _input.EnableMapNaviInput();
 
-            if (battleService.unitManager.currentKokuUnits.Count == 0)
+            if (battleService.unitManager.NoCurrentUnits())
             {
                 _parent.Pop();
                 _parent.Push(new HandleKokuPhrase(_parent));
@@ -26,10 +26,10 @@ namespace Game.Battle
 
         private void OnConfirm(CursorController obj)
         {
-            UnitObject unit = battleService.CurrentUnitObject;
+            UnitObject unit = battleService.CurrentUnit;
             if (unit == null) return;
             if (unit._team != BattleTeam.Player) return;
-            if (!battleService.unitManager.currentKokuUnits.Contains(unit)) return;
+            if (!battleService.CanSelectCurrentUnit) return;
             Debug.Log($"Confrimed on unit {battleService.CurrentTile}");
             _parent.Pop();
             _parent.Push(new ActionSelectionPhrase(_parent));

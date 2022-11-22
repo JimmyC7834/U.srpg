@@ -11,21 +11,18 @@ namespace Game.Battle
      [CreateAssetMenu(fileName = "PassiveCpuUnitController", menuName = "Game/AI/Passive")]
     public class PassiveCpuUnitController : CpuUnitAI
     {
-        public override List<CpuActionInfo> GetNextActions(UnitObject unit)
+        public override Queue<CpuActionInfo> GetNextActions(UnitObject unit)
         {
-            if (_skillCaster == null)
-                _skillCaster = new SkillCaster(_battleService);
-            
             List<SkillSO> skills = unit.partTree.GetAllSkills();
             IEnumerable<SkillSO> atkSkills = skills.Where(sk => sk.IsTagged(SkillTypeTag.Attack));
             SkillSO movSkill = skills.FirstOrDefault(sk => sk.IsTagged(SkillTypeTag.Move));
-            List<SkillCaster.SelectionInfo> selections = new List<SkillCaster.SelectionInfo>();
+            List<SkillCast.SelectionRange> selections = new List<SkillCast.SelectionRange>();
             Dictionary<UnitObject, List<SkillSO>> skillForUnit = new Dictionary<UnitObject, List<SkillSO>>();
             
             // search through all attack skill's range (included move range) for targets
             foreach (SkillSO skill in atkSkills)
             {
-                SkillCaster.SelectionInfo selection = GetRangeTilesFrom(unit.gridX, unit.gridY, movSkill, skill);
+                SkillCast.SelectionRange selection = GetRangeTilesFrom(unit.gridX, unit.gridY, movSkill, skill);
                 List<UnitObject> unitsInRange = selection.rangeTiles.Where(tile => tile.unitOnTile != null).Select(tile => tile.unitOnTile).ToList();
                 if (unitsInRange.Contains(unit)) unitsInRange.Remove(unit);
                 if (unitsInRange.Count == 0) continue;
@@ -37,33 +34,35 @@ namespace Game.Battle
                 }
             }
             
-            if (skillForUnit.Count == 0) return new List<CpuActionInfo>();
+            if (skillForUnit.Count == 0) return new Queue<CpuActionInfo>();
             UnitObject target = skillForUnit.Keys.First();
             SkillSO skillToUse = skillForUnit[target][Random.Range(0, skillForUnit[target].Count)];
 
-            List<CpuActionInfo> actions = new List<CpuActionInfo>();
+            Queue<CpuActionInfo> actions = new Queue<CpuActionInfo>();
 
             PathFinder pathFinder = new PathFinder(_battleService.battleBoard);
             List<PathFinder.AStarNode> path = 
                 pathFinder.AStar(unit.gridX, unit.gridY, target.gridX, target.gridY);
             
+            // determine which tile to move to be able to cast the skill
+            // choose the furthest tile from target 
             for (int i = 0; i < path.Count; i++)
             {
                 if (path[i].CostTo(target.gridX, target.gridY) == skillToUse.range)
                 {
-                    actions.Add(CpuActionInfo.From(
+                    actions.Enqueue(CpuActionInfo.From(
                         _battleService.battleBoard.GetTile(path[i].x, path[i].y), movSkill));
+                    break;
                 }
             }
             
-            actions.Add(CpuActionInfo.From(
+            actions.Enqueue(CpuActionInfo.From(
                 _battleService.battleBoard.GetTile(target.gridX, target.gridY), skillToUse));
-            
-            
+
             return actions;
         }
         
-        public SkillCaster.SelectionInfo GetRangeTilesFrom(
+        public SkillCast.SelectionRange GetRangeTilesFrom(
             int gx, int gy, SkillSO moveSkill, SkillSO skill)
         {
             // basic config
@@ -124,7 +123,7 @@ namespace Game.Battle
                 }
             }
 
-            return SkillCaster.SelectionInfo.From(rangeTiles, tileParents);
+            return SkillCast.SelectionRange.From(rangeTiles, tileParents);
         }
     }
 }

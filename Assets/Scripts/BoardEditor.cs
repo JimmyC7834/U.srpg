@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Game.Battle.Map;
 using Game.DataSet;
 using UnityEditor;
@@ -27,8 +24,8 @@ namespace Game
         {
             _grid = new Grid<TerrainID>(_size.x, _size.y, 1f, Vector3.zero, (_, _, _) => _defaultTerrian);
             DebugDrawGrid();
-            _input.placeTerrainEvent += PlaceTerrin;
-            _input.boardEditorMouseMoveEvent += UpdateMousePosition;
+            // _input.placeTerrainEvent += PlaceTerrin;
+            // _input.boardEditorMouseMoveEvent += UpdateMousePosition;
             
             // _input.EnableBoardEditorInput();
         }
@@ -40,14 +37,14 @@ namespace Game
         
         private void PlaceTerrin()
         {
-            Ray castPoint = Camera.main.ScreenPointToRay(_mousePos);
-            RaycastHit hit;
-            
-            if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
-            {
-                _grid.SetValue((int)hit.point.x, (int)hit.point.z, _selectedTerrian);
-                Debug.Log(hit.point);
-            }
+            // Ray castPoint = Camera.main.ScreenPointToRay(_mousePos);
+            // RaycastHit hit = new RaycastHit();
+            //
+            // if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+            // {
+            //     _grid.SetValue((int)hit.point.x, (int)hit.point.z, _selectedTerrian);
+            //     Debug.Log(hit.point);
+            // }
         }
 
         [ContextMenu("Save")]

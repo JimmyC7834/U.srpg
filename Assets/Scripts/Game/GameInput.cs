@@ -292,7 +292,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
             ""id"": ""b520142b-8f20-490a-b4f9-6b3a3d95d181"",
             ""actions"": [
                 {
-                    ""name"": ""ToggleDebug"",
+                    ""name"": ""ToggleDebugConsole"",
                     ""type"": ""Button"",
                     ""id"": ""ac9746b8-38d2-402c-af41-caa65062836d"",
                     ""expectedControlType"": ""Button"",
@@ -309,55 +309,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ToggleDebug"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""BoardEditor"",
-            ""id"": ""9bec351f-f139-47dd-b5aa-3209182a43b8"",
-            ""actions"": [
-                {
-                    ""name"": ""PlaceTerrain"",
-                    ""type"": ""Button"",
-                    ""id"": ""0debccfb-9e8b-4fb2-8fb3-ccc928883902"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""MouseMove"",
-                    ""type"": ""Value"",
-                    ""id"": ""89b7b5e6-5944-4cf5-80a7-c25e3efbbf3e"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""3770afc2-59d0-40ef-bf7a-81600c2c0976"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PlaceTerrain"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""17ff13bf-e98a-427a-a178-1b0fcbd83748"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""MouseMove"",
+                    ""action"": ""ToggleDebugConsole"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -380,11 +332,7 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         m_MenuNavi_Left = m_MenuNavi.FindAction("Left", throwIfNotFound: true);
         // DebugConsole
         m_DebugConsole = asset.FindActionMap("DebugConsole", throwIfNotFound: true);
-        m_DebugConsole_ToggleDebug = m_DebugConsole.FindAction("ToggleDebug", throwIfNotFound: true);
-        // BoardEditor
-        m_BoardEditor = asset.FindActionMap("BoardEditor", throwIfNotFound: true);
-        m_BoardEditor_PlaceTerrain = m_BoardEditor.FindAction("PlaceTerrain", throwIfNotFound: true);
-        m_BoardEditor_MouseMove = m_BoardEditor.FindAction("MouseMove", throwIfNotFound: true);
+        m_DebugConsole_ToggleDebugConsole = m_DebugConsole.FindAction("ToggleDebugConsole", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -558,12 +506,12 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     // DebugConsole
     private readonly InputActionMap m_DebugConsole;
     private IDebugConsoleActions m_DebugConsoleActionsCallbackInterface;
-    private readonly InputAction m_DebugConsole_ToggleDebug;
+    private readonly InputAction m_DebugConsole_ToggleDebugConsole;
     public struct DebugConsoleActions
     {
         private @GameInput m_Wrapper;
         public DebugConsoleActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ToggleDebug => m_Wrapper.m_DebugConsole_ToggleDebug;
+        public InputAction @ToggleDebugConsole => m_Wrapper.m_DebugConsole_ToggleDebugConsole;
         public InputActionMap Get() { return m_Wrapper.m_DebugConsole; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -573,61 +521,20 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_DebugConsoleActionsCallbackInterface != null)
             {
-                @ToggleDebug.started -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebug;
-                @ToggleDebug.performed -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebug;
-                @ToggleDebug.canceled -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebug;
+                @ToggleDebugConsole.started -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebugConsole;
+                @ToggleDebugConsole.performed -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebugConsole;
+                @ToggleDebugConsole.canceled -= m_Wrapper.m_DebugConsoleActionsCallbackInterface.OnToggleDebugConsole;
             }
             m_Wrapper.m_DebugConsoleActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @ToggleDebug.started += instance.OnToggleDebug;
-                @ToggleDebug.performed += instance.OnToggleDebug;
-                @ToggleDebug.canceled += instance.OnToggleDebug;
+                @ToggleDebugConsole.started += instance.OnToggleDebugConsole;
+                @ToggleDebugConsole.performed += instance.OnToggleDebugConsole;
+                @ToggleDebugConsole.canceled += instance.OnToggleDebugConsole;
             }
         }
     }
     public DebugConsoleActions @DebugConsole => new DebugConsoleActions(this);
-
-    // BoardEditor
-    private readonly InputActionMap m_BoardEditor;
-    private IBoardEditorActions m_BoardEditorActionsCallbackInterface;
-    private readonly InputAction m_BoardEditor_PlaceTerrain;
-    private readonly InputAction m_BoardEditor_MouseMove;
-    public struct BoardEditorActions
-    {
-        private @GameInput m_Wrapper;
-        public BoardEditorActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PlaceTerrain => m_Wrapper.m_BoardEditor_PlaceTerrain;
-        public InputAction @MouseMove => m_Wrapper.m_BoardEditor_MouseMove;
-        public InputActionMap Get() { return m_Wrapper.m_BoardEditor; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(BoardEditorActions set) { return set.Get(); }
-        public void SetCallbacks(IBoardEditorActions instance)
-        {
-            if (m_Wrapper.m_BoardEditorActionsCallbackInterface != null)
-            {
-                @PlaceTerrain.started -= m_Wrapper.m_BoardEditorActionsCallbackInterface.OnPlaceTerrain;
-                @PlaceTerrain.performed -= m_Wrapper.m_BoardEditorActionsCallbackInterface.OnPlaceTerrain;
-                @PlaceTerrain.canceled -= m_Wrapper.m_BoardEditorActionsCallbackInterface.OnPlaceTerrain;
-                @MouseMove.started -= m_Wrapper.m_BoardEditorActionsCallbackInterface.OnMouseMove;
-                @MouseMove.performed -= m_Wrapper.m_BoardEditorActionsCallbackInterface.OnMouseMove;
-                @MouseMove.canceled -= m_Wrapper.m_BoardEditorActionsCallbackInterface.OnMouseMove;
-            }
-            m_Wrapper.m_BoardEditorActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @PlaceTerrain.started += instance.OnPlaceTerrain;
-                @PlaceTerrain.performed += instance.OnPlaceTerrain;
-                @PlaceTerrain.canceled += instance.OnPlaceTerrain;
-                @MouseMove.started += instance.OnMouseMove;
-                @MouseMove.performed += instance.OnMouseMove;
-                @MouseMove.canceled += instance.OnMouseMove;
-            }
-        }
-    }
-    public BoardEditorActions @BoardEditor => new BoardEditorActions(this);
     public interface IMapNaviActions
     {
         void OnCursorMove(InputAction.CallbackContext context);
@@ -644,11 +551,6 @@ public partial class @GameInput : IInputActionCollection2, IDisposable
     }
     public interface IDebugConsoleActions
     {
-        void OnToggleDebug(InputAction.CallbackContext context);
-    }
-    public interface IBoardEditorActions
-    {
-        void OnPlaceTerrain(InputAction.CallbackContext context);
-        void OnMouseMove(InputAction.CallbackContext context);
+        void OnToggleDebugConsole(InputAction.CallbackContext context);
     }
 }

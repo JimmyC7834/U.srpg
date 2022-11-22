@@ -23,7 +23,7 @@ namespace Game.UI
 
         private void UpdatePanel(CursorController _)
         {
-            UnitObject unit = _battleService.CurrentUnitObject;
+            UnitObject unit = _battleService.CurrentUnit;
             if (unit == null) return;
             
             _displayNameLabel.SetText(unit.displayName);

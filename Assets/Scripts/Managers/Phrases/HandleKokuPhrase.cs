@@ -6,23 +6,22 @@ namespace Game.Battle
 {
     public class HandleKokuPhrase : Phrase
     {
-        public HandleKokuPhrase(BattlePhraseManager parent) : base(parent)
-        {
-        }
+        private List<UnitObject> _currentUnits;
+        
+        public HandleKokuPhrase(BattlePhraseManager parent) : base(parent) { }
 
         public override void Start()
         {
             _input.DisableAllInput();
 
-            while (battleService.unitManager.currentKokuUnits.Count == 0)
+            while (battleService.unitManager.NoCurrentUnits())
             {
                 battleService.battleTurnManager.NextKoku();
             }
-
-            List<UnitObject> cpus =
-                battleService.unitManager.currentKokuUnits.Where(unit => unit.cpuUnitController.haveAI)
-                    .ToList();
-
+        
+            _currentUnits = battleService.unitManager.GetCurrentUnits();
+            List<UnitObject> cpus = _currentUnits.FindAll(unit => unit.cpuUnitController.haveAI);
+            
             _parent.Pop();
             if (cpus.Count != 0)
             {

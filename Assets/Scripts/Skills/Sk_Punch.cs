@@ -12,16 +12,16 @@ namespace Game.Unit.Skill
         [SerializeField] private int _value;
             
         public override bool castableOn(BattleBoardTile tile) => tile.unitOnTile != null;
-        public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
+        public override IEnumerator Cast(BattleService battleService, SkillCast skillCast)
         {
-            AttackSourceInfo sourceInfo = AttackSourceInfo.From(skillCastInfo);
-            AttackInfo attackInfo = AttackInfo.From(sourceInfo, skillCastInfo.targetTile);
+            AttackSourceInfo sourceInfo = AttackSourceInfo.From(skillCast);
+            AttackInfo attackInfo = AttackInfo.From(sourceInfo, skillCast.targetTile);
             
             attackInfo.AddModifier(new DamageValueModifier(_value, ParamModifier.ModifyType.Flat));
-            skillCastInfo.caster.Attack(attackInfo);
+            skillCast.caster.Attack(attackInfo);
             
-            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .5f);
-            yield return skillCastInfo.caster.anim.PlayAnimation();
+            skillCast.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .5f);
+            yield return skillCast.caster.anim.PlayAnimation();
         }
     }
 }

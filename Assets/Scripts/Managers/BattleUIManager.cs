@@ -50,7 +50,7 @@ namespace Game.Battle
             PushView(_skillSelectionMenu);
         }
         
-        public void OpenActionMenu() => PushExitOnNextPushView(_actionMenu);
+        public void ToggleActionMenu(bool value) => _actionMenu.gameObject.SetActive(value);
 
         public void CreateDamageIndicator(Vector3 worldPosition, int value)
         {

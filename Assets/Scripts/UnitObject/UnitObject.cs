@@ -371,8 +371,8 @@ namespace Game.Unit
         public UnitObject unit { get; private set; }
         public SkillSO skill { get; private set; }
 
-        public static AttackSourceInfo From(SkillCastInfo skillCastInfo) =>
-            From(skillCastInfo.casterTile, skillCastInfo.castedSkill);
+        public static AttackSourceInfo From(SkillCast skillCast) =>
+            From(skillCast.casterTile, skillCast.skill);
         
         public static AttackSourceInfo From(BattleBoardTile sourceTile, SkillSO _sourceSkill) => new AttackSourceInfo()
         {
