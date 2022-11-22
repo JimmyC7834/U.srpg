@@ -13,19 +13,16 @@ namespace Game.Battle
     {
         public override Queue<CpuActionInfo> GetNextActions(UnitObject unit)
         {
-            if (_skillCaster == null)
-                _skillCaster = new SkillCaster(_battleService);
-            
             List<SkillSO> skills = unit.partTree.GetAllSkills();
             IEnumerable<SkillSO> atkSkills = skills.Where(sk => sk.IsTagged(SkillTypeTag.Attack));
             SkillSO movSkill = skills.FirstOrDefault(sk => sk.IsTagged(SkillTypeTag.Move));
-            List<SkillCaster.SelectionInfo> selections = new List<SkillCaster.SelectionInfo>();
+            List<SkillCast.SelectionRange> selections = new List<SkillCast.SelectionRange>();
             Dictionary<UnitObject, List<SkillSO>> skillForUnit = new Dictionary<UnitObject, List<SkillSO>>();
             
             // search through all attack skill's range (included move range) for targets
             foreach (SkillSO skill in atkSkills)
             {
-                SkillCaster.SelectionInfo selection = GetRangeTilesFrom(unit.gridX, unit.gridY, movSkill, skill);
+                SkillCast.SelectionRange selection = GetRangeTilesFrom(unit.gridX, unit.gridY, movSkill, skill);
                 List<UnitObject> unitsInRange = selection.rangeTiles.Where(tile => tile.unitOnTile != null).Select(tile => tile.unitOnTile).ToList();
                 if (unitsInRange.Contains(unit)) unitsInRange.Remove(unit);
                 if (unitsInRange.Count == 0) continue;
@@ -65,7 +62,7 @@ namespace Game.Battle
             return actions;
         }
         
-        public SkillCaster.SelectionInfo GetRangeTilesFrom(
+        public SkillCast.SelectionRange GetRangeTilesFrom(
             int gx, int gy, SkillSO moveSkill, SkillSO skill)
         {
             // basic config
@@ -126,7 +123,7 @@ namespace Game.Battle
                 }
             }
 
-            return SkillCaster.SelectionInfo.From(rangeTiles, tileParents);
+            return SkillCast.SelectionRange.From(rangeTiles, tileParents);
         }
     }
 }

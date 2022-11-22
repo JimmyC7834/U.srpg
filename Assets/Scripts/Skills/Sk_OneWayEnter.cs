@@ -12,12 +12,12 @@ namespace Game.Unit.Skill
     {
         public override bool castableOn(BattleBoardTile tile) => tile.unitOnTile != null;
 
-        public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
+        public override IEnumerator Cast(BattleService battleService, SkillCast skillCast)
         {
-            skillCastInfo.caster.seHandler.RegisterStatusEffects(new SE_OneWay(this));
-            skillCastInfo.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .25f);
-            skillCastInfo.caster.anim.StartAnimation();
-            skillCastInfo.caster.stats.ChangeAP(-skillCastInfo.caster.stats.AP);
+            skillCast.caster.seHandler.RegisterStatusEffects(new SE_OneWay(this));
+            skillCast.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .25f);
+            skillCast.caster.anim.StartAnimation();
+            skillCast.caster.stats.ChangeAP(-skillCast.caster.stats.AP);
             yield return null;
         }
     }

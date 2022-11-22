@@ -54,10 +54,11 @@ namespace Game.Battle
         }
         
         // Other services
-        [CanBeNull] public UnitObject CurrentUnit => battleBoard.GetUnit(cursor.MapCoord);
+        public UnitObject CurrentUnit => battleBoard.GetUnit(cursor.MapCoord);
         public BattleBoardTile CurrentTile => battleBoard.GetTile(cursor.MapCoord);
         public Vector2 CurrentCoord => cursor.MapCoord;
-        public bool CanSelectCurrentUnit => CurrentUnit != null && battleTurnManager.koku == CurrentUnit.stats.AP;
+        public bool CanSelectCurrentUnit => CurrentUnit != null && 
+                                            unitManager.GetCurrentUnits().Contains(CurrentUnit);
         public int CurrentKoku => battleTurnManager.koku;
         public int CurrentTurn => battleTurnManager.turn;
     }

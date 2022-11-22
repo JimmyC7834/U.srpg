@@ -20,6 +20,7 @@ namespace Game.Battle
         [SerializeField] private BattleSO _battleSO;
         [SerializeField] private BattleService _battleService;
         
+        [Header("Battle Managers")]
         [SerializeField] private CursorController _cursor;
         [SerializeField] private UnitManager _unitManager;
         [SerializeField] private BattleUIManager battleUIManager;
@@ -27,6 +28,11 @@ namespace Game.Battle
         [SerializeField] private BattlePhraseManager _battlePhraseManager;
         [SerializeField] private MapHighlighter _mapHighlighter;
         [SerializeField] private CinemachineVirtualCamera _camera;
+        
+        [Header("Debug Fields")]
+        [SerializeField] private LogConsole _logConsole;
+        [SerializeField] private DebugConsole _debugConsole;
+
         
         /**
          * Should be called first as a battle is initializing to provide references
@@ -44,8 +50,8 @@ namespace Game.Battle
             _battleService.ProvideMapHighlighter(_mapHighlighter);
             _battleService.ProvideBattleTurnManager(_battleTurnManager);
             _battleService.ProvideBattleBoard(new BattleBoard(_battleSO));
-            _battleService.ProvideDebugConsole(GetComponent<DebugConsole>());
-            _battleService.ProvideLogConsole(GetComponent<LogConsole>());
+            _battleService.ProvideDebugConsole(_debugConsole);
+            _battleService.ProvideLogConsole(_logConsole);
             _battleService.ProvideCamera(_camera);
         }
         

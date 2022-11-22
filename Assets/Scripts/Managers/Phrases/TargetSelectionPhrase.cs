@@ -1,23 +1,31 @@
-﻿using Game.Unit.Skill;
+﻿using Game.Battle.Map;
+using Game.Unit.Skill;
 
 namespace Game.Battle
 {
     public class TargetSelectionPhrase : Phrase
     {
-        private SkillCaster _skillCaster;
+        private SkillCast _skillCast;
         private SkillSO _skill;
-        private SkillCastInfo _skillCastInfo;
 
         public TargetSelectionPhrase(BattlePhraseManager parent, SkillSO skill) : base(parent)
         {
             _skill = skill;
+            _skillCast = new SkillCast(
+                battleService.battleBoard,
+                battleService.CurrentTile,
+                _skill
+            );
         }
 
         public override void Enter()
         {
             _input.DisableAllInput();
-            _skillCaster = new SkillCaster(battleService);
-            _skillCaster.HighlightRange();
+            
+            battleService.mapHighlighter.HighlightTiles(
+                _skillCast.selectionRange.rangeV2,
+                TileHighlightColor.InTargetRange
+                );
         }
 
         public override void Start()
@@ -28,19 +36,17 @@ namespace Game.Battle
 
         private void OnConfirm(CursorController cursor)
         {
-            if (!_skillCaster.Castable()) return;
+            BattleBoardTile targetTile = battleService.CurrentTile;
+            if (!_skillCast.Castable(targetTile)) return;
             _cursor.OnConfirm -= OnConfirm;
-                    
             _input.DisableAllInput();
+            
+            battleService.mapHighlighter.RemoveHighlights();
+            
             _parent.Pop();
             SkillAnimationPhrase skillAnimationPhrase = new SkillAnimationPhrase(_parent);
             _parent.Push(skillAnimationPhrase);
-            
-            _skillCastInfo = new SkillCastInfo(battleService.CurrentTile, _skill);
-            _skillCaster.Initialize(_skillCastInfo);
-            _skillCastInfo.SetTargetTile(battleService.CurrentTile);
-            
-            _skillCaster.CastSkill(skillAnimationPhrase.EndPhrase);
+            _skillCast.Cast(battleService, targetTile, skillAnimationPhrase.EndPhrase);
         }
     }
 }

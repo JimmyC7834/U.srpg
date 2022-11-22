@@ -10,12 +10,9 @@ namespace Game.Battle
     {
         private Queue<CpuUnitController> _cpus;
         private Queue<CpuActionInfo> _actions;
-        private SkillCastInfo _skillCastInfo;
-        private SkillCaster _skillCaster;
 
         public CpuActionPhrase(BattlePhraseManager parent, List<UnitObject> units) : base(parent)
         {
-            _skillCaster = new SkillCaster(battleService);
             _cpus = new Queue<CpuUnitController>();
             _actions = new Queue<CpuActionInfo>();
             foreach (UnitObject unit in units)
@@ -71,11 +68,11 @@ namespace Game.Battle
             CpuActionInfo action = _actions.Dequeue();
             CpuUnitController cpu = _cpus.Peek();
             
-            _skillCastInfo = new SkillCastInfo(
-                battleService.battleBoard.GetTile(cpu.unit.gridX, cpu.unit.gridY), action.skill);
-            _skillCastInfo.SetTargetTile(action.targetTile);
-            _skillCaster.Initialize(_skillCastInfo);
-            _skillCaster.CastSkill(ExecuteNextAction);
+            SkillCast skillCast = new SkillCast(
+                battleService.battleBoard, 
+                battleService.battleBoard.GetTile(cpu.unit.gridX, cpu.unit.gridY),
+                action.skill);
+            skillCast.Cast(battleService, action.targetTile, ExecuteNextAction);
         }
 
         private void EndPhrase()

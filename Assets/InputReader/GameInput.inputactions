@@ -270,7 +270,7 @@
             "id": "b520142b-8f20-490a-b4f9-6b3a3d95d181",
             "actions": [
                 {
-                    "name": "ToggleDebug",
+                    "name": "ToggleDebugConsole",
                     "type": "Button",
                     "id": "ac9746b8-38d2-402c-af41-caa65062836d",
                     "expectedControlType": "Button",
@@ -287,55 +287,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleDebug",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "BoardEditor",
-            "id": "9bec351f-f139-47dd-b5aa-3209182a43b8",
-            "actions": [
-                {
-                    "name": "PlaceTerrain",
-                    "type": "Button",
-                    "id": "0debccfb-9e8b-4fb2-8fb3-ccc928883902",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseMove",
-                    "type": "Value",
-                    "id": "89b7b5e6-5944-4cf5-80a7-c25e3efbbf3e",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "3770afc2-59d0-40ef-bf7a-81600c2c0976",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PlaceTerrain",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "17ff13bf-e98a-427a-a178-1b0fcbd83748",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MouseMove",
+                    "action": "ToggleDebugConsole",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -14,17 +14,17 @@ namespace Game.Unit.Skill
         
         public override bool castableOn(BattleBoardTile tile) => tile.walkable && tile.unitOnTile == null;
 
-        public override IEnumerator Cast(BattleService battleService, SkillCastInfo skillCastInfo, SkillCaster.SelectionInfo selectionInfo)
+        public override IEnumerator Cast(BattleService battleService, SkillCast skillCast)
         {
             
-            UnitObject casterObject = skillCastInfo.casterTile.unitOnTile;
-            battleService.battleBoard.MoveUnitFromTo(skillCastInfo.casterTile, skillCastInfo.targetTile);
+            UnitObject casterObject = skillCast.casterTile.unitOnTile;
+            battleService.battleBoard.MoveUnitFromTo(skillCast.casterTile, skillCast.targetTile);
             
-            battleService.logConsole.SendText($"{casterObject.displayName} moved from {skillCastInfo.casterTile.coord} to {skillCastInfo.targetTile.coord}");
+            battleService.logConsole.SendText($"{casterObject.displayName} moved from {skillCast.casterTile.coord} to {skillCast.targetTile.coord}");
 
             PathFinder pathFinder = new PathFinder(battleService.battleBoard);
             List<PathFinder.AStarNode> pathNodes = pathFinder.AStar(casterObject.gridX, casterObject.gridY, 
-                skillCastInfo.targetTile.x, skillCastInfo.targetTile.y);
+                skillCast.targetTile.x, skillCast.targetTile.y);
 
             // Stack<Vector2> path = new Stack<Vector2>();
             // path.Push(skillCastInfo.targetTile.coord);
