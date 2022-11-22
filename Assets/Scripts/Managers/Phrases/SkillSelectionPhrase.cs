@@ -14,7 +14,7 @@ namespace Game.Battle
         public override void Start()
         {
             battleService.BattleUIManager.OpenSkillSelectionMenu(
-                battleService.CurrentUnitObject,
+                battleService.CurrentUnit,
                 (skill) => SkillConfirmed(skill));
                     
             _input.EnableMenuNaviInput();

@@ -4,6 +4,7 @@ using Cinemachine;
 using Game.Battle.Map;
 using Game.Unit;
 using Game.Unit.Skill;
+using JetBrains.Annotations;
 using UnityEngine;
 
 
@@ -41,7 +42,7 @@ namespace Game.Battle
             debugConsole.AddItem("Current Selected Unit", () =>
             {
                 if (battleBoard.ContainsCoord(cursor.MapCoord))
-                    return CurrentUnitObject == null ? "null" : CurrentUnitObject.name;
+                    return CurrentUnit == null ? "null" : CurrentUnit.name;
                 return "null";
             });
             debugConsole.AddItem("Current Selected Tile", () => 
@@ -53,10 +54,11 @@ namespace Game.Battle
         }
         
         // Other services
-        public UnitObject CurrentUnitObject => battleBoard.GetUnit(cursor.MapCoord);
+        [CanBeNull] public UnitObject CurrentUnit => battleBoard.GetUnit(cursor.MapCoord);
         public BattleBoardTile CurrentTile => battleBoard.GetTile(cursor.MapCoord);
         public Vector2 CurrentCoord => cursor.MapCoord;
-        // public int currentKoku => battleTurnManager.koku;
-        // public int currentTurn => battleTurnManager.turn;
+        public bool CanSelectCurrentUnit => CurrentUnit != null && battleTurnManager.koku == CurrentUnit.stats.AP;
+        public int CurrentKoku => battleTurnManager.koku;
+        public int CurrentTurn => battleTurnManager.turn;
     }
 }

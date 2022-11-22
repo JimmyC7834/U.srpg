@@ -11,7 +11,7 @@ namespace Game.Battle
      [CreateAssetMenu(fileName = "PassiveCpuUnitController", menuName = "Game/AI/Passive")]
     public class PassiveCpuUnitController : CpuUnitAI
     {
-        public override List<CpuActionInfo> GetNextActions(UnitObject unit)
+        public override Queue<CpuActionInfo> GetNextActions(UnitObject unit)
         {
             if (_skillCaster == null)
                 _skillCaster = new SkillCaster(_battleService);
@@ -37,29 +37,31 @@ namespace Game.Battle
                 }
             }
             
-            if (skillForUnit.Count == 0) return new List<CpuActionInfo>();
+            if (skillForUnit.Count == 0) return new Queue<CpuActionInfo>();
             UnitObject target = skillForUnit.Keys.First();
             SkillSO skillToUse = skillForUnit[target][Random.Range(0, skillForUnit[target].Count)];
 
-            List<CpuActionInfo> actions = new List<CpuActionInfo>();
+            Queue<CpuActionInfo> actions = new Queue<CpuActionInfo>();
 
             PathFinder pathFinder = new PathFinder(_battleService.battleBoard);
             List<PathFinder.AStarNode> path = 
                 pathFinder.AStar(unit.gridX, unit.gridY, target.gridX, target.gridY);
             
+            // determine which tile to move to be able to cast the skill
+            // choose the furthest tile from target 
             for (int i = 0; i < path.Count; i++)
             {
                 if (path[i].CostTo(target.gridX, target.gridY) == skillToUse.range)
                 {
-                    actions.Add(CpuActionInfo.From(
+                    actions.Enqueue(CpuActionInfo.From(
                         _battleService.battleBoard.GetTile(path[i].x, path[i].y), movSkill));
+                    break;
                 }
             }
             
-            actions.Add(CpuActionInfo.From(
+            actions.Enqueue(CpuActionInfo.From(
                 _battleService.battleBoard.GetTile(target.gridX, target.gridY), skillToUse));
-            
-            
+
             return actions;
         }
         

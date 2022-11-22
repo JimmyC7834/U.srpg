@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Battle.Map;
+using Game.UI;
 using Game.Unit;
 using Game.Unit.Skill;
 using UnityEngine;
@@ -15,18 +16,25 @@ namespace Game.Battle
     /**
      * Interface for using CpuUnitAI
      */
+    [RequireComponent(typeof(UnitObject))]
     public class CpuUnitController : MonoBehaviour
     {
         [SerializeField] private CpuUnitAI _ai;
-
+        public UnitObject unit { get; private set; } 
+        
         public bool haveAI => _ai != null;
+
+        private void Awake()
+        {
+            unit = GetComponent<UnitObject>();
+        }
 
         public void SetAI(CpuUnitAI ai)
         {
             _ai = ai;
         }
         
-        public List<CpuActionInfo> GetNextActions() => _ai.GetNextActions(GetComponent<UnitObject>());
+        public Queue<CpuActionInfo> GetNextActions() => _ai.GetNextActions(unit);
     }
     
     /**
@@ -36,7 +44,7 @@ namespace Game.Battle
     {
         [SerializeField] protected BattleService _battleService;
         protected static SkillCaster _skillCaster;
-        public abstract List<CpuActionInfo> GetNextActions(UnitObject unit);
+        public abstract Queue<CpuActionInfo> GetNextActions(UnitObject unit);
     }
     
     /**

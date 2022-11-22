@@ -29,8 +29,8 @@ namespace Game.UI
 
         private void UpdatePanel(CursorController _)
         {
-            if (!_battleService.CurrentUnitObject) return;
-            LoadRegisters(_battleService.CurrentUnitObject.seHandler.StatusEffects);
+            if (!_battleService.CurrentUnit) return;
+            LoadRegisters(_battleService.CurrentUnit.seHandler.StatusEffects);
         }
         
         public void LoadRegisters(StatusEffect[] statusEffects)

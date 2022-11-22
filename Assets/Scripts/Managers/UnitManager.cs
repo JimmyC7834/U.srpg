@@ -7,30 +7,33 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Pool;
 using Utils;
+using Object = System.Object;
 
 namespace Game.Battle
 {
+    /**
+     * Manager of units of a single Battle
+     */
     public class UnitManager : MonoBehaviour
     {
         [SerializeField] private BattleService _battleService;
         
         private GameObjectPool<UnitObject> _pool;
-        private PriorityQueue<UnitObject, int> _unitsQueue;
-        private List<UnitObject> _units;
-        public List<UnitObject> currentKokuUnits;
+        private PriorityQueue<UnitObject, int> _heap;
+        private List<UnitObject> _currentKokuUnits;
 
         [SerializeField] private DataSet.UnitDatasetSO _unitDataset;
         [SerializeField] private UnitObject _prefab;
 
         public event Action<UnitObject> OnUnitSpawned = delegate {  };
-        
+        // public event Action<UnitObject, Vector2> OnUnitMoved = delegate {  };
+
         public void Initialize(BattleSO.UnitSpawnInfo[] unitSpawnInfo)
         {
             _pool = new GameObjectPool<UnitObject>(_prefab, transform);
 
-            currentKokuUnits = new List<UnitObject>();
-            _units = new List<UnitObject>();
-            _unitsQueue = new PriorityQueue<UnitObject, int>();
+            _currentKokuUnits = new List<UnitObject>();
+            _heap = new PriorityQueue<UnitObject, int>(new UnitApComparer());
 
             for (int i = 0; i < unitSpawnInfo.Length; i++)
             {
@@ -40,18 +43,40 @@ namespace Game.Battle
             _battleService.battleTurnManager.OnKokuChanged += UpdateCurrentKokuUnits;
         }
 
-        public void UpdateCurrentKokuUnits(int koku)
+        private class UnitApComparer : IComparer<int>
         {
-            currentKokuUnits = _units.Where(unit => unit.stats.AP == koku).ToList();
+            public int Compare(int a, int other)
+            {
+                return other - a;
+            }
         }
+
+        private void UpdateCurrentKokuUnits(int koku)
+        {
+            while (_heap.Peek().stats.AP == koku)
+                _currentKokuUnits.Add(_heap.Dequeue());
+        }
+
+        public List<UnitObject> GetCurrentUnits()
+        {
+            return new List<UnitObject>(_currentKokuUnits);
+        }
+        
+        public void ReturnToHeap(UnitObject unit)
+        {
+            if (!_currentKokuUnits.Contains(unit)) return;
+            _currentKokuUnits.Remove(unit);
+            _heap.Enqueue(unit, unit.stats.AP);
+        }
+        
+        public bool NoCurrentUnits() => _currentKokuUnits.Count == 0;
 
         public void SpawnUnitAt(UnitId id, Vector2Int coord)
         {
             UnitObject newUnit = _pool.Get(
                 obj => obj.InitializeWith(_unitDataset[id], _battleService));
             
-            _units.Add(newUnit);
-            // _unitsQueue.Enqueue(newUnit, newUnit.param.AP);
+            _heap.Enqueue(newUnit, newUnit.stats.AP);
             PlaceUnitObjectAt(newUnit, coord);
             
             OnUnitSpawned.Invoke(newUnit);
