@@ -37,7 +37,7 @@ namespace Game.UI
         private void RegisterIconOn(UnitObject unit)
         {
             _iconPool.Get(
-                obj => obj.Initialize(_battleService.BattleUIManager.timeline, unit));
+                obj => obj.Initialize(this, unit));
         }
     }
 }

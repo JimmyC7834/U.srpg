@@ -1,36 +1,42 @@
 using System;
 using System.Collections.Generic;
 using Game.Unit.Skill;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Game.UI
 {
-    public class UI_SkillSelectionMenu : UI_DataEntryMenu<SkillSO, SkillId>
+    public class UI_SkillSelectionMenu : UI_View
     {
+        [SerializeField] private InputReader _input;
+        [SerializeField] private UI_DataEntryMenu<SkillSO, SkillId> _skillMenu;
+        private event Action<SkillSO> onConfirm = delegate { };
+        private event Action onCancel = delegate { };
+        
         protected override void Enter()
         {
-            EventSystem.current.SetSelectedGameObject(items[0].gameObject);
+            _input.EnableMenuNaviInput();
+            _input.menuCancelEvent += CancelSkillSelection;
         }
 
-        public void OpenMenu(List<SkillSO> skills, Action<SkillSO> _callback)
+        protected override void Exit()
         {
-            Clear();
-            gameObject.SetActive(true);
-            callback += _callback;
-            
-            foreach (SkillSO skill in skills)
-                AddItem(skill);
+            _input.DisableAllInput();
+            _input.menuCancelEvent -= CancelSkillSelection;
         }
 
-        public override void OnConfirmed(SkillSO dataEntry)
+        public void OpenMenu(List<SkillSO> skills, Action<SkillSO> _onConfirm, Action _onCancel)
         {
-            CloseMenu();
+            onConfirm = _onConfirm;
+            onCancel = _onCancel;
+            _skillMenu.OpenMenu(skills, onConfirm);
+            EventSystem.current.SetSelectedGameObject(_skillMenu.GetItemObject(0).gameObject);
         }
 
-        public void CloseMenu()
+        public void CancelSkillSelection()
         {
-            Clear();
-            gameObject.SetActive(false);
+            _skillMenu.CloseMenu();
+            onCancel.Invoke();
         }
     }
 }

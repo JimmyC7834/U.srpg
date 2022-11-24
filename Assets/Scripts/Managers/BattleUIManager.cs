@@ -3,6 +3,7 @@ using Game.UI;
 using Game.Unit;
 using Game.Unit.Skill;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Game.Battle
 {
@@ -23,8 +24,6 @@ namespace Game.Battle
         
         // private UI_ViewController _viewController;
         private GameObjectPool<UI_DamageIndicator> _damageIndicatorPool;
-
-        public UI_BattleTimeline timeline { get => _timeline; }
         
         private void Awake()
         {
@@ -39,17 +38,27 @@ namespace Game.Battle
             PushView(_timeline);
         }
 
-        public void OpenSkillSelectionMenu(UnitObject unit, Action<SkillSO> callback)
+        public void EnterSkillSelectionMenu(UnitObject unit, Action<SkillSO> onConfirm, Action onCancel)
         {
             // TODO: handle no skills
-            _skillSelectionMenu.OpenMenu(unit.partTree.GetAllSkills(), (skill) =>
-            {
-                callback.Invoke(skill);
-                PopView();
-            });
+            Assert.IsNotNull(onConfirm);
+            Assert.IsNotNull(onCancel);
+            
+            _skillSelectionMenu.OpenMenu(unit.partTree.GetAllSkills(), 
+                (skill) =>
+                {
+                    PopView();
+                    onConfirm.Invoke(skill);
+                },
+                () =>
+                {
+                    PopView();
+                    onCancel.Invoke();
+                });
+            
             PushView(_skillSelectionMenu);
         }
-        
+
         public void ToggleActionMenu(bool value) => _actionMenu.gameObject.SetActive(value);
 
         public void CreateDamageIndicator(Vector3 worldPosition, int value)

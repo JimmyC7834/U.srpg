@@ -13,17 +13,22 @@ namespace Game.Battle
 
         public override void Start()
         {
-            battleService.BattleUIManager.OpenSkillSelectionMenu(
+            battleService.battleUIManager.EnterSkillSelectionMenu(
                 battleService.CurrentUnit,
-                (skill) => SkillConfirmed(skill));
-                    
-            _input.EnableMenuNaviInput();
+                SkillConfirmed,
+                CancelSkillSelection);
         }
 
         private void SkillConfirmed(SkillSO skill)
         {
             _parent.Pop();
             _parent.Push(new TargetSelectionPhrase(_parent, skill));
+        }
+
+        private void CancelSkillSelection()
+        {
+            _parent.Pop();
+            _parent.Push(new ActionSelectionPhrase(_parent));
         }
     }
 

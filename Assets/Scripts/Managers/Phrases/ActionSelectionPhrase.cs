@@ -14,7 +14,7 @@
             _input.menuCancelEvent += OnCancel;
             
             _cursor.gameObject.SetActive(false);
-            battleService.BattleUIManager.ToggleActionMenu(true);
+            battleService.battleUIManager.ToggleActionMenu(true);
         }
         
         public override void Exit()
@@ -24,7 +24,7 @@
             _input.menuCancelEvent -= OnCancel;
             _input.menuConfirmEvent -= OnConfirm;
             _cursor.gameObject.SetActive(true);
-            battleService.BattleUIManager.ToggleActionMenu(false);
+            battleService.battleUIManager.ToggleActionMenu(false);
         }
         
         private void ActionEnd()

@@ -18,7 +18,6 @@ namespace Game
 
         private void Update()
         {
-            throw new NotImplementedException();
         }
 
         private void FollowTarget()

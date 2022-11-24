@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using Game.DataSet;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UI;
 
 namespace Game.UI
 {
+    /**
+     * Base class for menu for data entries
+     */
     // TODO: remake menu logic
-    public abstract class UI_DataEntryMenu<T, E> : UI_View where T : DataEntrySO<E> where E : Enum
+    public abstract class UI_DataEntryMenu<T, E> : MonoBehaviour where T : DataEntrySO<E> where E : Enum
     {
         [SerializeField] private RectTransform _itemContainer;
         [SerializeField] private UI_DataEntryMenuItem<T, E> _prefab;
@@ -24,27 +28,45 @@ namespace Game.UI
             _pool = new GameObjectPool<UI_DataEntryMenuItem<T, E>>(_prefab, _itemContainer);
         }
 
+        public void OpenMenu(List<T> dataEntries, Action<T> _callback)
+        {
+            gameObject.SetActive(true);
+            callback = _callback;
+            foreach (T entry in dataEntries)
+            {
+                AddItem(entry);
+            }
+        }
+        
         public UI_DataEntryMenuItem<T, E> AddItem(T dataEntry)
         {
             UI_DataEntryMenuItem<T, E> newItem = 
-                _pool.Get((item) => item.Initialize(dataEntry, OnConfirmed_));
+                _pool.Get((item) => item.Initialize(dataEntry, OnConfirmed));
             items.Add(newItem);
             return newItem;
         }
 
-        private void OnConfirmed_(T dataEntry)
+        public int Count() => items.Count;
+
+        public UI_DataEntryMenuItem<T, E> GetItemObject(int i)
         {
-            callback.Invoke(dataEntry);
-            OnConfirmed(dataEntry);
+            if (i >= items.Count)
+                throw new IndexOutOfRangeException();
+
+            return items[i];
         }
         
-        public abstract void OnConfirmed(T dataEntry);
+        private void OnConfirmed(T dataEntry)
+        {
+            callback.Invoke(dataEntry);
+            CloseMenu();
+        }
         
-        public void Clear()
+        public void CloseMenu()
         {
             for (int i = 0; i < items.Count; i++)
             {
-                items[i].transform.SetParent(_transform);
+                // items[i].transform.SetParent(_transform);
                 _pool.Release(items[i]);
             }
             
@@ -53,6 +75,10 @@ namespace Game.UI
         }
     }
     
+    /**
+     * Immutable Object of menu item.
+     * Initialize should only be called by corresponding UI_DataEntryMenu as constructor.
+     */
     public class UI_DataEntryMenuItem<T, E> : MonoBehaviour where T : DataEntrySO<E> where E : Enum
     {
         public T _dataEntry;

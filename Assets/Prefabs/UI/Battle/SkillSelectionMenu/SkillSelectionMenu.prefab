@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4150149352780585338}
   - component: {fileID: 4150149352780585339}
   - component: {fileID: 4150149352780585337}
+  - component: {fileID: 4734646871184489676}
   m_Layer: 5
   m_Name: vlayout
   m_TagString: Untagged
@@ -72,6 +73,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4150149352780585317}
   m_CullTransparentMesh: 1
+--- !u!114 &4734646871184489676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4150149352780585317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321799710f9ed2b4e97a2b28fccffa4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemContainer: {fileID: 4150149352780585338}
+  _prefab: {fileID: 7337472959738860911, guid: f76c78249836b1a448bea7017d0cdf58, type: 3}
 --- !u!1 &4150149354352057046
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,5 +158,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a28edc973296a34382bb72de3758a59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemContainer: {fileID: 4150149352780585338}
-  _prefab: {fileID: 7337472959738860911, guid: f76c78249836b1a448bea7017d0cdf58, type: 3}
+  _input: {fileID: 11400000, guid: 5f5e14dac104e5345a7ea138a43a567c, type: 2}
+  _skillMenu: {fileID: 4734646871184489676}

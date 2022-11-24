@@ -53,7 +53,7 @@ namespace Game.Battle
 
         private void UpdateCurrentKokuUnits(int koku)
         {
-            while (_heap.Peek().stats.AP == koku)
+            while (_heap.Count != 0 && _heap.Peek().stats.AP == koku)
                 _currentKokuUnits.Add(_heap.Dequeue());
         }
 

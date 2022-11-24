@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace Game.Battle
 {
-    // TODO: rewrite skill cast logic
     // public class SkillCaster
     // {
     //     private BattleService _battleService;

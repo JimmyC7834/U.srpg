@@ -210,7 +210,7 @@ namespace Game.Unit
             OnAbTakeDamageEarly.Invoke(damageInfo);
             UnitParamModifier damageModifier = damageInfo.damageModifier;
             stats.AddModifier(damageModifier);
-            _battleService.BattleUIManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.DamageValue.Value);
+            _battleService.battleUIManager.CreateDamageIndicator(_transform.position + Vector3.up, damageInfo.DamageValue.Value);
             stats.Evaluate();
             OnAbTakeDamageLate.Invoke(damageInfo);
         }
