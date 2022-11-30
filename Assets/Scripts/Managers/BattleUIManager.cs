@@ -33,9 +33,9 @@ namespace Game.Battle
 
         public void Initialize()
         {
-            PushView(_unitInfoSePanel);
-            PushView(_unitInfoStatusPanel);
-            PushView(_timeline);
+            // PushView(_unitInfoSePanel);
+            // PushView(_unitInfoStatusPanel);
+            // PushView(_timeline);
         }
 
         public void EnterSkillSelectionMenu(UnitObject unit, Action<SkillSO> onConfirm, Action onCancel)

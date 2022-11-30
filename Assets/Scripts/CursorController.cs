@@ -52,21 +52,7 @@ namespace Game.Battle
                 _mapCoord = _newMapCoord;
                 OnMove.Invoke(this);
                 if (_mapCoord == _prevMapCoord) return;
-                
-                RaycastHit hit;
-                Ray ray = new Ray(_raycastPoint.position, Vector3.down);
-                if (Physics.Raycast(ray, out hit, 10f))
-                {
-                    // ray hits, update cursor position
-                    _prevMapCoord = _mapCoord;
-                    _markerSprite.position = _prevMapCoord.GameV2ToV3() + hit.point.ExtractY();
-                    OnTileChange.Invoke(this);
-                    return;
-                }
-
-                // if ray no hit, outside of map -> reset v 
-                _velocity = Vector2.zero;
-                UpdateCursorPosition();
+                UpdateCoord();
             }
             else
             {
@@ -78,9 +64,36 @@ namespace Game.Battle
             }
         }
 
+        private void UpdateCoord()
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(_raycastPoint.position, Vector3.down);
+            if (Physics.Raycast(ray, out hit, 10f))
+            {
+                // ray hits, update cursor position
+                _prevMapCoord = _mapCoord;
+                _markerSprite.position = _prevMapCoord.GameV2ToV3() + hit.point.ExtractY();
+                OnTileChange.Invoke(this);
+                return;
+            }
+            
+            // if ray no hit, outside of map -> reset v 
+            _velocity = Vector2.zero;
+            UpdateCursorPosition();
+        }
+
         private void InputOnCursorMoveEvent(Vector2 v)
         {
             _velocity = v.GameRotateV2(Mathf.Deg2Rad * _cameraAngle);
+        }
+        
+        public void MoveTo(Vector2 v)
+        {
+            transform.position = v.GameV2ToV3();
+            _mapCoord = _newMapCoord;
+            UpdateCoord();
+            OnMove.Invoke(this);
+            OnTileChange.Invoke(this);
         }
     }    
 }

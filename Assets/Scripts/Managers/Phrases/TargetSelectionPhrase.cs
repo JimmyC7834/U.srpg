@@ -1,5 +1,6 @@
 ﻿using Game.Battle.Map;
 using Game.Unit.Skill;
+using UnityEngine.UI;
 
 namespace Game.Battle
 {
@@ -31,14 +32,26 @@ namespace Game.Battle
         public override void Start()
         {
             _input.EnableMapNaviInput();
-            _cursor.OnConfirm += OnConfirm;
+            _cursor.OnConfirm += HandleConfirm;
+            _cursor.OnCancel += HandleCancel;
         }
 
-        private void OnConfirm(CursorController cursor)
+        private void HandleCancel(CursorController cursor)
+        {
+            _cursor.OnConfirm -= HandleConfirm;
+            _cursor.OnCancel -= HandleCancel;
+            battleService.mapHighlighter.RemoveHighlights();
+            cursor.MoveTo(_skillCast.casterTile.coord);
+            _parent.Pop();
+            _parent.Push(new SkillSelectionPhrase(_parent));
+        }
+        
+        private void HandleConfirm(CursorController cursor)
         {
             BattleBoardTile targetTile = battleService.CurrentTile;
             if (!_skillCast.Castable(targetTile)) return;
-            _cursor.OnConfirm -= OnConfirm;
+            _cursor.OnConfirm -= HandleConfirm;
+            _cursor.OnCancel -= HandleCancel;
             _input.DisableAllInput();
             
             battleService.mapHighlighter.RemoveHighlights();
