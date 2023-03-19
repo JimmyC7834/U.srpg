@@ -1,5 +1,6 @@
-using UnityEditor;
+using Game;
 using UnityEngine;
+using UnityEditor;
 
 namespace Editor
 {

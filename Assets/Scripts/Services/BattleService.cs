@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
+using UnityEngine;
 using Game.Battle.Map;
 using Game.Unit;
-using Game.Unit.Skill;
-using JetBrains.Annotations;
-using UnityEngine;
-
 
 namespace Game.Battle
 {

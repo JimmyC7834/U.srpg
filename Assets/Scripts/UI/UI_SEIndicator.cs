@@ -1,7 +1,7 @@
 using Game.Unit.StatusEffect;
-using UnityEngine;
 using TMPro;
-using Image = UnityEngine.UI.Image;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.UI
 {

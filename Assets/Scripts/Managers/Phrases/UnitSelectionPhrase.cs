@@ -1,5 +1,5 @@
-﻿using Game.Unit;
-using UnityEngine;
+﻿using UnityEngine;
+using Game.Unit;
 
 namespace Game.Battle
 {

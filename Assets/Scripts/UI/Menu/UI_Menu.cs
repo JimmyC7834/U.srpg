@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
 using Game.DataSet;
 using TMPro;
-using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.UI;
 
 namespace Game.UI
 {
