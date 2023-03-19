@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using Game.Unit;
 using Game.Unit.StatusEffect;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
 namespace Game.UI
 {
+    // TODO: adapt this visual to different SEs
     public class UI_SEIndicator : MonoBehaviour
     {
         [SerializeField] private Image _icon;
@@ -20,13 +17,11 @@ namespace Game.UI
         {
             _statusEffect = statusEffect;
             UpdateCountNumber();
-            // _icon.sprite = register.statusEffect.icon;
-            // UpdateCountNumber(register);
         }
 
         public void UpdateCountNumber()
         {
-            count = _statusEffect.count;
+            count = 0;
             _label.SetText(count.ToString());
         }
     }

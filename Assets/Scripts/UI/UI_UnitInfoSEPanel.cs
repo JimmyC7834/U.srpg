@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Game.Battle;
-using Game.Unit;
 using Game.Unit.StatusEffect;
 using UnityEngine;
-using UnityEngine.Pool;
 using UnityEngine.UI;
 
 namespace Game.UI
@@ -30,7 +26,7 @@ namespace Game.UI
         private void UpdatePanel(CursorController _)
         {
             if (!_battleService.CurrentUnit) return;
-            LoadRegisters(_battleService.CurrentUnit.seHandler.StatusEffects);
+            LoadRegisters(_battleService.CurrentUnit.seHandler.GetStatusEffects());
         }
         
         public void LoadRegisters(StatusEffect[] statusEffects)

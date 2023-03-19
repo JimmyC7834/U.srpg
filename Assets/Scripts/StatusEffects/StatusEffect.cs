@@ -1,185 +1,114 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Game.Unit.StatusEffect
-{ 
-    // TODO: rethink SE structure
+{
+    // TODO: decide if value SEs should be static
     public abstract class StatusEffect
     {
-        public enum EffectType { Stackable, Duration, CountDown, Special }
+        public abstract StatusEffectId ID { get; }
+        protected readonly UnitObject _unit;
 
-        public static readonly int MAX_COUNT = 5;
-
-        public static readonly Dictionary<Type, StatusEffectId> IDMAP = new Dictionary<Type, StatusEffectId>()
+        protected StatusEffect(UnitObject unit)
         {
-            {typeof(SE_Poison), StatusEffectId.Poison1},
-        };
-
-        public static readonly Dictionary<Type, EffectType> TYPEMAP = new Dictionary<Type, EffectType>()
-        {
-            {typeof(SE_Poison), EffectType.CountDown},
-            {typeof(SE_OneWay), EffectType.Special},
-            {typeof(SE_DamageReduction), EffectType.Duration},
-        };
-        
-        protected Sprite _icon;
-        
-        public Sprite icon { get; }
-        public StatusEffectId id { get; }
-        public ScriptableObject source { get; }
-        public EffectType seType { get; }
-        public Tuple<ScriptableObject, Type> key { get; }
-        
-        public UnitObject unit { get; protected set; }
-        public int count { get; protected set; }
-
-        public StatusEffect(ScriptableObject _source)
-        {
-            // id = IDMAP[GetType()];
-            seType = TYPEMAP[GetType()];
-            source = _source;
-            key = UnitSEHandler.CreateKey(this);
-        }
-        
-        public void RegisterTo(UnitObject _unit)
-        {
-            // prevent reassign by accident
-            if (unit) return;
-            unit = _unit;
-            unit.OnSETurnChanged += CountDown;
-            if (seType == EffectType.Special)
-                count = -1;
-            
-            Register();
+            _unit = unit;
         }
 
-        public void CountDown(UnitObject _)
+        public abstract void StackEffect(StatusEffect se);
+
+        public virtual void OnRegister() { }
+        public virtual void OnRemove() { }
+        public virtual void OnActionStart() { }
+        public virtual void OnActionEnd() { }
+        public virtual void OnTurnStart() { }
+        public virtual void OnTurnEnd() { }
+        public virtual void OnMomentStart() { }
+        public virtual void OnMomentEnd() { }
+        public virtual void OnPreAttack(AttackInfo info) { }
+        public virtual void OnPostAttack(AttackInfo info) { }
+        public virtual void OnAttackMissed(AttackInfo info) { }
+        public virtual void OnAttackDodged(AttackInfo info) { }
+        public virtual void OnAttackHit(AttackInfo info) { }
+        public virtual void OnPreTakeAttack(AttackInfo info) { }
+        public virtual void OnPostTakeAttack(AttackInfo info) { }
+        public virtual void OnDodgeAttack(AttackInfo info) { }
+        public virtual void OnPreTakeDamage(DamageInfo info) { }
+        public virtual void OnPostTakeDamage(DamageInfo info) { }
+    }
+
+    public abstract class TurnCountDownSE : StatusEffect
+    {
+        public int Count { get; private set; }
+
+        protected TurnCountDownSE(UnitObject unit, int count) : base(unit)
         {
-            if (!unit) return;
-            if (seType != EffectType.Special)
+            Count = count;
+        }
+
+        public override void StackEffect(StatusEffect se)
+        {
+            Count += ((TurnCountDownSE) se).Count;
+        }
+
+        public override void OnTurnEnd()
+        {
+            Count--;
+            if (Count == 0)
             {
-                count--;
-                if (count == 0)
-                    Remove();
+                _unit.RemoveStatusEffect(ID);
+                return;
             }
 
             OnCountDown();
         }
 
-        public void Remove()
-        {
-            if (unit.Equals(null)) return;
-            unit.seHandler.RemoveSE(this);
-            OnRemoval();
-        }
-
-        public void Stack(int _count)
-        {
-            if (seType == EffectType.Special) return;
-            count = Mathf.Min(count + _count, MAX_COUNT);
-            OnStacked();
-        }
-
-        protected virtual void Register() { }
-
-        protected virtual void OnCountDown() { }
-        protected virtual void OnStacked() { }
-
-        protected virtual void OnRemoval() { }
-    }
-
-    public class SE_MPRegenUp : StatusEffect
-    {
-        private int _value;
-
-        public SE_MPRegenUp(int value, ScriptableObject source) : base(source)
-        {
-            _value = value;
-        }
-
-        protected override void OnCountDown() => unit.stats.ChangeAP(_value);
-    }
-
-    public class SE_MPRegenDown : SE_MPRegenUp
-    {
-        public SE_MPRegenDown(int value, ScriptableObject source) : base(-value, source) { }
+        protected abstract void OnCountDown();
     }
     
-    public class SE_HPRegenPerTurn : StatusEffect
+    public abstract class MomentCountDownSE : StatusEffect
     {
-        [Tooltip("0f < 1f: percentage add \n>= 1f: flat \nfloor value for float > 1")]
-        private float _value;
+        public int Count { get; private set; }
 
-        public SE_HPRegenPerTurn(float value, ScriptableObject source) : base(source)
+        protected MomentCountDownSE(UnitObject unit, int count) : base(unit)
         {
-            _value = value;
+            Count = count;
         }
-        
-        protected override void OnCountDown() => IncreaseHP();
 
-        private void IncreaseHP()
+        public override void StackEffect(StatusEffect se)
         {
-            if (Mathf.Abs(_value) < 1f)
+            Count += ((TurnCountDownSE) se).Count;
+        }
+
+        public override void OnMomentEnd()
+        {
+            Count--;
+            if (Count == 0)
             {
-                unit.stats.AddModifier(new UnitParamModifier(
-                    UnitStatType.DUR, _value, ParamModifier.ModifyType.PercentAdd, this));
+                _unit.RemoveStatusEffect(ID);
                 return;
             }
-            
-            unit.stats.AddModifier(new UnitParamModifier(
-                UnitStatType.DUR, (int) _value, ParamModifier.ModifyType.Flat, this));
+
+            OnCountDown();
+        }
+
+        protected abstract void OnCountDown();
+    }
+
+    public abstract class StackableSE : StatusEffect
+    {
+        public int Count { get; private set; }
+        protected StackableSE(UnitObject unit, int count) : base(unit)
+        {
+            Count = count;
+        }
+        
+        public override void StackEffect(StatusEffect se)
+        {
+            Count += ((TurnCountDownSE) se).Count;
         }
     }
     
-    public class SE_MOVUp : StatusEffect
+    public abstract class SpecialSE : StatusEffect
     {
-        [Tooltip("0f < 1f: percentage add \n>= 1f: flat \nfloor value for float > 1")]
-        private float _value;
-
-        public SE_MOVUp(int value, ScriptableObject source) : base(source)
-        {
-            _value = value;
-        }
+        protected SpecialSE(UnitObject unit) : base(unit) { }
         
-        protected override void Register()
-        {
-            unit.stats.ModifyMOV(_value, this);
-        }
-
-        protected override void OnRemoval()
-        {
-            unit.stats.RemoveMOVRateModifier(this);
-        }
-    }
-
-    public class SE_MOVDown : SE_MOVUp
-    {
-        public SE_MOVDown(int value, ScriptableObject source) : base(-value, source) { }
-    }
-    
-    public class SE_MPConsumeUp : StatusEffect
-    {
-        private int _value;
-
-        public SE_MPConsumeUp(int value, ScriptableObject source) : base(source)
-        {
-            _value = value;
-        }
-        
-        protected override void Register()
-        {
-            unit.stats.OnAPConsumed += ReduceAP;
-        }
-
-        protected override void OnRemoval()
-        {
-            unit.stats.OnAPConsumed -= ReduceAP;
-        }
-
-        private void ReduceAP(UnitObject _)
-        {
-            unit.stats.ChangeAP(_value);
-        }
+        public override void StackEffect(StatusEffect se) { }
     }
 }

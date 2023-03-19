@@ -13,11 +13,12 @@ namespace Game.Unit.StatusEffect
 
     public enum StatusEffectId
     {
-        None = -1,
-        AttackDamageUp = 5,
-        DamageBoost1 = 10,
-        AttackDamageReduction = 15,
-        Poison1 = 20,
-        Count = 2,
+        None,
+        AttackDamageUp,
+        DamageBoost1,
+        AttackDamageReduction,
+        TurnPoison,
+        MomentPoison,
+        OneWay,
     }
 }

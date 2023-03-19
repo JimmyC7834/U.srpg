@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Game.Unit;
 using Game.Unit.StatusEffect;
-using UnityEngine;
 
 namespace Game
 {
@@ -14,48 +11,48 @@ namespace Game
      */
     public class UnitSEHandler
     {
-        private UnitObject _unit;
-        private Dictionary<Tuple<ScriptableObject, Type>, StatusEffect> _registers;
+        private Dictionary<StatusEffectId, StatusEffect> _statusEffects;
 
-        public StatusEffect[] StatusEffects => _registers.Values.ToArray();
-        
         public UnitSEHandler(UnitObject unit)
         {
-            _unit = unit;
-            _registers = new Dictionary<Tuple<ScriptableObject, Type>, StatusEffect>();
+            unit.OnPreAttack += (info) => Map((x) => x.OnPreAttack(info));
+            unit.OnPostAttack += (info) => Map((x) => x.OnPostAttack(info));
+            unit.OnAttackMissed += (info) => Map((x) => x.OnAttackMissed(info));
+            unit.OnAttackDodged += (info) => Map((x) => x.OnAttackDodged(info));
+            unit.OnAttackHit += (info) => Map((x) => x.OnAttackHit(info));
+            unit.OnPreTakeAttack += (info) => Map((x) => x.OnPreTakeAttack(info));
+            unit.OnPostTakeAttack += (info) => Map((x) => x.OnPostTakeAttack(info));
+            unit.OnDodgedAttack += (info) => Map((x) => x.OnDodgeAttack(info));
+            unit.OnPreTakeDamage += (info) => Map((x) => x.OnPreTakeDamage(info));
+            unit.OnPostTakeDamage += (info) => Map((x) => x.OnPostTakeDamage(info));
         }
         
-        public void RegisterStatusEffects(StatusEffect statusEffect)
+        public void RegisterStatusEffect(StatusEffect se)
         {
-            if (_registers.ContainsKey(statusEffect.key))
+            if (_statusEffects.ContainsKey(se.ID))
             {
-                _registers[statusEffect.key].Stack(statusEffect.count);
+                _statusEffects[se.ID].StackEffect(se);
                 return;
             }
             
-            _registers.Add(statusEffect.key, statusEffect);
-            statusEffect.RegisterTo(_unit);
+            _statusEffects.Add(se.ID, se);
+            se.OnRegister();
         }
 
-        public void RemoveSE(StatusEffect statusEffect)
+        public void RemoveStatusEffect(StatusEffectId id)
         {
-            Tuple<ScriptableObject, Type> key = statusEffect.key;
-            if (!_registers.ContainsKey(key)) return;
-            _registers.Remove(key);
+            if (!_statusEffects.ContainsKey(id)) return;
+            _statusEffects[id].OnRemove();
+            _statusEffects.Remove(id);
         }
 
-        public void RemoveSEBySource(ScriptableObject source)
+        private void Map(Action<StatusEffect> map)
         {
-            List<Tuple<ScriptableObject, Type>> regs = 
-                _registers.Keys.Where(reg => reg.Item1.Equals(source)).ToList();
-            foreach (Tuple<ScriptableObject,Type> reg in regs)
-            {
-                _registers.Remove(reg);
-            }
+            foreach (StatusEffect se in _statusEffects.Values)
+                map(se);
         }
 
-        public static Tuple<ScriptableObject, Type> CreateKey(StatusEffect statusEffect) =>
-            new Tuple<ScriptableObject, Type>(statusEffect.source, statusEffect.GetType());
+        public StatusEffect[] GetStatusEffects() => _statusEffects.Values.ToArray();
     }
 }
  

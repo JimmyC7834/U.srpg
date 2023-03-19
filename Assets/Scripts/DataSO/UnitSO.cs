@@ -37,6 +37,7 @@ namespace Game.Unit
         [SerializeField] private CpuUnitAI _ai;
         [SerializeField] private AnimatorOverrideController _animatorOverrideController;
         [SerializeField] private PartNode _partTree;
+        [SerializeField] public NewPartSO[] _parts;
 
         // make a copy of the raw data everytime to prevent change on dataset
         public PartNode PartTree => _partTree.Copy();

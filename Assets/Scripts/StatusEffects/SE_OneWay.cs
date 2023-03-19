@@ -1,40 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Game.Unit.StatusEffect
 {
-    public class SE_OneWay : StatusEffect
+    public class SE_OneWay : SpecialSE
     {
+        public override StatusEffectId ID { get => StatusEffectId.OneWay; }
         private int _mpLeft;
 
-        public SE_OneWay(ScriptableObject source) : base(source) { }
-        
-        protected override void Register()
-        {
-            unit.OnSEActionEnd += HandleActionEnd;
-        }
+        public SE_OneWay(UnitObject unit) : base(unit) { }
 
-        public void HandleActionEnd(UnitObject _)
+        public override void OnActionEnd()
         {
-            _mpLeft = unit.stats.AP;
+            _mpLeft = _unit.stats.AP;
             if (_mpLeft < 0)
-            {
-                Remove();
-            }
-            unit.stats.ChangeAP(-_mpLeft);
+                _unit.RemoveStatusEffect(ID);
+            
+            _unit.stats.ChangeAP(-_mpLeft);
         }
 
-        protected override void OnCountDown() => RecoverMP();
+        public override void OnTurnEnd()
+        {
+            RecoverMP();
+        }
 
         public void RecoverMP()
         {
-            unit.stats.ChangeAP(_mpLeft);
-        }
-        
-        protected override void OnRemoval()
-        {
-            unit.OnSEActionEnd -= HandleActionEnd;
+            _unit.stats.ChangeAP(_mpLeft);
         }
     }
 }

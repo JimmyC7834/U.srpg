@@ -6,6 +6,7 @@ using Game.DataSet;
 using Game.Unit.Ability;
 using Game.Unit.Part;
 using Game.Unit.Skill;
+using Game.Unit.StatusEffect;
 using UnityEngine;
 
 
@@ -40,22 +41,6 @@ namespace Game.Unit
         public Vector2Int location => Vector2Int.FloorToInt(Extensions.GameV3ToV2(_transform.position));
         public float height => _transform.position.y;
 
-        #region UnitGameEvents
-        public event Action<AttackInfo> OnAttackEarly = delegate { };
-        public event Action<AttackInfo> OnAttack = delegate { };
-        public event Action<AttackInfo> OnAttackLate = delegate { };
-        public event Action<AttackInfo> OnTakeAttackEarly = delegate { };
-        public event Action<AttackInfo> OnTakeAttack = delegate { };
-        public event Action<AttackInfo> OnTakeAttackLate = delegate { };
-        public event Action<DamageInfo> OnTakeDamageEarly = delegate { };
-        public event Action<DamageInfo> OnTakeDamageLate = delegate { };
-        public event Action<UnitObject> OnTurnChanged = delegate { };
-        public event Action<UnitObject> OnKokuChanged = delegate { };
-        public event Action<UnitObject> OnActionEnd = delegate { };
-        public event Action<AttackInfo> OnMissedAttack = delegate { };
-        public event Action<AttackInfo> OnDodgedAttack = delegate { };
-        #endregion
-        
         #region UnitAbilityEvents
         public event Action<AttackInfo> OnAbAttackEarly = delegate { };
         public event Action<AttackInfo> OnAbAttack = delegate { };
@@ -73,19 +58,24 @@ namespace Game.Unit
         #endregion
         
         #region UnitSEEvents
-        public event Action<AttackInfo> OnSEAttackEarly = delegate { };
-        public event Action<AttackInfo> OnSEAttack = delegate { };
-        public event Action<AttackInfo> OnSEAttackLate = delegate { };
-        public event Action<AttackInfo> OnSETakeAttackEarly = delegate { };
-        public event Action<AttackInfo> OnSETakeAttack = delegate { };
-        public event Action<AttackInfo> OnSETakeAttackLate = delegate { };
-        public event Action<DamageInfo> OnSETakeDamageEarly = delegate { };
-        public event Action<DamageInfo> OnSETakeDamageLate = delegate { };
+
+        public event Action OnActionStart = delegate { };
+        public event Action OnActionEnd = delegate { };
+
+        public event Action<AttackInfo> OnPreAttack = delegate { };
+        public event Action<AttackInfo> OnPostAttack = delegate { };
+        public event Action<AttackInfo> OnAttackHit = delegate { };
+        public event Action<AttackInfo> OnAttackDodged = delegate { };
+        public event Action<AttackInfo> OnAttackMissed = delegate { };
+        public event Action<AttackInfo> OnPreTakeAttack = delegate { };
+        public event Action<AttackInfo> OnPostTakeAttack = delegate { };
+        public event Action<AttackInfo> OnDodgedAttack = delegate { };
+        public event Action<DamageInfo> OnPreTakeDamage = delegate { };
+        public event Action<DamageInfo> OnPostTakeDamage = delegate { };
+        
         public event Action<UnitObject> OnSETurnChanged = delegate { };
         public event Action<UnitObject> OnSEKokuChanged = delegate { };
         public event Action<UnitObject> OnSEActionEnd = delegate { };
-        public event Action<AttackInfo> OnSEMissedAttack = delegate { };
-        public event Action<AttackInfo> OnSEDodgedAttack = delegate { };
         #endregion
         
         public void InitializeWith(UnitSO _unitSO, BattleService battleService)
@@ -118,25 +108,6 @@ namespace Game.Unit
             
             stats.InitializeMaxValues();
             stats.Evaluate();
-            
-            // events
-            battleService.battleTurnManager.OnTurnChanged += InvokeOnTurnChanged;
-            battleService.battleTurnManager.OnKokuChanged += InvokeOnKokuChanged;
-        }
-        
-        private void InvokeOnTurnChanged(int turn)
-        {
-            stats.ResetAP();
-            OnTurnChanged.Invoke(this);
-            OnAbTurnChanged.Invoke(this);
-            OnSETurnChanged.Invoke(this);
-        }
-
-        private void InvokeOnKokuChanged(int koku)
-        {
-            OnKokuChanged.Invoke(this);
-            OnAbKokuChanged.Invoke(this);
-            OnSEKokuChanged.Invoke(this);
         }
 
         private void RegisterParts(UnitPartTree.UnitPartTreeNode node)
@@ -161,9 +132,19 @@ namespace Game.Unit
             stats.AddModifiers(node.Part.ParamBoosts);
         }
 
+        public void AddStatusEffect(StatusEffect.StatusEffect se)
+        {
+            seHandler.RegisterStatusEffect(se);
+        }
+        
+        public void RemoveStatusEffect(StatusEffectId id)
+        {
+            seHandler.RemoveStatusEffect(id);
+        }
+
         public void EndAction()
         {
-            OnActionEnd.Invoke(this);
+            OnActionEnd.Invoke();
         }
         
         public void Attack(AttackInfo attackInfo)
@@ -174,7 +155,7 @@ namespace Game.Unit
             
             if (attackInfo.missed)
             {
-                OnMissedAttack.Invoke(attackInfo);
+                OnAttackMissed.Invoke(attackInfo);
                 OnAbMissedAttack.Invoke(attackInfo);
                 return;
             }
@@ -234,7 +215,9 @@ namespace Game.Unit
             if (stats.CheckDodge())
                 attackInfo.ToDodged();
         }
-        
+
+        #region UnitPartTree
+
         /**
          * Immutable Tree represent the parts that forms the unit
          */
@@ -299,86 +282,8 @@ namespace Game.Unit
                 return skills;
             }
         }
+
+        #endregion
     }
     
-    /**
-     * Mutable struct of single damage deal
-     */
-    public struct DamageInfo
-    {
-        public DamageValue DamageValue { get; private set; }
-        public object source { get; private set; }
-        
-        public void AddModifier(DamageValueModifier damageValueModifier) => 
-            DamageValue.AddModifier(damageValueModifier);
-        
-        /**
-         * Generate final UnitStatModifier to modify DUR base on the damage value
-         */
-        public UnitParamModifier damageModifier => 
-            new UnitParamModifier(UnitStatType.DUR, -DamageValue.Value, ParamModifier.ModifyType.Flat, source);
-        
-        public static DamageInfo From(object _source) => new DamageInfo()
-        {
-            DamageValue = new DamageValue(),
-            source = _source,
-        };
-    }
-    
-    /**
-     * Mutable struct of info of a single attack preformed by an unit
-     */
-    public class AttackInfo
-    {
-        public AttackSourceInfo source { get; private set; }
-        public BattleBoardTile targetTile { get; private set; }
-        public UnitObject target { get => targetTile.unitOnTile; }
-        public DamageInfo damageInfo { get; private set; }
-        public int combo { get; private set; }
-        public bool isCritical { get; private set; }
-        public bool missed { get; private set; }
-        public bool dodge { get; private set; }
-
-        public static AttackInfo From(AttackSourceInfo _source, BattleBoardTile _targetTile) =>
-            From(_source, _targetTile, 1);
-
-        public static AttackInfo From(AttackSourceInfo _source, BattleBoardTile _targetTile, int _combo) => new AttackInfo()
-        {
-            source = _source,
-            targetTile = _targetTile,
-            damageInfo = DamageInfo.From(_source),
-            combo = _combo,
-            isCritical = false,
-            missed = false,
-            dodge = false,
-        };
-
-        public bool ToCritical() => isCritical = true;
-        public bool ToMissed() => missed = true;
-        public bool ToDodged() => dodge = true;
-        
-        public void AddModifier(DamageValueModifier damageValueModifier) => damageInfo.AddModifier(damageValueModifier);
-
-        public UnitParamModifier damageModifier => damageInfo.damageModifier;
-    }
-    
-    /**
-     * Immutable struct of info of source of an attack
-     */
-    public struct AttackSourceInfo
-    {
-        public BattleBoardTile tile { get; private set; }
-        public UnitObject unit { get; private set; }
-        public SkillSO skill { get; private set; }
-
-        public static AttackSourceInfo From(SkillCast skillCast) =>
-            From(skillCast.casterTile, skillCast.skill);
-        
-        public static AttackSourceInfo From(BattleBoardTile sourceTile, SkillSO _sourceSkill) => new AttackSourceInfo()
-        {
-            tile = sourceTile,
-            unit = sourceTile.unitOnTile,
-            skill = _sourceSkill,
-        };
-    }
 }
