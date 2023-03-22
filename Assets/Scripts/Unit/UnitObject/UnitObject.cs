@@ -10,28 +10,6 @@ using UnityEngine;
 
 namespace Game.Unit
 {
-    public partial interface IUnitEventsListener
-    {
-        partial void OnRegister();
-        partial void OnRemove();
-        partial void OnActionStart();
-        partial void OnActionEnd();
-        partial void OnTurnStart();
-        partial void OnTurnEnd();
-        partial void OnMomentStart();
-        partial void OnMomentEnd();
-        partial void OnPreAttack(AttackInfo info);
-        partial void OnPostAttack(AttackInfo info);
-        partial void OnAttackMissed(AttackInfo info);
-        partial void OnAttackDodged(AttackInfo info);
-        partial void OnAttackHit(AttackInfo info);
-        partial void OnPreTakeAttack(AttackInfo info);
-        partial void OnPostTakeAttack(AttackInfo info);
-        partial void OnDodgeAttack(AttackInfo info);
-        partial void OnPreTakeDamage(DamageInfo info);
-        partial void OnPostTakeDamage(DamageInfo info);
-    }
-    
     /**
      * GameObject of a unit
      */
@@ -148,7 +126,7 @@ namespace Game.Unit
             
             AbilitySO[] abilities = node.Part.GetAbilities();
             for (int i = 0; i < abilities.Length; i++)
-                abilities[i].RegisterTo(this, node);
+                abilities[i].Create(this, 1);
             stats.AddModifiers(node.Part.ParamBoosts);
         }
 

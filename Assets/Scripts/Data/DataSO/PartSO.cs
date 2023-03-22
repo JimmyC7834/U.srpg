@@ -10,7 +10,7 @@ namespace Game.Unit.Part
     {
         [SerializeField] private AbilityDataSetSO _abDataset;
         
-        [SerializeField] private AbilityId[] _abilities;
+        [SerializeField] private AbilityID[] _abilities;
         [SerializeField] private UnitParam.ParamBoostEntry[] _paramBoostEntries;
         private UnitParamModifier[] _paramBoosts;
         [SerializeField] private SkillId _skillId;

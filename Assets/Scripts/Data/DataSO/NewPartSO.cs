@@ -37,7 +37,7 @@ public class NewPartSO : ScriptableObject
     [Serializable]
     public struct AbilityContainer
     {
-        public AbilityId abilityId;
+        public AbilityID abilityId;
         public bool locked;
     }
 }

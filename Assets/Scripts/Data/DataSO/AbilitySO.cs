@@ -6,45 +6,43 @@ using UnityEngine;
 
 namespace Game.Unit.Ability
 {
-    public abstract class AbilitySO : DataEntrySO<AbilityId>
+    /// <summary>
+    /// Base class for metadata and constructor function of Abilities
+    /// </summary>
+    public abstract class AbilitySO : DataEntrySO<AbilityID>
     {
-        protected Dictionary<ParamModifier.ModifyType, Func<float, DamageValueModifier>> _modifierDict = new ()
-        {
-            {ParamModifier.ModifyType.Flat, (value) => 
-                new DamageValueModifier(value, ParamModifier.ModifyType.Flat)},
-            {ParamModifier.ModifyType.Percent, (value) => 
-                new DamageValueModifier(1 + value, ParamModifier.ModifyType.Percent)},
-            {ParamModifier.ModifyType.PercentAdd, (value) => 
-                new DamageValueModifier(value, ParamModifier.ModifyType.PercentAdd)},
-        };
-        
-        public abstract void RegisterTo(UnitObject unit, UnitObject.UnitPartTree.UnitPartTreeNode node);
+        /// <summary>
+        /// Constructor function of Ability objects. Derived class should
+        /// Properly create and initialize the ability object before returning it.
+        /// </summary>
+        /// <param name="unit"> The unit that is getting the ability </param>
+        /// <param name="count"> The count of the ability </param>
+        /// <returns></returns>
+        public abstract Ability Create(UnitObject unit, int count);
     }
 
-    public enum AbilityId
+    /// <summary>
+    /// Represents a ability of an unit. The ability could be stacked
+    /// and operate base on the number of stacks.
+    /// 
+    /// This is a base class for any ability class to be inherited.
+    /// This base class provides various functions invoked on event calls
+    /// which the derived class should override as needed.
+    /// </summary>
+    public abstract class Ability : IUnitEventsListener, IDataId<AbilityID>
     {
-        None = -1,
-        DamageReduction1 = 10,
-        AttackDamageUpOnHighGroundF = 20,
-        AttackDamageUpOnHighGroundP = 30,
-        DamageReductionUpOnHighGroundF = 40,
-        DamageReductionUpOnHighGroundP = 50,
-        AttackDamageAndDamageReductionUpOnHighGroundP = 60,
-        AttackDamageUpFullHpP = 70,
-        AttackDamageUpOver75HpP = 80,
-        AttackDamageUpUnder50HpP= 90,
-        DamageReductionFullHpP = 100,
-        ReduceAP = 110,
-        IncreaseAP = 120,
-        AB_DEBUG = 9999,
-        Count = 11,
-    }
-
-    public abstract class Ability : IUnitEventsListener, IDataId<AbilityId>
-    {
-        public abstract AbilityId ID { get; }
+        /// <summary>
+        /// The derived class should define this its corresponding id
+        /// </summary>
+        public abstract AbilityID ID { get; }
+        /// <summary>
+        /// The count of ability stack.
+        /// </summary>
         public int Count { get; private set; }
-        
+        /// <summary>
+        /// The unit object this ability is attached to.
+        /// This variable is initialized on construct.
+        /// </summary>
         protected readonly UnitObject _unit;
 
         protected Ability(UnitObject unit, int count)
@@ -53,6 +51,10 @@ namespace Game.Unit.Ability
             Count = count;
         }
 
+        /// <summary>
+        /// Increase the count of the ability stack.
+        /// </summary>
+        /// <param name="value"></param>
         public void Stack(int value)
         {
             Count += value;
@@ -60,6 +62,7 @@ namespace Game.Unit.Ability
         
         private void OnRegister() { }
         private void OnRemove() { }
+        protected void OnStack() { }
         public virtual void OnActionStart() { }
         public virtual void OnActionEnd() { }
         public virtual void OnTurnStart() { }
@@ -76,58 +79,6 @@ namespace Game.Unit.Ability
         public virtual void OnDodgeAttack(AttackInfo info) { }
         public virtual void OnPreTakeDamage(DamageInfo info) { }
         public virtual void OnPostTakeDamage(DamageInfo info) { }
-    }
-
-    public class AbilityHandler
-    {
-        private Dictionary<AbilityId, Ability> _abilities;
-
-        public AbilityHandler(UnitObject unit)
-        {
-            unit.OnPreAttack += (info) => Map((x) => x.OnPreAttack(info));
-            unit.OnPostAttack += (info) => Map((x) => x.OnPostAttack(info));
-            unit.OnAttackMissed += (info) => Map((x) => x.OnAttackMissed(info));
-            unit.OnAttackDodged += (info) => Map((x) => x.OnAttackDodged(info));
-            unit.OnAttackHit += (info) => Map((x) => x.OnAttackHit(info));
-            unit.OnPreTakeAttack += (info) => Map((x) => x.OnPreTakeAttack(info));
-            unit.OnPostTakeAttack += (info) => Map((x) => x.OnPostTakeAttack(info));
-            unit.OnDodgedAttack += (info) => Map((x) => x.OnDodgeAttack(info));
-            unit.OnPreTakeDamage += (info) => Map((x) => x.OnPreTakeDamage(info));
-            unit.OnPostTakeDamage += (info) => Map((x) => x.OnPostTakeDamage(info));
-        }
-        
-        public void Register(Ability ability)
-        {
-            if (_abilities.ContainsKey(ability.ID))
-            {
-                _abilities[ability.ID].Stack(ability.Count);
-                return;
-            }
-            
-            _abilities.Add(ability.ID, ability);
-        }
-
-        public void Reduce(Ability ability)
-        {
-            if (!_abilities.ContainsKey(ability.ID)) return;
-            _abilities[ability.ID].Stack(-ability.Count);
-            if (_abilities[ability.ID].Count <= 0)
-                RemoveAll(ability.ID);
-        }
-        
-        public void RemoveAll(AbilityId id)
-        {
-            if (!_abilities.ContainsKey(id)) return;
-            _abilities.Remove(id);
-        }
-
-        private void Map(Action<Ability> map)
-        {
-            foreach (Ability ability in _abilities.Values)
-                map(ability);
-        }
-
-        public Ability[] GetAbilities() => _abilities.Values.ToArray();
     }
 
     [Serializable]
