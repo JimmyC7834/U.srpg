@@ -9,20 +9,20 @@ namespace Game.Unit.Ability
         [SerializeField] private ParamModifier.ModifyType _modifyType;
         [SerializeField] private float _modifyValue;
 
-        public override Ability Create(UnitObject unit, int count)
+        public override UnitAbility Create(int count)
         {
-            return new Ab_DmgBuffOnFullHealth(unit, count,
+            return new Ab_DmgBuffOnFullHealth(count,
                 new DamageValueModifier(_modifyValue, _modifyType));
         }
     }
 
-    public class Ab_DmgBuffOnFullHealth : Ability
+    public class Ab_DmgBuffOnFullHealth : UnitAbility
     {
         public override AbilityID ID { get => AbilityID.AttackDamageUpFullHpP; }
         private static DamageValueModifier _modifier;
 
-        public Ab_DmgBuffOnFullHealth(UnitObject unit, int count, DamageValueModifier modifier)
-            : base(unit, count)
+        public Ab_DmgBuffOnFullHealth(int count, DamageValueModifier modifier)
+            : base(count)
         {
             _modifier ??= modifier;
         }
@@ -32,7 +32,7 @@ namespace Game.Unit.Ability
             UnitObject foe = info.target;
             UnitObject self = info.source.unit;
 
-            if (self.stats.DurPercentage >= .99f)
+            if (self.Stats.DurPercentage >= .99f)
             {
                 info.AddModifier(_modifier);
             }

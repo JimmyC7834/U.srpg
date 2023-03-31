@@ -1,26 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Game.DataSet;
-using UnityEngine;
+﻿using Game.DataSet;
 
 namespace Game.Unit.Ability
 {
-    /// <summary>
-    /// Base class for metadata and constructor function of Abilities
-    /// </summary>
-    public abstract class AbilitySO : DataEntrySO<AbilityID>
-    {
-        /// <summary>
-        /// Constructor function of Ability objects. Derived class should
-        /// Properly create and initialize the ability object before returning it.
-        /// </summary>
-        /// <param name="unit"> The unit that is getting the ability </param>
-        /// <param name="count"> The count of the ability </param>
-        /// <returns></returns>
-        public abstract Ability Create(UnitObject unit, int count);
-    }
-
     /// <summary>
     /// Represents a ability of an unit. The ability could be stacked
     /// and operate base on the number of stacks.
@@ -29,7 +10,7 @@ namespace Game.Unit.Ability
     /// This base class provides various functions invoked on event calls
     /// which the derived class should override as needed.
     /// </summary>
-    public abstract class Ability : IUnitEventsListener, IDataId<AbilityID>
+    public abstract class UnitAbility : IUnitEventsListener, IDataId<AbilityID>
     {
         /// <summary>
         /// The derived class should define this its corresponding id
@@ -43,12 +24,16 @@ namespace Game.Unit.Ability
         /// The unit object this ability is attached to.
         /// This variable is initialized on construct.
         /// </summary>
-        protected readonly UnitObject _unit;
+        protected UnitObject _unit;
 
-        protected Ability(UnitObject unit, int count)
+        protected UnitAbility(int count)
+        {
+            Count = count;
+        }
+
+        public void RegisterTo(UnitObject unit)
         {
             _unit = unit;
-            Count = count;
         }
 
         /// <summary>
@@ -79,43 +64,5 @@ namespace Game.Unit.Ability
         public virtual void OnDodgeAttack(AttackInfo info) { }
         public virtual void OnPreTakeDamage(DamageInfo info) { }
         public virtual void OnPostTakeDamage(DamageInfo info) { }
-    }
-
-    [Serializable]
-    public struct Comparer
-    {
-        public enum CompareType
-        {
-            Greater,
-            Less,
-            GreaterOrEquals,
-            LessOrEquals,
-        }
-        
-        [SerializeField] private CompareType _compareType;
-        [SerializeField] private float _value;
-
-        public static Comparer From(CompareType compareType, float value) => new Comparer()
-        {
-            _compareType = compareType,
-            _value = value,
-        };
-        
-        public bool MatchCondition(float inputValue)
-        {
-            return (inputValue > _value && _compareType == CompareType.Greater) ||
-                   (inputValue < _value && _compareType == CompareType.Less) ||
-                   (inputValue >= _value && _compareType == CompareType.GreaterOrEquals) ||
-                   (inputValue <= _value && _compareType == CompareType.LessOrEquals);
-        }
-    }
-
-    public enum BuffType
-    {
-        DamageUp,
-        DamageReduction,
-        CirtRateUp,
-        DodgeRateUp,
-        HitRateUp,
     }
 }

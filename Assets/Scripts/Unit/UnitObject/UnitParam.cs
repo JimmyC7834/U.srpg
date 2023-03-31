@@ -35,8 +35,8 @@ namespace Game.Unit
         {
             public UnitStatType unitStatType;
             public int value;
-            public UnitParamModifier ToModifier() => 
-                new UnitParamModifier(unitStatType, value, ParamModifier.ModifyType.Flat, null);
+            public UnitParamModifier ToModifier(object source) => 
+                new UnitParamModifier(unitStatType, value, ParamModifier.ModifyType.Flat, source);
         }
     }
     

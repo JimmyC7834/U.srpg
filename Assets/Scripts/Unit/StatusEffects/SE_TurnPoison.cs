@@ -6,7 +6,7 @@ namespace Game.Unit.StatusEffect
         private static readonly float _damagePerTurn = 5f;
 
         public SE_TurnPoison(UnitObject unit, int count) : base(unit, count) { }
-        public override StatusEffect Copy() => new SE_TurnPoison(_unit, Count);
+        public override StatusEffectRegister Copy() => new SE_TurnPoison(_unit, Count);
 
         protected override void OnCountDown() => DealDamage();
 
@@ -24,7 +24,7 @@ namespace Game.Unit.StatusEffect
         private static readonly float _damagePerTurn = 1f;
 
         public SE_MomentPoison(UnitObject unit, int count) : base(unit, count) { }
-        public override StatusEffect Copy() => new SE_MomentPoison(_unit, Count);
+        public override StatusEffectRegister Copy() => new SE_MomentPoison(_unit, Count);
         
         protected override void OnCountDown() => DealDamage();
 

@@ -23,9 +23,9 @@ namespace Game.UI
             UnitObject unit = _battleService.CurrentUnit;
             if (unit == null) return;
             
-            _displayNameLabel.SetText(unit.displayName);
-            _hpBar.fillAmount = unit.stats.DurPercentage;
-            _icon.sprite = unit.unitSO.sprite;
+            _displayNameLabel.SetText(unit.DisplayName);
+            _hpBar.fillAmount = unit.Stats.DurPercentage;
+            _icon.sprite = unit.unitSO.Sprite;
         }
     }
 }

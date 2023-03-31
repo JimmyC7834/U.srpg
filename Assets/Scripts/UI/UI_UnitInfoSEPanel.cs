@@ -26,21 +26,21 @@ namespace Game.UI
         private void UpdatePanel(CursorController _)
         {
             if (!_battleService.CurrentUnit) return;
-            LoadRegisters(_battleService.CurrentUnit.seHandler.GetStatusEffects());
+            LoadRegisters(_battleService.CurrentUnit.Data.SEHandler.GetStatusEffects());
         }
         
-        public void LoadRegisters(StatusEffect[] statusEffects)
+        public void LoadRegisters(StatusEffectRegister[] statusEffects)
         {
             Clear();
-            foreach (StatusEffect statusEffect in statusEffects)
+            foreach (StatusEffectRegister statusEffect in statusEffects)
             {
                 AddIndicator(statusEffect);
             }
         }
 
-        private void AddIndicator(StatusEffect statusEffect)
+        private void AddIndicator(StatusEffectRegister statusEffectRegister)
         {
-            UI_SEIndicator newIndicator = _pool.Get(obj => obj.Initialize(statusEffect));
+            UI_SEIndicator newIndicator = _pool.Get(obj => obj.Initialize(statusEffectRegister));
             _indicators.Add(newIndicator);
         }
 

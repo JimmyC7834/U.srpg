@@ -19,17 +19,17 @@ namespace Game.UI
         public void Initialize(UI_BattleTimeline timeline, UnitObject unit)
         {
             _timeline = timeline;
-            _image.sprite = unit.spriteRenderer.sprite;
+            _image.sprite = unit.unitSO.Sprite;
             _unit = unit;
             
-            unit.stats.OnAPChanged += UpdatePositionOnTimeline;
+            unit.Stats.OnAPChanged += UpdatePositionOnTimeline;
             
             UpdatePositionOnTimeline(unit);
         }
         
         public void UpdatePositionOnTimeline(UnitObject _)
         {
-            int index = 20 - _unit.stats.AP;
+            int index = 20 - _unit.Stats.AP;
             _transform.SetParent(_timeline.horizontalLayouts[index].gameObject.transform, false);
         }
     }

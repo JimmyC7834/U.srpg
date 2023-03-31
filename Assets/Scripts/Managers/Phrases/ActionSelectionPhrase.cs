@@ -30,7 +30,7 @@
         private void ActionEnd()
         {
             battleService.unitManager.ReturnToHeap(battleService.CurrentUnit);
-            battleService.CurrentUnit.EndAction();
+            battleService.CurrentUnit.Data.EndAction();
             // battleService.uiManager.CloseSkillSelectionMenu();
             _parent.Pop();
             if (battleService.unitManager.NoCurrentUnits())

@@ -34,7 +34,7 @@ namespace Game.Unit
         [SerializeField] private UnitParam _per;
         [SerializeField] private UnitParam _san;
         private UnitParam[] _param;
-        private readonly UnitObject _unit;
+        private UnitObject _unit;
 
         public float DurPercentage { get => DUR/(float) _maxDur; }
         public int AP { get; private set; }
@@ -45,14 +45,12 @@ namespace Game.Unit
         public int TEC { get => (int) _tec.Value; }
         public int PER { get => (int) _per.Value; }
         public int SAN { get => (int) _san.Value; }
-        
-        public event Action<UnitObject> OnHPChanged;
-        public event Action<UnitObject> OnAPChanged;
-        public event Action<UnitObject> OnAPConsumed;
-        public event Action<UnitObject> OnSANChanged;
 
-        
-        public UnitStats(UnitObject unit)
+        public event Action<UnitObject> OnHPChanged = delegate { };
+        public event Action<UnitObject> OnAPChanged = delegate { };
+        public event Action<UnitObject> OnSANChanged = delegate { };
+
+        public UnitStats()
         {
             _hitRate = new ModifiableParam(BASE_HITRATE);
             _dodgeRate = new ModifiableParam(BASE_DODGERATE);
@@ -70,12 +68,16 @@ namespace Game.Unit
                 _san = new UnitParam(),
             };
 
-            _unit = unit;
             AP = DEFAULT_AP;
             
             _maxDur = DUR;
             _maxAP = DEFAULT_AP;
             _maxSan = SAN;
+        }
+
+        public void Initialize(UnitObject unit)
+        {
+            _unit = unit;
         }
 
         public void InitializeMaxValues()
@@ -114,7 +116,6 @@ namespace Game.Unit
         {
             AP -= value;
             OnAPChanged?.Invoke(_unit);
-            OnAPConsumed?.Invoke(_unit);
         }
         
         public void Evaluate()

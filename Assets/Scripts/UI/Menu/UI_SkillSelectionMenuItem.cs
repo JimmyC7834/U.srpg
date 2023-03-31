@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.UI
 {
-    public class UI_SkillSelectionMenuItem : UI_DataEntryMenuItem<SkillSO, SkillId>
+    public class UI_SkillSelectionMenuItem : UI_DataEntryMenuItem<SkillSO, SkillID>
     {
         [SerializeField] private TMP_Text _costText;
 

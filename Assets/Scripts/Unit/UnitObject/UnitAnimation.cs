@@ -80,7 +80,7 @@ namespace Game.Unit
         
         public IEnumerator MoveUnitOnBroad(Vector2 targetCoord, float time)
         {
-            Vector2 startPosition = _unit.location;
+            Vector2 startPosition = _unit.Location;
             Vector2 currentPosition = startPosition;
             RaycastHit hit;
             float startTime = Time.time;

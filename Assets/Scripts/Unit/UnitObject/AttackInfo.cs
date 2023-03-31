@@ -31,9 +31,9 @@ namespace Game.Unit
             dodge = false,
         };
 
-        public bool ToCritical() => isCritical = true;
-        public bool ToMissed() => missed = true;
-        public bool ToDodged() => dodge = true;
+        public bool RollCritical() => source.unit.Data.Stats.CheckCritical();
+        public bool RollHit() => source.unit.Data.Stats.CheckHit();
+        public bool RollDodged() => target.Data.Stats.CheckDodge();
         
         public void AddModifier(DamageValueModifier damageValueModifier) => damageInfo.AddModifier(damageValueModifier);
 

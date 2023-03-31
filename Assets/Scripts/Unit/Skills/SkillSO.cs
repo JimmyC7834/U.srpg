@@ -15,7 +15,7 @@ namespace Game.Unit.Skill
     public interface ISk_Buff { }
     public interface ISk_Debuff { }
 
-    public abstract class SkillSO : DataEntrySO<SkillId>
+    public abstract class SkillSO : DataEntrySO<SkillID>
     {
         [SerializeField] private bool _unique;
         [SerializeField] private int _cost;
@@ -47,13 +47,13 @@ namespace Game.Unit.Skill
             SkillCast skillCast, Action callback)
         {
             UnitObject casterObject = skillCast.casterTile.unitOnTile;
-            casterObject.stats.ConsumeAP(_cost);
+            casterObject.Stats.ConsumeAP(_cost);
             if (skillCast.target == null)
                 battleService.logConsole.SendText(
-                    $"{casterObject.displayName} casted {skillCast.skill.displayName}");
+                    $"{casterObject.DisplayName} casted {skillCast.skill.displayName}");
             else
                 battleService.logConsole.SendText(
-                    $"{casterObject.displayName} casted {skillCast.skill.displayName} to {skillCast.target.displayName}");
+                    $"{casterObject.DisplayName} casted {skillCast.skill.displayName} to {skillCast.target.DisplayName}");
 
             casterObject.StartCoroutine(
                 CallBackWrap(Cast(battleService, skillCast), callback));
@@ -72,7 +72,7 @@ namespace Game.Unit.Skill
         public bool IsTagged(SkillTypeTag tag) => _skillTypeTags.Contains(tag);
     }
     
-    public enum SkillId
+    public enum SkillID
     {
         None = -1,
         Punch = 9910,

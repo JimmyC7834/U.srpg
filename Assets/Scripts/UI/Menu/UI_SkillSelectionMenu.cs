@@ -9,7 +9,7 @@ namespace Game.UI
     public class UI_SkillSelectionMenu : UI_View
     {
         [SerializeField] private InputReader _input;
-        [SerializeField] private UI_DataEntryMenu<SkillSO, SkillId> _skillMenu;
+        [SerializeField] private UI_DataEntryMenu<SkillSO, SkillID> _skillMenu;
         private event Action<SkillSO> onConfirm = delegate { };
         private event Action onCancel = delegate { };
         

@@ -14,9 +14,9 @@ namespace Game.Unit.Skill
         public override IEnumerator Cast(BattleService battleService, SkillCast skillCast)
         {
             skillCast.caster.AddStatusEffect(new SE_OneWay(skillCast.caster));
-            skillCast.caster.anim.AddAnimationStep(UnitAnimation.Attack1, .25f);
-            skillCast.caster.anim.StartAnimation();
-            skillCast.caster.stats.ChangeAP(-skillCast.caster.stats.AP);
+            skillCast.caster.Anim.AddAnimationStep(UnitAnimation.Attack1, .25f);
+            skillCast.caster.Anim.StartAnimation();
+            skillCast.caster.Stats.ChangeAP(-skillCast.caster.Stats.AP);
             yield return null;
         }
     }

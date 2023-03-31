@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Unit;
 using Game.Unit.StatusEffect;
+using UnityEngine.Assertions;
 
 namespace Game
 {
@@ -10,52 +11,58 @@ namespace Game
      */
     public class UnitSEHandler
     {
-        private Dictionary<StatusEffectId, StatusEffect> _seMap;
-        private List<StatusEffect> _statusEffects;
-
-        public UnitSEHandler(UnitObject unit)
+        private Dictionary<StatusEffectId, StatusEffectRegister> _seMap;
+        private List<StatusEffectRegister> _statusEffects;
+        private bool _initialized = false;
+        
+        public void Initialize(UnitObject unit)
         {
-            unit.OnPreAttack += (info) => Map((x) => x.OnPreAttack(info));
-            unit.OnPostAttack += (info) => Map((x) => x.OnPostAttack(info));
-            unit.OnAttackMissed += (info) => Map((x) => x.OnAttackMissed(info));
-            unit.OnAttackDodged += (info) => Map((x) => x.OnAttackDodged(info));
-            unit.OnAttackHit += (info) => Map((x) => x.OnAttackHit(info));
-            unit.OnPreTakeAttack += (info) => Map((x) => x.OnPreTakeAttack(info));
-            unit.OnPostTakeAttack += (info) => Map((x) => x.OnPostTakeAttack(info));
-            unit.OnDodgedAttack += (info) => Map((x) => x.OnDodgeAttack(info));
-            unit.OnPreTakeDamage += (info) => Map((x) => x.OnPreTakeDamage(info));
-            unit.OnPostTakeDamage += (info) => Map((x) => x.OnPostTakeDamage(info));
+            Assert.IsTrue(!_initialized);
+            _initialized = true;
+            
+            unit.Data.OnPreAttack += (info) => Map((x) => x.OnPreAttack(info));
+            unit.Data.OnPostAttack += (info) => Map((x) => x.OnPostAttack(info));
+            unit.Data.OnAttackMissed += (info) => Map((x) => x.OnAttackMissed(info));
+            unit.Data.OnAttackDodged += (info) => Map((x) => x.OnAttackDodged(info));
+            unit.Data.OnAttackHit += (info) => Map((x) => x.OnAttackHit(info));
+            unit.Data.OnPreTakeAttack += (info) => Map((x) => x.OnPreTakeAttack(info));
+            unit.Data.OnPostTakeAttack += (info) => Map((x) => x.OnPostTakeAttack(info));
+            unit.Data.OnDodgedAttack += (info) => Map((x) => x.OnDodgeAttack(info));
+            unit.Data.OnPreTakeDamage += (info) => Map((x) => x.OnPreTakeDamage(info));
+            unit.Data.OnPostTakeDamage += (info) => Map((x) => x.OnPostTakeDamage(info));
 
-            _statusEffects = new List<StatusEffect>();
-            _seMap = new Dictionary<StatusEffectId, StatusEffect>();
+            _statusEffects = new List<StatusEffectRegister>();
+            _seMap = new Dictionary<StatusEffectId, StatusEffectRegister>();
         }
         
         /// <summary>
         /// Register a new SE to the unit. Stack effects if SE already exists.
         /// </summary>
         /// <param name="se"> The SE o register </param>
-        public void Register(StatusEffect statusEffect)
+        public void Register(StatusEffectRegister statusEffectRegister)
         {
-            if (_seMap.ContainsKey(statusEffect.ID))
+            Assert.IsTrue(_initialized);
+            if (_seMap.ContainsKey(statusEffectRegister.ID))
             {
-                _seMap[statusEffect.ID].StackEffect(statusEffect);
+                _seMap[statusEffectRegister.ID].StackEffect(1);
                 return;
             }
             
-            StatusEffect se = statusEffect.Copy();
+            StatusEffectRegister se = statusEffectRegister.Copy();
             _statusEffects.Add(se);
             _seMap.Add(se.ID, se);
             se.OnRegister();
         }
 
         /// <summary>
-        /// Reduce the stack count of a SE.
+        /// Reduce the 1 count of the SE.
         /// </summary>
         /// <param name="se"> The SE to be reduce </param>
-        public void Reduce(StatusEffect se)
+        public void Reduce(StatusEffectId id)
         {
-            if (!_seMap.ContainsKey(se.ID)) return;
-            _seMap[se.ID].ReduceEffect(se);
+            Assert.IsTrue(_initialized);
+            if (!_seMap.ContainsKey(id)) return;
+            _seMap[id].ReduceEffect(1);
         }
         
         /// <summary>
@@ -64,20 +71,24 @@ namespace Game
         /// <param name="id"> The id of the SE to be removed </param>
         public void RemoveAll(StatusEffectId id)
         {
+            Assert.IsTrue(_initialized);
             if (!_seMap.ContainsKey(id)) return;
-            StatusEffect se = _statusEffects.Find(x => x.ID == id);
+            StatusEffectRegister se = _statusEffects.Find(x => x.ID == id);
             _statusEffects.Remove(se);
             _seMap.Remove(id);
             se.OnRemove();
         }
 
-        private void Map(Action<StatusEffect> map)
+        private void Map(Action<StatusEffectRegister> map)
         {
-            foreach (StatusEffect se in _statusEffects)
+            foreach (StatusEffectRegister se in _statusEffects)
                 map(se);
         }
 
-        public StatusEffect[] GetStatusEffects() => _statusEffects.ToArray();
+        public StatusEffectRegister[] GetStatusEffects() {
+            Assert.IsTrue(_initialized);
+            return _statusEffects.ToArray();
+        }
     }
 }
  

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Game.UI;
@@ -44,7 +45,7 @@ namespace Game.Battle
             Assert.IsNotNull(onConfirm);
             Assert.IsNotNull(onCancel);
             
-            _skillSelectionMenu.OpenMenu(unit.partTree.GetAllSkills(), 
+            _skillSelectionMenu.OpenMenu(unit.GetSkills().ToList(), 
                 (skill) =>
                 {
                     PopView();

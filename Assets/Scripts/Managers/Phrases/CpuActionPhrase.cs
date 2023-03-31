@@ -37,7 +37,7 @@ namespace Game.Battle
             // End Current Cpu Action
             CpuUnitController cpu = _cpus.Dequeue();
             battleService.unitManager.ReturnToHeap(cpu.unit);
-            cpu.unit.EndAction();
+            cpu.unit.Data.EndAction();
             
             // End Phrase if not Cpus left
             if (_cpus.Count == 0)
@@ -69,7 +69,7 @@ namespace Game.Battle
             
             SkillCast skillCast = new SkillCast(
                 battleService.battleBoard, 
-                battleService.battleBoard.GetTile(cpu.unit.gridX, cpu.unit.gridY),
+                battleService.battleBoard.GetTile(cpu.unit.GridX, cpu.unit.GridY),
                 action.skill);
             skillCast.Cast(battleService, action.targetTile, ExecuteNextAction);
         }

@@ -18,9 +18,9 @@ namespace Game.Unit.Skill
             skill = _skill;
             selectionRange = CalculateSelectionRange(
                 board,
-                caster.location.x,
-                caster.location.y, 
-                skill.calWithMoveRange ? caster.stats.GetMoveRange() : skill.range,
+                caster.Location.x,
+                caster.Location.y, 
+                skill.calWithMoveRange ? caster.Stats.GetMoveRange() : skill.range,
                 skill.ignoreTerrain, 
                 skill.includeSelf, 
                 skill.optionalRange);

@@ -28,7 +28,7 @@ namespace Game.Battle
         {
             UnitObject unit = battleService.CurrentUnit;
             if (unit == null) return;
-            if (unit._team != BattleTeam.Player) return;
+            if (unit.Team != BattleTeam.Player) return;
             if (!battleService.CanSelectCurrentUnit) return;
             Debug.Log($"Confrimed on unit {battleService.CurrentTile}");
             _parent.Pop();

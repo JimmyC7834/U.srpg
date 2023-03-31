@@ -2,20 +2,19 @@ using Game.DataSet;
 
 namespace Game.Unit.StatusEffect
 {
-    // TODO: decide if value SEs should be static
-    public abstract class StatusEffect : IUnitEventsListener, IDataId<StatusEffectId>
+    public abstract class StatusEffectRegister : IUnitEventsListener, IDataId<StatusEffectId>
     {
         public abstract StatusEffectId ID { get; }
         protected readonly UnitObject _unit;
 
-        protected StatusEffect(UnitObject unit)
+        protected StatusEffectRegister(UnitObject unit)
         {
             _unit = unit;
         }
 
-        public abstract void StackEffect(StatusEffect se);
-        public abstract void ReduceEffect(StatusEffect se);
-        public abstract StatusEffect Copy();
+        public abstract void StackEffect(int count);
+        public abstract void ReduceEffect(int count);
+        public abstract StatusEffectRegister Copy();
         
         public virtual void OnRegister() { }
         public virtual void OnRemove() { }
@@ -37,7 +36,7 @@ namespace Game.Unit.StatusEffect
         public virtual void OnPostTakeDamage(DamageInfo info) { }
     }
 
-    public abstract class TurnCountDownSE : StatusEffect
+    public abstract class TurnCountDownSE : StatusEffectRegister
     {
         public int Count { get; private set; }
 
@@ -46,14 +45,14 @@ namespace Game.Unit.StatusEffect
             Count = count;
         }
         
-        public override void StackEffect(StatusEffect se)
+        public override void StackEffect(int count)
         {
-            Count += ((TurnCountDownSE) se).Count;
+            Count += count;
         }
         
-        public override void ReduceEffect(StatusEffect se)
+        public override void ReduceEffect(int count)
         {
-            Count -= ((TurnCountDownSE) se).Count;
+            Count -= count;
             if (Count <= 0) _unit.RemoveStatusEffect(ID);
         }
 
@@ -72,7 +71,7 @@ namespace Game.Unit.StatusEffect
         protected abstract void OnCountDown();
     }
     
-    public abstract class MomentCountDownSE : StatusEffect
+    public abstract class MomentCountDownSE : StatusEffectRegister
     {
         public int Count { get; private set; }
 
@@ -81,14 +80,14 @@ namespace Game.Unit.StatusEffect
             Count = count;
         }
 
-        public override void StackEffect(StatusEffect se)
+        public override void StackEffect(int count)
         {
-            Count += ((MomentCountDownSE) se).Count;
+            Count += count;
         }
         
-        public override void ReduceEffect(StatusEffect se)
+        public override void ReduceEffect(int count)
         {
-            Count -= ((MomentCountDownSE) se).Count;
+            Count -= count;
             if (Count <= 0) _unit.RemoveStatusEffect(ID);
         }
 
@@ -107,7 +106,7 @@ namespace Game.Unit.StatusEffect
         protected abstract void OnCountDown();
     }
 
-    public abstract class StackableSE : StatusEffect
+    public abstract class StackableSE : StatusEffectRegister
     {
         public int Count { get; private set; }
         protected StackableSE(UnitObject unit, int count) : base(unit)
@@ -115,23 +114,23 @@ namespace Game.Unit.StatusEffect
             Count = count;
         }
         
-        public override void StackEffect(StatusEffect se)
+        public override void StackEffect(int count)
         {
-            Count += ((TurnCountDownSE) se).Count;
+            Count += count;
         }
         
-        public override void ReduceEffect(StatusEffect se)
+        public override void ReduceEffect(int count)
         {
-            Count -= ((TurnCountDownSE) se).Count;
+            Count -= count;
             if (Count <= 0) _unit.RemoveStatusEffect(ID);
         }
     }
     
-    public abstract class SpecialSE : StatusEffect
+    public abstract class SpecialSE : StatusEffectRegister
     {
         protected SpecialSE(UnitObject unit) : base(unit) { }
         
-        public override void StackEffect(StatusEffect se) { }
-        public override void ReduceEffect(StatusEffect se) { }
+        public override void StackEffect(int count) { }
+        public override void ReduceEffect(int count) { }
     }
 }

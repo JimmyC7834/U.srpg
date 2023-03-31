@@ -7,7 +7,7 @@ namespace Game.Unit.StatusEffect
 
         public SE_OneWay(UnitObject unit) : base(unit) { }
 
-        public override StatusEffect Copy()
+        public override StatusEffectRegister Copy()
         {
             SE_OneWay se = new SE_OneWay(_unit);
             se._mpLeft = _mpLeft;
@@ -16,11 +16,11 @@ namespace Game.Unit.StatusEffect
 
         public override void OnActionEnd()
         {
-            _mpLeft = _unit.stats.AP;
+            _mpLeft = _unit.Stats.AP;
             if (_mpLeft < 0)
                 _unit.RemoveStatusEffect(ID);
             
-            _unit.stats.ChangeAP(-_mpLeft);
+            _unit.Stats.ChangeAP(-_mpLeft);
         }
 
         public override void OnTurnEnd()
@@ -30,7 +30,7 @@ namespace Game.Unit.StatusEffect
 
         public void RecoverMP()
         {
-            _unit.stats.ChangeAP(_mpLeft);
+            _unit.Stats.ChangeAP(_mpLeft);
         }
     }
 }

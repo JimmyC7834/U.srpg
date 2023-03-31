@@ -3,8 +3,8 @@ using Game.Unit.Ability;
 using Game.Unit.Skill;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewPartSO", menuName = "Game/SO/NewPart")]
-public class NewPartSO : ScriptableObject
+// [CreateAssetMenu(fileName = "GridPartSO", menuName = "Game/SO/GridPartS")]
+public class GridPartSO : ScriptableObject
 {
     [SerializeField] private Sprite _icon;
 
@@ -16,7 +16,7 @@ public class NewPartSO : ScriptableObject
     [Space] 
     
     // [Header("Skill and Abilities")]
-    [SerializeField] private SkillId _skill;
+    [SerializeField] private SkillID _skill;
     [SerializeField] private AbilityContainer[] _abilities;
     [SerializeField] private int _abilityActivation;
 

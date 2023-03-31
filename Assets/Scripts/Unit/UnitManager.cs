@@ -48,7 +48,7 @@ namespace Game.Battle
 
         private void UpdateCurrentKokuUnits(int koku)
         {
-            while (_heap.Count != 0 && _heap.Peek().stats.AP == koku)
+            while (_heap.Count != 0 && _heap.Peek().Stats.AP == koku)
                 _currentKokuUnits.Add(_heap.Dequeue());
         }
 
@@ -61,7 +61,7 @@ namespace Game.Battle
         {
             if (!_currentKokuUnits.Contains(unit)) return;
             _currentKokuUnits.Remove(unit);
-            _heap.Enqueue(unit, unit.stats.AP);
+            _heap.Enqueue(unit, unit.Stats.AP);
         }
         
         public bool NoCurrentUnits() => _currentKokuUnits.Count == 0;
@@ -69,9 +69,9 @@ namespace Game.Battle
         public void SpawnUnitAt(UnitId id, Vector2Int coord)
         {
             UnitObject newUnit = _pool.Get(
-                obj => obj.InitializeWith(_unitDataset[id], _battleService));
+                obj => obj.Initialize(_unitDataset[id], ""));
             
-            _heap.Enqueue(newUnit, newUnit.stats.AP);
+            _heap.Enqueue(newUnit, newUnit.Stats.AP);
             PlaceUnitObjectAt(newUnit, coord);
             
             OnUnitSpawned.Invoke(newUnit);

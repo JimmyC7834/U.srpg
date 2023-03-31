@@ -11,11 +11,11 @@ namespace Game.UI
         [SerializeField] private Image _icon;
         [SerializeField] private TMP_Text _label;
         [SerializeField] private int count;
-        private StatusEffect _statusEffect;
+        private StatusEffectRegister _statusEffectRegister;
 
-        public void Initialize(StatusEffect statusEffect)
+        public void Initialize(StatusEffectRegister statusEffectRegister)
         {
-            _statusEffect = statusEffect;
+            _statusEffectRegister = statusEffectRegister;
             UpdateCountNumber();
         }
 

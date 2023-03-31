@@ -4,5 +4,5 @@ using UnityEngine;
 namespace Game.DataSet
 {
     [CreateAssetMenu(menuName = "Game/DataSet/Skill")]
-    public class SkillDataSetSO : DataSetSO<SkillId, SkillSO> { }
+    public class SkillDataSetSO : DataSetSO<SkillID, SkillSO> { }
 }

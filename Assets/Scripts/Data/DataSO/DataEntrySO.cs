@@ -5,6 +5,7 @@ namespace Game.DataSet
 {
     public abstract class DataEntrySO<I> : ScriptableObject, IDataId<I> where I : Enum
     {
+        [Header("Metadata")]
         [SerializeField] private string _displayName;
         [SerializeField] private I _id;
         [SerializeField] private Sprite _icon;

@@ -19,10 +19,10 @@ namespace Game.Unit.Skill
             UnitObject casterObject = skillCast.casterTile.unitOnTile;
             battleService.battleBoard.MoveUnitFromTo(skillCast.casterTile, skillCast.targetTile);
             
-            battleService.logConsole.SendText($"{casterObject.displayName} moved from {skillCast.casterTile.coord} to {skillCast.targetTile.coord}");
+            battleService.logConsole.SendText($"{casterObject.DisplayName} moved from {skillCast.casterTile.coord} to {skillCast.targetTile.coord}");
 
             PathFinder pathFinder = new PathFinder(battleService.battleBoard);
-            List<PathFinder.AStarNode> pathNodes = pathFinder.AStar(casterObject.gridX, casterObject.gridY, 
+            List<PathFinder.AStarNode> pathNodes = pathFinder.AStar(casterObject.GridX, casterObject.GridY, 
                 skillCast.targetTile.x, skillCast.targetTile.y);
 
             // Stack<Vector2> path = new Stack<Vector2>();
@@ -40,16 +40,16 @@ namespace Game.Unit.Skill
             //     yield return casterObject.anim.MoveUnitOnBroad(path.Pop(), movingTimePerTile);
             // }
             
-            casterObject.anim.SwitchStateTo(UnitAnimation.Move);
+            casterObject.Anim.SwitchStateTo(UnitAnimation.Move);
             
             while (pathNodes.Count != 0)
             {
                 Vector2 targetPos = new Vector2(pathNodes[0].x, pathNodes[0].y);
                 pathNodes.RemoveAt(0);
-                yield return casterObject.anim.MoveUnitOnBroad(targetPos, movingTimePerTile);
+                yield return casterObject.Anim.MoveUnitOnBroad(targetPos, movingTimePerTile);
             }
             
-            casterObject.anim.SwitchStateTo(UnitAnimation.Idle);
+            casterObject.Anim.SwitchStateTo(UnitAnimation.Idle);
         }
     }
 }
