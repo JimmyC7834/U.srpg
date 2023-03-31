@@ -16,6 +16,8 @@
         ReduceAP = 110,
         IncreaseAP = 120,
         AB_DEBUG = 9999,
-        Count = 11,
+        Test1 = -101,
+        Test2 = -102,
+        Test3 = -103,
     }
 }

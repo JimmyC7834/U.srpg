@@ -5,7 +5,7 @@ using Game.Unit.Skill;
 
 namespace Tests.Builders
 {
-    public class PartBuilder
+    public class PartBuilder : SimpleBuilder<UnitPart>
     {
         private PartID _id;
         private SkillID _skillID;
@@ -36,36 +36,9 @@ namespace Tests.Builders
             return this;
         }
 
-        public UnitPart Build()
+        protected override UnitPart Build()
         {
             return new UnitPart(_id, _abilityRegs, _skillID, _paramBoostEntries);
-        }
-    }
-
-    public class TestAbilityBuilder
-    {
-        private int _count;
-
-        public TestAbilityBuilder WithCount(int value)
-        {
-            _count = value;
-            return this;
-        }
-
-        public UnitAbility Build()
-        {
-            return new TestAbility(_count);
-        }
-
-        public static implicit operator UnitAbility(TestAbilityBuilder builder)
-        {
-            return builder.Build();
-        }
-
-        public class TestAbility : UnitAbility
-        {
-            public override AbilityID ID { get => AbilityID.AB_DEBUG; }
-            public TestAbility(int count) : base(count) { }
         }
     }
 }

@@ -9,8 +9,10 @@ namespace Game.Unit
     
     public class UnitData
     {
-        public readonly ReadOnlyArray<Optional<UnitPart>> Parts;
-        public readonly ReadOnlyArray<SkillSO> Skills;
+        private readonly ReadOnlyArray<Optional<UnitPart>> _parts;
+        private readonly ReadOnlyArray<SkillSO> _skills;
+        public Optional<UnitPart>[] Parts => _parts.ToArray();
+        public SkillSO[] Skills => _skills.ToArray();
         public readonly UnitAbilityHandler AbilityHandler;
         public readonly UnitSEHandler SEHandler;
         public readonly UnitStats Stats;
@@ -51,8 +53,8 @@ namespace Game.Unit
                 // skills[i] = parts[i].GetSkill();
             }
 
-            Parts = partsRegs;
-            Skills = skills;
+            _parts = partsRegs;
+            _skills = skills;
         }
 
         public void Bind(UnitObject unit)
@@ -61,7 +63,7 @@ namespace Game.Unit
             SEHandler.Initialize(unit);
             Stats.Initialize(unit);
 
-            foreach (Optional<UnitPart> part in Parts)
+            foreach (Optional<UnitPart> part in _parts)
                 foreach (UnitAbility ab in part.Value.Abilities)
                     AbilityHandler.Register(ab);
         }
